@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.TsTodayOnworkCountMapper">
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.TsTodayOnworkCount">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="record_id" jdbcType="BIGINT" property="recordId" />
+    <result column="data_time" jdbcType="VARCHAR" property="dataTime" />
+    <result column="data_count" jdbcType="BIGINT" property="dataCount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="data_desc" jdbcType="VARCHAR" property="dataDesc" />
+    <result column="area_id" jdbcType="VARCHAR" property="areaId" />
+    <result column="dept_id" jdbcType="VARCHAR" property="deptId" />
+  </resultMap>
+
+
+  <resultMap id="OnWorkCntResultMap" type="com.czht.smartpark.tbweb.modular.dto.OnWrokCntDTO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName"></result>
+    <result column="count" jdbcType="INTEGER" property="count"/>
+  </resultMap>
+
+  <resultMap id="OnWorkPassResultMap" type="com.czht.smartpark.tbweb.modular.dto.OnWorkPassDTO">
+    <id column="record_id" jdbcType="BIGINT" property="recordId"></id>
+    <result column="last_passtime" jdbcType="VARCHAR" property="lastPasstime" />
+    <result column="last_direct" jdbcType="VARCHAR" property="lastDirect" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="onwork_status" jdbcType="VARCHAR" property="onworkStatus" />
+    <result column="identification_pic_id" jdbcType="LONGVARBINARY" property="userPic" />
+  </resultMap>
+
+  <select id="countOnworkBy24h" resultMap="BaseResultMap">
+    SELECT record_id,data_time,count(data_count) as data_count,area_id,today.dept_id,data_desc FROM ts_today_onwork_count today left join tb_pf_department dept on today.dept_id=dept.dept_id    <where>
+      <if test="deptPid != null and deptPid > 0">
+         and dept.parent_id=#{deptPid}
+      </if>
+      <if test="deptId != null and deptId>0">
+        and today.dept_id=#{deptId}
+      </if>
+      <if test="areaId != null and areaId>0">
+        and today.area_id=#{areaId}
+      </if>
+    </where>
+    GROUP BY data_time
+</select>
+
+
+  <select id="countOnworkByType" resultMap="OnWorkCntResultMap">
+    select type.no as id,dept_name,type.name,count(user_id) as count from v_attend_onwork_type type
+    left join (
+    SELECT
+    u.user_id,
+    u.dept_id,
+    u.user_name,
+    t.pass_datetime,
+    dept.dept_name,
+    t.device_direction,
+    (case when device_direction=1 then 1 when device_direction=2 &amp;&amp; pass_datetime &gt;=date_sub(now(), INTERVAL 1 HOUR) then 2 else 3 end) as id
+    FROM
+    tb_user u LEFT JOIN tb_pf_department dept on u.dept_id=dept.dept_id
+    LEFT OUTER JOIN (
+    SELECT
+    user_id,
+    pass_datetime,
+    device_direction
+    FROM
+    view_today_pass_last
+    ) t ON u.user_id = t.user_id
+    <where>
+      <if test="deptPid != null and deptPid>0">
+        and u.dept_parent_id = #{deptPid}
+      </if>
+      <if test="deptId != null and deptId>0">
+        and u.dept_id=#{deptId}
+      </if>
+    </where>
+    ) r on type.no=r.id
+    GROUP BY type.no
+
+  </select>
+
+  <select id="countOnworkByArea" resultMap="OnWorkCntResultMap">
+    select area.area_id as id, area.area_name as `name`,sum(today.value) AS count  from tb_pf_area area left join view_today_onwork_count_by_area today on area.area_id=today.id
+    LEFT JOIN tb_pf_department dept on today.dept_id=dept.dept_id
+    <where>
+      area.area_id>1
+      <if test="deptPid != null and deptPid>0">
+        and dept.parent_id = #{deptPId}
+      </if>
+      <if test="deptId != null and deptId>0">
+        and dept_id=#{deptId}
+      </if>
+    </where>
+    GROUP BY area.area_id
+  </select>
+
+  <select id="countOnworkByDept" resultMap="OnWorkCntResultMap">
+    SELECT dept.dept_id,dept.dept_name as name, sum(value) AS count
+    FROM view_today_onwork_count_by_area area LEFT JOIN tb_pf_department dept on area.dept_id=dept.dept_id
+    <where>
+      <if test="deptPid != null and deptPid>0">
+        and dept.parent_id = #{deptPId}
+      </if>
+      <if test="areaId != null and areaId>0">
+        and area.id=#{areaId}
+      </if>
+    </where>
+    GROUP BY dept.dept_id
+  </select>
+
+  <select id="getUsersOnworkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
+    SELECT
+    pass_datetime AS last_passtime,
+    u.user_id,
+    u.dept_id,
+    dept.dept_name,
+    u.user_name,
+    (case when device_direction=1 then '进' when device_direction=2 then '出'  else '' end) as lastDirect,
+    device_area_id AS area_id,
+    area.area_name as area_name,
+    (case when device_direction=1 then '在岗' when oa.leave_name is not null then oa.leave_name else '不在岗' end) as onwork_status,
+    u.identification_pic_id
+    FROM
+    tb_user u
+    LEFT JOIN view_today_pass_last pass ON u.user_id = pass.user_id
+    LEFT JOIN tb_pf_area area ON pass.device_area_id = area.area_id
+    LEFT OUTER JOIN tb_pf_department dept ON u.dept_id = dept.dept_id
+    left outer join
+    (select leaveuser.userName, leavetype.name as leave_name from tb_third_oa_leaveuser leaveuser, tb_third_oa_leavetype leavetype
+    where leaveuser.leaveType=leavetype.id and  now() BETWEEN leaveuser.beginTime and if(leaveuser.cancelLeaveTime is not null,if(leaveuser.endTime>leaveuser.cancelLeaveTime,leaveuser.cancelLeaveTime, leaveuser.cancelLeaveTime),leaveuser.endTime)) oa on pass.user_name=oa.userName
+    <where>
+      <if test="deptId != null and deptId>0">
+        and u.dept_id=#{deptId}
+      </if>
+      <if test="deptPid != null and deptPid >0">
+        and dept.parent_id=#{deptPid}
+      </if>
+    </where>
+    order by pass.device_direction desc
+  </select>
+
+  <select id="getOnWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
+    select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onworkStatus, u.identification_pic_id  from (
+    SELECT
+        pass_datetime AS last_passtime,
+        user_id,
+        pass.dept_id,
+        dept.dept_name,
+        user_name,
+        '进' as lastDirect,
+        device_area_id AS area_id,
+        area.area_name as area_name,
+        '在岗' AS onworkStatus
+    FROM
+        view_today_pass_last pass left join tb_pf_area area on pass.device_area_id=area.area_id
+        left outer join tb_pf_department dept on pass.dept_id=dept.dept_id
+    where pass.device_direction=1
+    <if test="deptId != null and deptId>0">
+      and pass.dept_id=#{deptId}
+    </if>
+    <if test="deptPid != null and deptPid >0">
+      and dept.parent_id=#{deptPid}
+    </if>
+    ) t left join tb_user u on t.user_id=u.user_id
+  </select>
+
+  <select id="getTempWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
+    select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onworkStatus, u.identification_pic_id  from (
+    SELECT
+        pass_datetime AS last_passtime,
+        user_id,
+        pass.dept_id,
+        dept.dept_name,
+        user_name,
+        '出' as lastDirect,
+        device_area_id AS area_id,
+        area.area_name as area_name,
+        '临时离岗' AS onworkStatus
+    FROM
+        view_today_pass_last pass left join tb_pf_area area on pass.device_area_id=area.area_id
+        left outer join tb_pf_department dept on pass.dept_id=dept.dept_id
+    where pass.device_direction=2 and pass.pass_datetime &gt;= DATE_SUB(now(),INTERVAL 1 HOUR)
+    <if test="deptId != null and deptId>0">
+      and pass.dept_id=#{deptId}
+    </if>
+    <if test="deptPid != null and deptPid >0">
+      and dept.parent_id=#{deptPid}
+    </if>
+    ) t left join tb_user u on t.user_id=u.user_id
+  </select>
+
+  <select id="getOffWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
+    select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onworkStatus, u.identification_pic_id  from (
+    SELECT
+    pass_datetime AS last_passtime,
+    user_id,
+    pass.dept_id,
+    dept.dept_name,
+    user_name,
+    '出' as lastDirect,
+    device_area_id AS area_id,
+    area.area_name as area_name,
+    (case when oa.leave_name is not null then oa.leave_name else '不在岗' end) as onwork_status,
+    FROM
+    view_today_pass_last pass left join tb_pf_area area on pass.device_area_id=area.area_id
+    left outer join tb_pf_department dept on pass.dept_id=dept.dept_id
+    left outer join
+    (select leaveuser.userName, leavetype.name as leave_name from tb_third_oa_leaveuser leaveuser, tb_third_oa_leavetype leavetype
+    where leaveuser.leaveType=leavetype.id and  now() BETWEEN leaveuser.beginTime and if(leaveuser.cancelLeaveTime is not null,if(leaveuser.endTime>leaveuser.cancelLeaveTime,leaveuser.cancelLeaveTime, leaveuser.cancelLeaveTime),leaveuser.endTime)) oa on pass.user_name=oa.userName
+    where pass.device_direction=2 and pass.pass_datetime &lt; DATE_SUB(now(),INTERVAL 1 HOUR)
+    <if test="deptId != null and deptId>0">
+      and pass.dept_id=#{deptId}
+    </if>
+    <if test="deptPid != null and deptPid >0">
+      and dept.parent_id=#{deptPid}
+    </if>
+    ) t left join tb_user u on t.user_id=u.user_id
+  </select>
+</mapper>
+

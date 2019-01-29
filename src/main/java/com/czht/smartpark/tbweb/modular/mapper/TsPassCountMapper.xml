@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.TsPassCountMapper">
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.TsPassCount">
+    <id column="record_id" jdbcType="BIGINT" property="recordId" />
+    <result column="data_time" jdbcType="VARCHAR" property="dataTime" />
+    <result column="data_count" jdbcType="BIGINT" property="dataCount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="data_desc" jdbcType="VARCHAR" property="dataDesc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    record_id, data_time, data_count, create_time, data_desc
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ts_today_pass_count
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ts_today_pass_count
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.czht.smartpark.tbweb.modular.dmo.TsPassCount">
+    insert into ts_today_pass_count (record_id, data_time, data_count, 
+      create_time, data_desc)
+    values (#{recordId,jdbcType=BIGINT}, #{dataTime,jdbcType=VARCHAR}, #{dataCount,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{dataDesc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.czht.smartpark.tbweb.modular.dmo.TsPassCount">
+    insert into ts_today_pass_count
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        record_id,
+      </if>
+      <if test="dataTime != null">
+        data_time,
+      </if>
+      <if test="dataCount != null">
+        data_count,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="dataDesc != null">
+        data_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        #{recordId,jdbcType=BIGINT},
+      </if>
+      <if test="dataTime != null">
+        #{dataTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCount != null">
+        #{dataCount,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataDesc != null">
+        #{dataDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.czht.smartpark.tbweb.modular.dmo.TsPassCount">
+    update ts_today_pass_count
+    <set>
+      <if test="dataTime != null">
+        data_time = #{dataTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCount != null">
+        data_count = #{dataCount,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataDesc != null">
+        data_desc = #{dataDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.czht.smartpark.tbweb.modular.dmo.TsPassCount">
+    update ts_today_pass_count
+    set data_time = #{dataTime,jdbcType=VARCHAR},
+      data_count = #{dataCount,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      data_desc = #{dataDesc,jdbcType=VARCHAR}
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </update>
+</mapper>

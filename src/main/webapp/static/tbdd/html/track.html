@@ -1,0 +1,78 @@
+<!-- 个人轨迹 -->
+<!--sidebar-menu-->
+<div id="sidebar">
+    <ul id="function-list">
+        <li><a href="#"><i class="glyphicon glyphicon-user"></i><div>实时动态</div></a></li>
+        <!--<li><a href="#"><i class="glyphicon glyphicon-home"></i><div>办公地点查询</div></a></li>-->
+    </ul>
+    <div id="deptTree"></div>
+</div>
+
+<!-- right -->
+<div id="right">
+    <form id="query">
+        <div class="form-group">
+            <label for="deptId">部门</label>
+            <select type="text" class="form-control" name="deptId" placeholder="部门"></select>
+        </div>
+        <div class="form-group">
+            <label for="userId">姓名</label>
+            <select type="text" class="form-control" name="userId" placeholder="姓名"></select>
+        </div>
+        <div class="form-group">
+            <label>时间</label>
+            <input type="text" class="form-control" name="starttime" id="starttime" placeholder="开始时间">
+            <input type="text" class="form-control m-t" name="endtime" id="endtime" placeholder="结束时间">
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-success">查询</button>
+        </div>
+    </form>
+</div>
+
+<!--main-container-part-->
+<div id="content">
+    <!--breadcrumbs-->
+    <div id="content-header">
+        <div id="breadcrumb">
+            <a href="#" title="返回首页 "><i class="icon-home"></i>首页</a>
+            <a href="#" class="current">人员轨迹</a>
+            <a href="#" onclick="javascript:history.back()" title="返回上一页 "><i class="icon-arrow-left"></i>返回上一页</a>
+        </div>
+    </div>
+    <!--End-breadcrumbs-->
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab1">人员轨迹</a></li>
+                        <li><a data-toggle="tab" href="#tab2">历史考勤</a></li>
+                    </ul>
+                </div>
+                <div class="widget-content tab-content">
+                    <div id="tab1" class="tab-pane active">
+                        <div class="peopleName">
+                            <div class="peopleLeft">
+                                <img src="" alt="" id="userHeader" class="peopleImg">
+                            </div>
+                            <div class="flatLeft">
+                                <p><span id="userName" class="personName">-</span>&nbsp;&nbsp;<span id="deptName">-</span></p>
+                                <p id="trackDate"></p>
+
+                            </div>
+                        </div>
+                        <div id="trackWrap" class="chart" style="height:500px"></div>
+                    </div>
+                    <div id="tab2" class="tab-pane">
+                        <div>
+                            <table class="table table-striped center" id="historyTable">
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

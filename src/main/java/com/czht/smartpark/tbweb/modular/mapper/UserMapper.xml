@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.User">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="userMobile" />
+    <result column="user_sex" jdbcType="INTEGER" property="userSex" />
+    <result column="user_nation" jdbcType="INTEGER" property="userNation" />
+    <result column="user_birthday" jdbcType="DATE" property="userBirthday" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_parent_id" jdbcType="INTEGER" property="deptParentId" />
+    <result column="user_group" jdbcType="INTEGER" property="userGroup" />
+    <result column="attendance_sign" jdbcType="INTEGER" property="attendanceSign" />
+    <result column="identification_type" jdbcType="INTEGER" property="identificationType" />
+    <result column="identification_number" jdbcType="VARCHAR" property="identificationNumber" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="compare_threshold" jdbcType="DOUBLE" property="compareThreshold" />
+    <result column="register_cause" jdbcType="VARCHAR" property="registerCause" />
+    <result column="receiver_name" jdbcType="INTEGER" property="receiverName" />
+    <result column="visit_endtime" jdbcType="TIMESTAMP" property="visitEndtime" />
+    <result column="visit_starttime" jdbcType="TIMESTAMP" property="visitStarttime" />
+    <result column="register_pic1_id" jdbcType="BIGINT" property="registerPic1Id" />
+    <result column="register_pic2_id" jdbcType="BIGINT" property="registerPic2Id" />
+    <result column="register_pic3_id" jdbcType="BIGINT" property="registerPic3Id" />
+    <result column="register_pic4_id" jdbcType="BIGINT" property="registerPic4Id" />
+    <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
+    <result column="register_method" jdbcType="INTEGER" property="registerMethod" />
+    <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
+    <result column="compare_result" jdbcType="INTEGER" property="compareResult" />
+    <result column="last_edit_manager" jdbcType="VARCHAR" property="lastEditManager" />
+    <result column="batch_no" jdbcType="BIGINT" property="batchNo" />
+    <result column="user_name_spell" jdbcType="VARCHAR" property="userNameSpell" />
+    <result column="user_name_short" jdbcType="VARCHAR" property="userNameShort" />
+    <result column="update_datetime" jdbcType="TIMESTAMP" property="updateDatetime" />
+    <result column="create_datetime" jdbcType="TIMESTAMP" property="createDatetime" />
+    <result column="plate_no" jdbcType="VARCHAR" property="plateNo" />
+    <result column="reserve_vchar" jdbcType="VARCHAR" property="reserveVchar" />
+    <result column="reserve_vchar1" jdbcType="VARCHAR" property="reserveVchar1" />
+    <result column="reserve_vchar2" jdbcType="VARCHAR" property="reserveVchar2" />
+    <result column="reserve_vchar3" jdbcType="VARCHAR" property="reserveVchar3" />
+    <result column="reserve_vchar4" jdbcType="VARCHAR" property="reserveVchar4" />
+    <result column="reserve_vchar5" jdbcType="VARCHAR" property="reserveVchar5" />
+    <result column="reserve_int" jdbcType="INTEGER" property="reserveInt" />
+    <result column="reserve_int1" jdbcType="INTEGER" property="reserveInt1" />
+    <result column="reserve_int2" jdbcType="INTEGER" property="reserveInt2" />
+    <result column="reserve_int3" jdbcType="INTEGER" property="reserveInt3" />
+    <result column="reserve_int4" jdbcType="INTEGER" property="reserveInt4" />
+    <result column="reserve_int5" jdbcType="INTEGER" property="reserveInt5" />
+    <result column="reserve_bigint" jdbcType="BIGINT" property="reserveBigint" />
+    <result column="reserve_double" jdbcType="DOUBLE" property="reserveDouble" />
+    <result column="identification_pic_id" jdbcType="LONGVARBINARY" property="identificationPicId" />
+    <result column="register_pic1_path" jdbcType="LONGVARBINARY" property="registerPic1Path" />
+    <result column="register_pic2_path" jdbcType="LONGVARBINARY" property="registerPic2Path" />
+    <result column="register_pic3_path" jdbcType="LONGVARBINARY" property="registerPic3Path" />
+    <result column="register_pic4_path" jdbcType="LONGVARBINARY" property="registerPic4Path" />
+    <result column="fingerprint_data" jdbcType="LONGVARBINARY" property="fingerprintData" />
+    <result column="reserve_blob" jdbcType="LONGVARBINARY" property="reserveBlob" />
+  </resultMap>
+
+  <resultMap id="SimpleUserResultMap" type="com.czht.smartpark.tbweb.modular.dto.UserDTO">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_sex" jdbcType="INTEGER" property="userSex" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="userMobile" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_parent_id" jdbcType="INTEGER" property="deptPid" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="identification_pic_id" jdbcType="LONGVARBINARY" property="idPic" />
+  </resultMap>
+
+  <resultMap id="CodeResultMap" type="com.czht.smartpark.tbweb.modular.dto.CodeDTO">
+    <id column="user_id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="text" />
+  </resultMap>
+
+  <select id="loginVail" resultMap="SimpleUserResultMap">
+    select user_id, user_name, user_sex, user_mobile, dept_id, dept_parent_id, identification_pic_id from tb_user
+    <where>
+      <if test="username != null">
+         and user_name=#{username}
+      </if>
+      <if test="password != null">
+        and password=#{password}
+      </if>
+      <if test="deptPid != null and deptPid > 0">
+        and dept_parent_id=#{deptPid}
+      </if>
+    </where>
+  </select>
+
+  <select id="getUsersForCode" resultMap="CodeResultMap">
+    select user_id, user_name from tb_user
+    <where>
+      <if test="deptId != null and deptId>0">
+        and dept_id=#{deptId}
+      </if>
+      <if test="username != null">
+        and user_name REGEXP #{username}
+      </if>
+    </where>
+    <if test="limit != null">
+      limit #{limit}
+    </if>
+  </select>
+
+  <select id="getSimpleUserInfo" parameterType="java.lang.Integer" resultMap="SimpleUserResultMap">
+    select user_id, user_name, user_sex, user_mobile, u.dept_id,dept.dept_name, dept_parent_id, identification_pic_id from tb_user u left join tb_pf_department dept on u.dept_id=dept.dept_id where user_id=#{userId}
+  </select>
+
+</mapper>

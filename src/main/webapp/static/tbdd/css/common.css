@@ -1,0 +1,19 @@
+h1,h2,h3 {line-height: 40px;font-weight: bold}
+strong {font-weight: bold;}
+#right label{font-weight: normal;}
+
+form .form-group .form-control {background-color: #fff;border-radius: 5px; width: 85%;color: #333;}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{border-top: none;}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{vertical-align: middle;}
+table.dataTable tbody th, table.dataTable tbody td{padding: 0;}
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate{color: #fff;margin-right: 100px;}
+.dataTables_wrapper .dataTables_info {clear: none;float: left;padding-top: 4px;}
+/*.row-fluid{padding-top: 10px;}*/
+table.dataTable.no-footer{border: none;}
+
+.m-t {margin-top: 10px;}
+.m-l {margin-left: 10px;}
+
+
+#query{padding-left: 20px;}

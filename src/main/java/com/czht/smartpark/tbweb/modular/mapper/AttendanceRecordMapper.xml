@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.AttendanceRecordMapper">
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.AttendanceRecord">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="dept_pid" jdbcType="INTEGER" property="deptPid" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="attend_date" jdbcType="DATE" property="attendDate" />
+    <result column="late_min_unit" jdbcType="DECIMAL" property="lateMinUnit" />
+    <result column="over_min_unit" jdbcType="DECIMAL" property="overMinUnit" />
+    <result column="attend_rule_id" jdbcType="TINYINT" property="attendRuleId" />
+    <result column="sign_in_time_am" jdbcType="TIMESTAMP" property="signInTimeAm" />
+    <result column="sign_out_time_am" jdbcType="TIMESTAMP" property="signOutTimeAm" />
+    <result column="sign_in_time_pm" jdbcType="TIMESTAMP" property="signInTimePm" />
+    <result column="sign_out_time_pm" jdbcType="TIMESTAMP" property="signOutTimePm" />
+    <result column="week" jdbcType="VARCHAR" property="week" />
+    <result column="review_flag" jdbcType="INTEGER" property="reviewFlag" />
+    <result column="review_remark" jdbcType="VARCHAR" property="reviewRemark" />
+    <result column="absence_time" jdbcType="REAL" property="absenceTime" />
+    <result column="actual_time" jdbcType="REAL" property="actualTime" />
+    <result column="over_time" jdbcType="REAL" property="overTime" />
+    <result column="leave_status" jdbcType="INTEGER" property="leaveStatus" />
+    <result column="leave_remark" jdbcType="VARCHAR" property="leaveRemark" />
+    <result column="compute_detail" jdbcType="VARCHAR" property="computeDetail" />
+    <result column="pair_flag" jdbcType="INTEGER" property="pairFlag" />
+    <result column="updated" jdbcType="TIMESTAMP" property="updated" />
+    <result column="created" jdbcType="TIMESTAMP" property="created" />
+  </resultMap>
+
+  <resultMap id="StatisticsResultMap" type="com.czht.smartpark.tbweb.modular.dto.AttendStatisticsDTO">
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="start_date" jdbcType="VARCHAR" property="startDate" />
+    <result column="end_date" jdbcType="VARCHAR" property="endDate" />
+    <result column="absence_days" jdbcType="INTEGER" property="absenceDays"></result>
+    <result column="leave_days" jdbcType="INTEGER" property="leaveDays"></result>
+    <result column="attend_time" jdbcType="REAL" property="attendTime" />
+    <result column="absence_time" jdbcType="REAL" property="absenceTime" />
+    <result column="over_time" jdbcType="REAL" property="overTime" />
+  </resultMap>
+
+  <select id="getAttendStatisticsRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.AttendBean" resultMap="StatisticsResultMap">
+    select
+        user_id,
+        user_name,
+        dept_id,
+        dept_name,
+        attend_date,
+        min(attend_date) as start_date,
+        max(attend_date) as end_date,
+        sum(actual_time) as attend_time,
+        sum(over_time) as overtime,
+        sum(absence_time) as absence_time,
+        sum((case when leave_status=0 || leave_status=1 then 1 else 0 end)) as absence_days,
+        sum((case when leave_status=2 then 1 else 0 end)) as leave_days
+    from
+        tb_attendance_record_tb
+    <where>
+      <if test="deptId != null and deptId>0">
+        and dept_id=#{deptId}
+      </if>
+      <if test="deptPid != null and deptPid>0">
+        and dept_pid=#{deptPid}
+      </if>
+      <if test="userId!=null and userId>0">
+        and user_id=#{userId}
+      </if>
+      <if test="startDate != null and startDate != ''">
+        and attend_date &gt;= #{startDate}
+      </if>
+      <if test="startDate == null || startDate==''">
+        and attend_date=date_sub(curdate(),interval 1 day)
+      </if>
+      <if test="endDate != null and endDate != ''">
+        and attend_date &lt;= #{endDate}
+      </if>
+    </where>
+    group by user_id
+  </select>
+
+  <select id="countHistoryRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.AttendBean" resultType="java.lang.Integer">
+    select count(id) from tb_attendance_record_tb
+    <where>
+      <if test="deptId != null and deptId>0">
+        and dept_id=#{deptId}
+      </if>
+      <if test="deptPid != null and deptPid>0">
+        and dept_pid=#{deptPid}
+      </if>
+      <if test="userId!=null and userId>0">
+        and user_id=#{userId}
+      </if>
+      <if test="startDate != null and startDate != ''">
+        and attend_date &gt;= #{startDate}
+      </if>
+      <if test="endDate != null and endDate != ''">
+        and attend_date &lt;= #{endDate}
+      </if>
+    </where>
+  </select>
+
+  <select id="getHistoryRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.AttendBean" resultMap="BaseResultMap">
+    select * from tb_attendance_record_tb
+    <where>
+      <if test="deptId != null and deptId>0">
+        and dept_id=#{deptId}
+      </if>
+      <if test="deptPid != null and deptPid>0">
+        and dept_pid=#{deptPid}
+      </if>
+      <if test="userId!=null and userId>0">
+        and user_id=#{userId}
+      </if>
+      <if test="startDate != null and startDate != ''">
+        and attend_date &gt;= #{startDate}
+      </if>
+      <if test="endDate != null and endDate != ''">
+        and attend_date &lt;= #{endDate}
+      </if>
+    </where>
+    order by attend_date desc
+    limit #{start}, #{length}
+  </select>
+</mapper>

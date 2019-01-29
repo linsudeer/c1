@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人脸识别考勤系统-登录</title>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/matrix-style.css">
+    <link rel="stylesheet" href="../css/login.css">
+
+    <script src="../lib/jquery-3.3.1.min.js"></script>
+    <script src="../lib/layer-v3.1.1/layer/layer.js"></script>
+    </script><script src="../js/URL.js"></script>
+    <script src="../js/common.js"></script>
+
+<style>
+    input::-ms-clear{display:none;}
+    input::-ms-reveal{display:none;}
+    .login-form .form-group {
+        overflow: hidden;
+        padding-bottom: 40px;
+        margin-bottom: 0;
+    }
+</style>
+</head>
+<body class="login-body mainBody">
+<div class="loging"></div>
+<div class="loginCenter">
+    <div class="login-form">
+        <p class="loginChinese">综合智能管理系统</p>
+        <form class="orm-horizontal defaultForm" id="loginFrom" autocomplete="off">
+            <div class="form-group">
+                <label for="account" class="loginIconBox">
+                    <i class="glyphicon glyphicon-user liginIcon"></i>
+                </label>
+                <input type="text"  class="loginInput"  name="account" id="account" placeholder="登录账号" autocomplete="off" style="background: #ffffff">
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="loginIconBox">
+                    <i class="glyphicon glyphicon-lock liginIcon"></i>
+                </label>
+                <input type="password"  class="loginInput" name="password" id="password" placeholder="登录密码"  autocomplete="off" style="background: #ffffff">
+            </div>
+            <div style="text-align: right;">
+                <!--<a href="./view/personal/login.html">个人管理平台</a>-->
+            </div>
+            <div class="form-group">
+                <input class="loginSubmit" id="loginSubmit" type="button" value="登 录">
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="../js/login.js"></script>
+</body>
+</html>

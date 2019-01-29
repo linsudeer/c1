@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.PassRecordMapper">
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.PassRecord">
+    <id column="pass_record_id" jdbcType="BIGINT" property="passRecordId" />
+    <result column="pass_datetime" jdbcType="TIMESTAMP" property="passDatetime" />
+    <result column="way_of_pass" jdbcType="INTEGER" property="wayOfPass" />
+    <result column="register_flag" jdbcType="INTEGER" property="registerFlag" />
+    <result column="similarity_degree" jdbcType="REAL" property="similarityDegree" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="device_id" jdbcType="INTEGER" property="deviceId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_sex" jdbcType="INTEGER" property="userSex" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
+    <result column="user_group" jdbcType="INTEGER" property="userGroup" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_parent_id" jdbcType="INTEGER" property="deptParentId" />
+    <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+    <result column="device_type" jdbcType="INTEGER" property="deviceType" />
+    <result column="device_direction" jdbcType="INTEGER" property="deviceDirection" />
+    <result column="device_area_id" jdbcType="INTEGER" property="deviceAreaId" />
+    <result column="device_entrance_id" jdbcType="INTEGER" property="deviceEntranceId" />
+    <result column="device_parent_id" jdbcType="INTEGER" property="deviceParentId" />
+    <result column="device_auth" jdbcType="INTEGER" property="deviceAuth" />
+    <result column="time_auth" jdbcType="INTEGER" property="timeAuth" />
+    <result column="live_auth" jdbcType="INTEGER" property="liveAuth" />
+    <result column="facesize_auth" jdbcType="INTEGER" property="facesizeAuth" />
+    <result column="filter_flag" jdbcType="INTEGER" property="filterFlag" />
+    <result column="filter_time" jdbcType="BIGINT" property="filterTime" />
+    <result column="search_id" jdbcType="BIGINT" property="searchId" />
+    <result column="classify_id" jdbcType="BIGINT" property="classifyId" />
+    <result column="classify_score" jdbcType="REAL" property="classifyScore" />
+    <result column="full_fdfs_id" jdbcType="VARCHAR" property="fullFdfsId" />
+    <result column="face_fdfs_id" jdbcType="VARCHAR" property="faceFdfsId" />
+    <result column="pic_quality" jdbcType="INTEGER" property="picQuality" />
+    <result column="pic_score" jdbcType="REAL" property="picScore" />
+    <result column="pass_feature_id" jdbcType="BIGINT" property="passFeatureId" />
+    <result column="lock_flag" jdbcType="INTEGER" property="lockFlag" />
+    <result column="create_datetime" jdbcType="TIMESTAMP" property="createDatetime" />
+    <result column="reserve_int" jdbcType="INTEGER" property="reserveInt" />
+    <result column="reserve_bigint" jdbcType="BIGINT" property="reserveBigint" />
+    <result column="reserve_double" jdbcType="DOUBLE" property="reserveDouble" />
+    <result column="reserve_vchar" jdbcType="VARCHAR" property="reserveVchar" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.czht.smartpark.tbweb.modular.dmo.PassRecord">
+    <result column="reserve_blob" jdbcType="LONGVARBINARY" property="reserveBlob" />
+  </resultMap>
+
+  <resultMap id="PassResultMap" type="com.czht.smartpark.tbweb.modular.dto.PassDTO">
+    <id column="pass_record_id" jdbcType="BIGINT" property="passRecordId" />
+    <result column="pass_datetime" jdbcType="TIMESTAMP" property="passDatetime" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="device_id" jdbcType="INTEGER" property="deviceId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_sex" jdbcType="INTEGER" property="userSex" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
+    <result column="user_group" jdbcType="INTEGER" property="userGroup" />
+    <result column="user_group_name" jdbcType="VARCHAR" property="userGroupName"></result>
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_parent_id" jdbcType="INTEGER" property="deptParentId" />
+    <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+    <result column="device_type" jdbcType="INTEGER" property="deviceType" />
+    <result column="device_direction" jdbcType="INTEGER" property="deviceDirection" />
+    <result column="direct" jdbcType="VARCHAR" property="direct"></result>
+    <result column="device_area_id" jdbcType="INTEGER" property="deviceAreaId" />
+    <result column="full_fdfs_id" jdbcType="VARCHAR" property="fullFdfsId" />
+    <result column="face_fdfs_id" jdbcType="VARCHAR" property="faceFdfsId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="device_area_name" jdbcType="VARCHAR" property="deviceAreaName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    pass_record_id, pass_datetime, way_of_pass, register_flag, similarity_degree, user_id, 
+    device_id, user_name, user_sex, user_type, user_group, group_id, dept_id, dept_parent_id, 
+    device_name, device_type, device_direction, device_area_id, device_entrance_id, device_parent_id, 
+    device_auth, time_auth, live_auth, facesize_auth, filter_flag, filter_time, search_id, 
+    classify_id, classify_score, full_fdfs_id, face_fdfs_id, pic_quality, pic_score, 
+    pass_feature_id, lock_flag, create_datetime, reserve_int, reserve_bigint, reserve_double, 
+    reserve_vchar
+  </sql>
+  <sql id="Blob_Column_List">
+    reserve_blob
+  </sql>
+
+  <select id="getPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.PassBean"  resultMap="PassResultMap">
+  SELECT
+    t.pass_record_id,
+    t.pass_datetime,
+    t.user_id,
+    t.device_id,
+    t.user_name,
+    t.user_sex,
+    t.user_type,
+    t.user_group,
+
+    t.group_id,
+    t.dept_id,
+    t.dept_name,
+    t.dept_parent_id,
+    t.device_name,t.user_group_name,
+    t.device_type,
+    t.device_direction,
+    t.direct,
+    t.device_area_id,
+    t.device_area_name,
+    concat(config.value,'/',t.full_fdfs_id) as full_fdfs_id,
+    concat(config.value,'/',t.face_fdfs_id) as face_fdfs_id
+    FROM
+    (
+    SELECT
+    pass.pass_record_id,
+    pass.pass_datetime,
+    pass.user_id,
+    pass.device_id,
+    pass.user_name,
+    pass.user_sex,
+    pass.user_type,
+    pass.user_group,
+    (select c.name from tb_sys_code c LEFT JOIN tb_sys_codetype t on c.codetype_id=t.codetype_id where t.`code`='user_group' and c.code=pass.user_group) as user_group_name,
+    pass.group_id,
+    pass.dept_id,
+    dept.dept_name,
+    pass.dept_parent_id,
+    pass.device_name,
+    pass.device_type,
+    pass.device_direction,
+    (case when pass.device_direction=1 then '进' else '出' end) as direct,
+    pass.device_area_id,
+    area.area_name as device_area_name,
+    pass.full_fdfs_id,
+    pass.face_fdfs_id,
+    'FDFS_URL' AS config_typename
+    FROM
+    tb_pass_record pass
+    LEFT JOIN tb_pf_department dept ON pass.dept_id = dept.dept_id
+    LEFT OUTER JOIN tb_pf_area area ON pass.device_area_id = area.area_id
+    <where>
+      <if test="starttime != null and starttime != ''">
+        and pass.pass_datetime &gt;= #{starttime}
+      </if>
+      <if test="starttime == null || starttime == ''">
+        and pass.pass_datetime &gt;= DATE_FORMAT(now(),'%Y-%m-%d 00:00:00')
+      </if>
+      <if test="endtime != null and endtime != ''">
+        and pass.pass_datetime &lt;= #{endtime}
+      </if>
+      <if test="deptId != null">
+        and pass.dept_id=#{deptId}
+      </if>
+      <if test="userId != null">
+        and pass.user_id=#{userId}
+      </if>
+      <if test="userGroup != null">
+        and pass.user_group=#{userGroup}
+      </if>
+      <if test="areaId != null">
+        and pass.device_area_id=#{areaId}
+      </if>
+      <if test="direct != null">
+        and pass.device_direction=#{direct}
+      </if>
+    </where>
+    order by pass_datetime desc
+    limit #{start}, #{length}
+    ) t
+    LEFT JOIN tb_sys_config config ON t.config_typename = config.typename
+    WHERE
+    config.config_type = 'client_fdfs'
+
+  </select>
+
+  <select id="getPassCount" parameterType="com.czht.smartpark.tbweb.modular.bean.PassBean" resultType="java.lang.Integer">
+    SELECT
+      count(*)
+  FROM
+      tb_pass_record pass
+    <where>
+      <if test="starttime != null and starttime != ''">
+        and pass.pass_datetime &gt;= #{starttime}
+      </if>
+      <if test="starttime == null || starttime ==''">
+        and pass.pass_datetime &gt;= DATE_FORMAT(now(),'%Y-%m-%d 00:00:00')
+      </if>
+      <if test="endtime != null and endtime != ''">
+        and pass.pass_datetime &lt;= #{endtime}
+      </if>
+      <if test="deptId != null">
+        and pass.dept_id=#{deptId}
+      </if>
+      <if test="userId != null">
+        and pass.user_id=#{userId}
+      </if>
+      <if test="userGroup != null">
+        and pass.user_group=#{userGroup}
+      </if>
+      <if test="areaId != null">
+        and pass.device_area_id=#{areaId}
+      </if>
+      <if test="direct != null">
+        and pass.device_direction=#{direct}
+      </if>
+    </where>
+  </select>
+
+</mapper>

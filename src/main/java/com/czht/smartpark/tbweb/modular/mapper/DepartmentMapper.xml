@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.DepartmentMapper" >
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.Department" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="dept_id" property="deptId" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="dept_name" property="deptName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="sort_no" property="sortNo" jdbcType="INTEGER" />
+    <result column="leader_id" property="leaderId" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <resultMap id="OnWorkOrgTreeResultMap" type="com.czht.smartpark.tbweb.modular.dto.DeptDTO">
+    <id column="dept_id" property="deptId" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="dept_name" property="deptName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="leader_id" property="leaderId" jdbcType="INTEGER" />
+    <result column="on_work_cnt" property="onWorkCnt" jdbcType="INTEGER" />
+  </resultMap>
+
+  <resultMap id="CodeResultMap" type="com.czht.smartpark.tbweb.modular.dto.CodeDTO">
+    <id column="dept_id" jdbcType="INTEGER" property="id" />
+    <result column="dept_name" jdbcType="VARCHAR" property="text" />
+  </resultMap>
+
+  <select id="listOrgs" parameterType="java.lang.Integer">
+    select dept_id,parent_id,dept_name,type,leader_id,remark from tb_pf_department
+    <where>
+      <if test="deptPid != null and deptPid > 0">
+        and parent_id=#{deptPid}
+      </if>
+    </where>
+    order by sort_no asc
+  </select>
+
+  <select id="getOnWorkOrgTree" resultMap="OnWorkOrgTreeResultMap">
+    select dept.dept_id,dept.parent_id,dept.type,dept.leader_id,dept.dept_name,case when today.on_work_cnt is null then 0 else today.on_work_cnt end on_work_cnt from tb_pf_department dept left join
+    (select dept_id,count(user_id) as on_work_cnt from view_today_pass_last_in group by dept_id) today on dept.dept_id=today.dept_id
+    <where>
+      <if test="deptPid != null and deptPid > 0">
+        and dept.parent_id=#{deptPid}
+      </if>
+    </where>
+  </select>
+  
+  <select id="getDeptsForCode" resultMap="CodeResultMap">
+    select dept_id, dept_name from tb_pf_department
+    where type=2
+    <if test="key != null">
+      and dept_name REGEXP #{key}
+    </if>
+    <if test="deptPid != null and deptPid > 0">
+      and parent_id=#{deptPid}
+    </if>
+    ORDER BY sort_no asc
+  </select>
+</mapper>

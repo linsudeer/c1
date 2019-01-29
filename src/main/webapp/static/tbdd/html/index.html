@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>人脸识别考勤系统-首页</title>
+
+    <link rel="shortcut icon" href="/static/tbdd/img/favicon.ico" />
+
+    <link rel="bookmark"href="/static/tbdd/img/favicon.ico" />
+
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../lib/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="../lib/bootstrap-treeview-1.2.0/css/bootstrap-treeview.min.css">
+    <link rel="stylesheet" href="../lib/datatables-1.10.18/datatables.min.css">
+    <link rel="stylesheet" href="../lib/select2-4.0.5/css/select2.min.css">
+    <link rel="stylesheet" href="../lib/lightbox2/lightbox.min.css">
+    <link rel="stylesheet" href="../css/matrix-style.css">
+    <link rel="stylesheet" href="../css/matrix-media.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <script src="../lib/jquery-3.3.1.min.js"></script>
+    <script src="../lib/jquery.serializejson.min.js"></script>
+    <script src="../lib/q.js"></script>
+    <script src="../lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../lib/bootstrap-treeview-1.2.0/js/bootstrap-treeview.min.js"></script>
+    <script src="../lib/lodash/lodash.min.js"></script>
+    <script src="../lib/select2-4.0.5/js/select2.min.js"></script>
+    <script src="../lib/select2-4.0.5/js/i18n/zh-CN.js"></script>
+    <script src="../lib/laydate-5.0.9/laydate.min.js"></script>
+    <script src="../lib/datatables-1.10.18/datatables.min.js"></script>
+    <script src="../lib/echarts.min.js"></script>
+    <script src="../lib/lightbox2/lightbox.min.js"></script>
+    <script src="../lib/jquery.mousewheel.js"></script>
+    <script src="../lib/jquery.carousel.min.js"></script>
+    <script src="../lib/layer-v3.1.1/layer/layer.js"></script>
+    <script src="../js/URL.js"></script>
+    <script src="../js/common.js"></script>
+</head>
+<body>
+<!-- 顶部 -->
+<header id="header" class="header">
+    <nav>
+        <h1><a href="#">人脸识别考勤系统</a></h1>
+        <div class="header-menu">
+            <ul class="header-nav">
+                <li><a href="#!index">实时动态</a></li>
+                <li>
+                    <a href="javascript:void(0);" onclick="javascript:go('pass')">通行记录</a>
+                    <!--<div class="header-menu-sub">
+                        <p><a href="javascript:void(0);" onclick="javascript:go('pass')">记录查询</a></p>
+                        <p><a href="javascript:void(0);" onclick="javascript:go('editPass')">记录修改</a></p>
+                    </div>-->
+                </li>
+                <li><a href="#!attend">综合考勤</a></li>
+                <li>
+                    <a><i class="icon icon-user"></i><span class="navSapn" id="headerUserName">--</span></a>
+                    <div class="header-menu-sub">
+                        <p id="logout"><a href="javascript:void(0)">注销</a></p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<!-- 页面变化区 -->
+<main id="main"></main>
+
+<!-- 页脚 -->
+<footer class="footer"></footer>
+
+<!-- 公用的部分 -->
+
+<div id="addPassWrap" style="display: none;">
+    <form>
+        <div class="form-group">
+            <label for="userId">姓名</label>
+            <select type="text" class="form-control" name="userId" placeholder="姓名"></select>
+        </div>
+        <div class="form-group">
+            <label for="areaId">区域</label>
+            <select type="text" class="form-control" name="areaId" placeholder="区域"></select>
+        </div>
+        <div class="form-group">
+            <label for="direct">进出方向</label>
+            <select type="text" class="form-control" name="direct" placeholder="进出方向"></select>
+        </div>
+        <div class="form-group">
+            <label>通行时间</label>
+            <input type="text" class="form-control" name="passDatetime" id="passDatetime" placeholder="通行时间">
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-success" id="saveBtn">保存</button>
+        </div>
+    </form>
+</div>
+
+<script src="../js/head.js"></script>
+<script src="../js/home.js"></script>
+<script src="../js/pass.js"></script>
+<script src="../js/track.js"></script>
+<script src="../js/onwork.js"></script>
+<script src="../js/attend.js"></script>
+
+<script src="../js/router.js"></script>
+
+<script>
+    $(function(){
+        initHead();
+    });
+</script>
+
+</body>
+</html>

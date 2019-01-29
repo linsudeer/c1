@@ -1,0 +1,73 @@
+<!-- 通行记录 -->
+
+<!--sidebar-menu-->
+<div id="sidebar">
+    <ul id="function-list">
+        <li><a href="#"><i class="glyphicon glyphicon-user"></i><div>实时动态</div></a></li>
+        <!--<li><a href="#"><i class="glyphicon glyphicon-home"></i><div>办公地点查询</div></a></li>-->
+    </ul>
+    <div id="departmentTree"></div>
+</div>
+
+<!-- right -->
+<div id="right">
+    <form id="query">
+        <div class="form-group">
+            <label for="deptId">部门</label>
+            <select type="text" class="form-control" name="deptId" placeholder="部门"></select>
+        </div>
+        <div class="form-group">
+            <label for="userId">姓名</label>
+            <select type="text" class="form-control" name="userId" placeholder="姓名"></select>
+        </div>
+        <div class="form-group">
+            <label for="areaId">区域</label>
+            <select type="text" class="form-control" name="areaId" placeholder="区域"></select>
+        </div>
+        <div class="form-group">
+            <label for="userGroup">人员类型</label>
+            <select type="text" class="form-control" name="userGroup" placeholder="人员分组"></select>
+        </div>
+        <div class="form-group">
+            <label for="direct">进出方向</label>
+            <select type="text" class="form-control" name="direct" placeholder="进出方向"></select>
+        </div>
+        <div class="form-group">
+            <label>通行时间</label>
+            <input type="text" class="form-control" name="starttime" id="starttime" placeholder="开始时间">
+            <input type="text" class="form-control m-t" name="endtime" id="endtime" placeholder="结束时间">
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-success" id="queryBtn">查询</button>
+            <button type="button" class="btn btn-success m-l" id="addBtn">新增</button>
+        </div>
+    </form>
+</div>
+
+<!--main-container-part-->
+<div id="content">
+    <!--breadcrumbs-->
+    <div id="content-header">
+        <div id="breadcrumb">
+            <a href="#" title="返回首页 "><i class="icon-home"></i>首页</a>
+            <a href="javascript:void(0)" class="current"> 通行记录</a>
+            <a href="#" onclick="javascript:history.back()" title="返回上一页 "><i class="icon-arrow-left"></i>返回上一页</a>
+        </div>
+    </div>
+    <!--End-breadcrumbs-->
+
+    <div class="widget-box" id="region-detail">
+
+        <div class="widget-content tab-content">
+            <div id="tab1" class="tab-pane active">
+                <div>
+                    <table id="passTable" class="table table-striped center dataTable imageTable">
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

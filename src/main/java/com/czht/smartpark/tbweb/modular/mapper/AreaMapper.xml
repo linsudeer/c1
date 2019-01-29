@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.AreaMapper">
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.Area">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="sort_no" jdbcType="INTEGER" property="sortNo" />
+    <result column="alarm_level" jdbcType="INTEGER" property="alarmLevel" />
+    <result column="alarm_level2" jdbcType="INTEGER" property="alarmLevel2" />
+    <result column="alarm_level3" jdbcType="INTEGER" property="alarmLevel3" />
+    <result column="created" jdbcType="TIMESTAMP" property="created" />
+    <result column="updated" jdbcType="TIMESTAMP" property="updated" />
+    <result column="area_type" jdbcType="INTEGER" property="areaType" />
+    <result column="lng" jdbcType="DECIMAL" property="lng" />
+    <result column="lat" jdbcType="DECIMAL" property="lat" />
+  </resultMap>
+
+  <resultMap id="CodeResultMap" type="com.czht.smartpark.tbweb.modular.dto.CodeDTO">
+    <id column="area_id" jdbcType="INTEGER" property="id" />
+    <result column="area_name" jdbcType="VARCHAR" property="text" />
+  </resultMap>
+
+  <select id="getAreas" resultMap="BaseResultMap">
+    SELECT * FROM tb_pf_area order by sort_no asc
+  </select>
+
+  <select id="getAreasForCode" resultMap="CodeResultMap">
+    select area_id, area_name from tb_pf_area
+    <if test="key != null">
+      and area_name REGEXP #{key}
+    </if>
+    order by sort_no asc
+    <if test="limit != null">
+      limit #{limit}
+    </if>
+  </select>
+</mapper>

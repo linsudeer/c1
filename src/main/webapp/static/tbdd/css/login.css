@@ -1,0 +1,516 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+a{
+   
+    text-decoration: none;
+}
+ul,li{
+    list-style: none;
+}
+/*body{min-width: 1200px}*/
+.loging{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: none;
+    background: rgba(0,0,0,0.4);
+
+}
+/*登录页*/
+.login-body{
+    background: url(../img/bodyBg.jpg) no-repeat center top ;
+    background-size: 100% 100%;
+    overflow: auto;
+}
+
+.loginCenter{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.login-form{
+    width: 100%;
+    height: 334px;
+    position: absolute;
+    /*left: 50%;*/
+    top: 50%;
+    /*margin-left: -200px;*/
+    margin-top: -167px;
+
+}
+.loginChinese{
+    font-family: HYk1gj;
+    font-size: 37px;
+    font-weight: normal;
+    font-stretch: normal;
+    text-align: center;
+    color: #ffffff;
+}
+#loginFrom{
+    position: absolute;
+    left: 50%;
+    margin-left: -200px;
+}
+.loginEnglish{
+    font-family: ArialMT;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    text-align: center;
+    color: #ffffff;
+}
+.login-form .form-group {
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+.loginIconBox{
+    width: 50px;
+    height: 50px;
+    background-color: #FFFFFF;
+    text-align: center;
+    vertical-align: center;
+    line-height: 50px;
+    float: left;
+    border-radius: 6px 0 0 6px;
+}
+.liginIcon{
+    vertical-align: middle;
+    color: #cccccc;
+    font-size: 28px;
+}
+.loginInput{
+    float: left;
+    border: 0;
+    outline: none;
+    height: 50px;
+    width: 350px;
+    line-height: 50px;
+    font-size: 20px;
+    color: #707070 !important;
+    font-family: MicrosoftYaHei;
+    border-radius: 0 6px 6px 0 ;
+}
+.loginSubmit{
+    width: 400px;
+    height: 50px;
+    background-color: #210843;
+    border-radius: 6px;
+    font-family: MicrosoftYaHei;
+    font-size: 24px;
+    color: #ffffff;
+    border: none;
+    outline: none;
+}
+.loginSubmit:disabled {
+    color: #7f7f7f;
+    background-color: #533661;
+    cursor: not-allowed;
+}
+.login-form .has-feedback label~.form-control-feedback {
+    top: 10px;
+}
+/*谷歌浏览器from表单背景变黄*/
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: #cccccc !important;
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px white inset!important;
+}
+/*菜单底部*/
+.footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    background-color: #f0f0f0;
+    color: #666;
+    z-index: 99;
+    line-height: 60px;
+}
+.copyright,.version{
+    color: #ffffff;
+}
+/*顶部导航*/
+.headerTop{
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 70px;
+    background-color: #0b3a58;
+    z-index: 9;
+    color: #ffffff;
+}
+#onePage html{
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+}
+/*左侧导航*/
+.leftVav{
+    height: 100%;
+    background: #263238;
+    transition: all .3s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    padding: 80px 0 60px 0;
+
+}
+.oneNav{
+    position: relative;
+
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.navItem{
+    border-left: 5px solid #263238;
+    padding: 10px 0;
+    cursor:pointer;
+}
+.navTop{
+    top:0;
+    height: 80px;
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    background-color: #0b3a58;
+
+}
+.menuSearchBox{
+    width: 100%;
+    background: #263238;
+    padding: 10px 15px;
+    position: relative;
+}
+.searchIcon{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    right: 23px;
+    top: 18px;
+    color: #ffffff;
+    font-size: 8px;
+    cursor: pointer;
+    display: none;
+
+}
+.menuSearch{
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    text-indent:10px;
+    color: #e7e7eb;
+    border: 0;
+    outline: 0;
+    border-radius: 3px;
+}
+.hiddenMenu{
+    display: none;
+}
+.showMenu{
+    display: block !important;
+}
+.navBody{
+    width: 260px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+}
+.navBodyMin{
+    position: relative;
+}
+/*.navBody::-webkit-scrollbar {*/
+    /*display: none;*/
+/*}*/
+.oneNavBox{
+    position: relative;
+    /*line-height: 30px;*/
+    background: #263238;
+}
+.navShouToggle{
+    height: 60px;
+    width: 60px;
+    float: left;
+    /*border-bottom: 1px solid rgba(255,255,255,.1);*/
+}
+.signOut{
+    float: right;
+    color: #ffffff;
+    line-height: 80px;
+    padding: 0 30px 0 10px;
+    cursor: pointer;
+}
+.userName{
+    float: right;
+    color: #ffffff;
+    line-height: 80px;
+    padding: 0 30px 0 10px;
+    cursor: pointer;
+}
+.weather{
+    float: right;
+    color: #ffffff;
+    /*width: 300px;*/
+    height: 80px;
+}
+.login{
+    font-family: FZLTCHK--GBK1-0;
+    color: #ffffff;
+    font-size: 30px;
+    line-height: 80px;
+    padding-left: 80px;
+    display: inline-block;
+    cursor: pointer;
+}
+.nav-icon{
+    color: #ffffff;
+    font-size: 20px;
+    padding:5px 15px 5px 15px;
+    /*float: left;*/
+    /*background-color: red;*/
+}
+.navText{
+    /*font-size: 14px;*/
+    color: #fefeff;
+    /*line-height: 30px;*/
+    display: inline-block;
+    /*position: relative;*/
+    top: -3px;
+}
+.colorRed{
+    color: #6d7262;
+}
+.nav-icon-more{
+    position: absolute !important;
+    color: #ABB1B7;
+    font-size: 12px;
+    right: 25px;
+    /*margin-right: 25px;*/
+    line-height: 50px !important;
+}
+.two-more{
+    line-height: 35px !important;
+}
+.twoNavBox{
+    display: none;
+}
+.twoNav{
+    position: relative;
+}
+.twoNav .navItem{
+    padding-left: 53px;
+}
+.twoNav .navItem .nav-icon-more{
+    line-height: 40px !important;
+}
+.thrNavBox{
+    display: none;
+}
+.thrNav{
+    padding-left: 14px;
+}
+
+.navItemActive{
+    background-color: #3c4b53;
+    border-left: 5px solid #0b3a58;
+}
+.minItemActive{
+    background-color: #490e68;
+}
+.navSearchItemActive{
+    background-color: #3c4b53;
+    border-left: 5px solid #0b3a58;
+}
+.navItem:hover{
+    background-color: #3c4b53;
+    border-left: 5px solid #0b3a58;
+}
+
+.showBodyBox{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    /*z-index: 100;*/
+    overflow-y: hidden;
+    padding-bottom: 60px;
+}
+
+.showBodyHeader{
+    padding-left:60px ;
+    padding-top: 80px;
+    height: 100%;
+}
+.bodyHeader{
+    /*position: absolute;*/
+    padding: 10px;
+    width: 100%;
+    /*height: 40px;*/
+    /*line-height: 40;*/
+}
+.headerRight{
+    float: right;
+    cursor: pointer;
+}
+.showBody{
+    padding-bottom: 40px;
+    /*background-color: #2b542c;*/
+    /*height: 500px;*/
+    height: 100%;
+    margin-left: 10px;
+}
+.showBodyMin{
+    margin-left:60px
+}
+.textRigih{
+    text-align: right;
+    line-height: 40px;
+}
+
+/*标题栏a标签颜色*/
+.headerLeft a{
+    color: #ffffff;
+    cursor: pointer;
+    /*line-height: 40px;*/
+    text-decoration:none
+}
+/*左侧导航滚动条*/
+
+.leftVav{
+    /*width: 500px;*/
+
+}
+.minMenuOne{
+    width: 60px;
+    float: left;
+    height: 100%;
+    position: relative;
+}
+.minMenuTwo{
+    float: left;
+    position: relative;
+    width: 190px;
+    max-height: 100%;
+    /*height: 100%;*/
+    display: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background:  linear-gradient(#5C3C76,#3B4360);
+}
+.minMenuThr{
+    float: left;
+    width: 180px;
+    max-height: 100%;
+
+    position: relative;
+    overflow-y: auto;
+    display: none;
+    overflow-x: hidden;
+    background:  linear-gradient(#5C3C76,#3B4360);
+}
+.minNavItem{
+    padding: 10px 0 10px 0;
+    position: relative;
+    cursor: pointer;
+}
+.minNavItem .nav-icon-more{
+    line-height: 40px !important;
+}
+.minMenuTwoBox {
+    display: none;
+}
+.minMenuThrBox{
+    display: none;
+}
+.minMenuTwoBox .minNavItem,.minMenuThrBox .minNavItem{
+    padding: 10px 0 10px 15px;
+}
+.navBodyMin{
+    /*display: none;*/
+    height: 100%;
+}
+/*滚动条左边距*/
+.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{
+    background-color: #fff; background-color: rgba(255,255,255,0.75);
+    width: 4px;
+    filter: "alpha(opacity=75)"; -ms-filter: "alpha(opacity=75)";
+}
+.mCSB_scrollTools .mCSB_draggerRail{
+    width: 2px;
+    height: 100%;
+    margin: 0 auto;
+    -webkit-border-radius: 16px; -moz-border-radius: 16px; border-radius: 16px;
+    background-color: #000; background-color: rgba(0,0,0,0.4);
+    filter: "alpha(opacity=40)"; -ms-filter: "alpha(opacity=40)";
+}
+.mCSB_inside > .mCSB_container {
+    margin-right: 0px;
+}
+.mCSB_scrollTools .mCSB_draggerRail {
+    background-color: rgba(255,255,255,0.4);
+    filter: "alpha(opacity=40)";
+    -ms-filter: "alpha(opacity=40)";
+}
+.mCSB_dragger{
+    height: 50px !important;
+}
+
+.mCustomScrollBox{
+    border-right: 2px solid;
+    border-color: rgb(106, 66, 132);
+
+}
+/*头部导航*/
+.header-menu{
+    position: absolute;
+    left: 50%;
+    top: 0;
+    /*width: 470px;*/
+    margin-left: -200px;
+
+}
+.headerNav {
+    padding: 0 40px 5px 40px;
+    height: 40px;
+    background-size: 100% 100%;
+    border-radius: 0 0 25px 25px;
+     background: url("../images/headerMenu.png") no-repeat center;
+    background-size: 100% 100%;
+    /*background: -webkit-linear-gradient(top, rgba(51,38,107,0.9) 0, rgba(245,130,222,.2) 100%);*/
+    /*background: -moz-linear-gradient(top, rgba(51,38,107,0.9) 0, rgba(245,130,222,.2) 100%);*/
+    /*background: -o-linear-gradient(top, rgba(51,38,107,0.9) 0, rgba(245,130,222,.2) 100%);*/
+    font-size: 1.1em;
+    overflow: hidden;
+}
+.header-menu li{
+    float: left;
+    margin: 5px 0;
+    padding: 0 10px;
+    cursor: pointer;
+    border-right: 1px solid rgba(255,255,255,0.2);
+}
+.header-menu li:last-child {
+    border: none;
+}
+.icon-stranger{
+    background: url("../images/icon-stranger.png") no-repeat center;
+    height: 23px;
+    margin-left: 10px;
+}
+.icon-meeting{
+    background: url("../images/icon-meeting.png") no-repeat center;
+    height: 23px;
+    margin-left: 10px;
+}

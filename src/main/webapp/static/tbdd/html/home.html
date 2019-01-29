@@ -1,0 +1,131 @@
+<!-- 首页 -->
+
+
+<div id="sidebar">
+    <ul id="function-list" class="leftUl area-list">
+        <li class="leftLi leftLiFir  area-4">
+            <a href="#">
+                <img src="../img/allPalce.png" alt="" class="leftNavImg">
+                <div class="leftNavText">总体情况</div>
+            </a>
+        </li>
+        <li class="leftLi area-1">
+            <a href="javascript:void(0);">
+                <img src="../img/bgl.png" alt="" class="leftNavImg">
+                <div class="leftNavText">办公楼</div>
+            </a>
+        </li>
+        <li class="leftLi area-2">
+            <a href="#">
+                <img src="../img/sd.png" alt="" class="leftNavImg">
+                <div class="leftNavText">Ⅲ段</div>
+            </a>
+        </li>
+        <li class="leftLi area-3">
+            <a href="#">
+                <img src="../img/yz.png" alt="" class="leftNavImg">
+                <div class="leftNavText">一招</div>
+            </a>
+        </li>
+    </ul>
+
+    <div id="deptTree"></div>
+</div>
+
+<div id="right">
+    <div class="widget-box widget-plain">
+        <div class="center">
+            <ul class="stat-boxes2">
+                <li>
+                    <div class="left "><img src="../img/yzg.png" alt=""></div>
+                    <a class="right" href="javascript:void(0);"><strong id="totalPerson">0</strong> 应在岗人数</a>
+                </li>
+                <li>
+                    <div class="left "><img src="../img/zg.png" alt=""></div>
+                    <a class="right" href="javascript:void(0);"><strong id="onDutyPerson">0</strong> 实在岗人数</a>
+                </li>
+                <li>
+                    <div class="left "><img src="../img/lszg.png" alt=""></div>
+                    <a class="right" href="javascript:void(0);"><strong id="tempOffDutyPerson">0</strong> 临时离岗数</a>
+                </li>
+                <li>
+                    <div class="left "><img src="../img/bzg.png" alt=""></div>
+                    <a class="right" href="javascript:void(0);"><strong id="offDutyPerson">0</strong> 不在岗人数</a>
+                </li>
+            </ul>
+            <div id="paihang" class="row-fluid">
+                <div class="panel-title">
+                    <h5><i class="icon icon-signal"></i><a href="index9.html">周考勤排行</a></h5><!-- 在位人员排行 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="content">
+    <!--breadcrumbs-->
+    <div id="content-header">
+        <div id="breadcrumb">
+            <a href="#" title="人员实时动态"><i class="icon-home"></i>实时动态</a>
+            <a href="#" class="current"> 总体情况</a>
+            <a href="#" title="返回上一页 "><i class="icon-arrow-left"></i></a>
+        </div>
+    </div>
+    <!--End-breadcrumbs-->
+
+    <div class="container-fluid">
+        <!--Chart-box-->
+        <div class="row-fluid">
+            <div class="widget-box">
+                <div class="widget-title bg_lg"><span class="icon"><i class="glyphicon glyphicon-signal"></i></span>
+                    <h5>各时段在岗人数</h5>
+                </div>
+                <div class="widget-content" >
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="chart" id="onWork24h"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span4" id="chart1">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <h5></h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="span4" id="chart2">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <h5></h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="span4" id="chart3">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <h5></h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="chart"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 各部门在岗人员分布 -->
+            <!-- 人员进出比例 -->
+        </div>
+        <!--End-Chart-box-->
+
+        <!-- 各区域在岗人数统计 -->
+    </div>
+</div>
