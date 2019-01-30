@@ -20,14 +20,6 @@ public class AttendBean extends Page {
         this.deptId = deptId;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
     public String getStartDate() {
         return startDate;
     }

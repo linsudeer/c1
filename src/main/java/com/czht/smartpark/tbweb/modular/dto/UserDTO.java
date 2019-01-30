@@ -15,6 +15,8 @@ public class UserDTO {
 
     private Integer userType;
 
+    private String dataRole;
+
     private byte[] idPic;
 
     public Integer getUserId() {
@@ -103,5 +105,13 @@ public class UserDTO {
 
     public void setUserType(Integer userType) {
         this.userType = userType;
+    }
+
+    public String getDataRole() {
+        return dataRole;
+    }
+
+    public void setDataRole(String dataRole) {
+        this.dataRole = dataRole;
     }
 }

@@ -85,12 +85,12 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
-  <!--<filter>
-    <filter-name>loginFilter</filter-name>
-    <filter-class>com.czht.smartpark.tbweb.context.filter.LoginFilter</filter-class>
+  <filter>
+    <filter-name>RequestFilter</filter-name>
+    <filter-class>com.czht.smartpark.tbweb.context.filter.RequestFilter</filter-class>
   </filter>
   <filter-mapping>
-    <filter-name>loginFilter</filter-name>
-    <url-pattern>/*</url-pattern> &lt;!&ndash; 拦截 所有http请求 &ndash;&gt;
-  </filter-mapping>-->
+    <filter-name>RequestFilter</filter-name>
+    <url-pattern>/*</url-pattern> <!-- 拦截 所有http请求 -->
+  </filter-mapping>
 </web-app>
