@@ -73,20 +73,24 @@
 <div id="addPassWrap" style="display: none;">
     <form>
         <div class="form-group">
-            <label for="userId">姓名</label>
-            <select type="text" class="form-control" name="userId" placeholder="姓名"></select>
+            <label for="userId">姓名：</label>
+            <select type="text" class="form-control" style="width: 85%;" name="userId" placeholder="姓名"></select>
         </div>
         <div class="form-group">
-            <label for="areaId">区域</label>
-            <select type="text" class="form-control" name="areaId" placeholder="区域"></select>
+            <label for="areaId">区域：</label>
+            <select type="text" class="form-control" style="width: 85%;" name="areaId" placeholder="区域"></select>
         </div>
         <div class="form-group">
-            <label for="direct">进出方向</label>
-            <select type="text" class="form-control" name="direct" placeholder="进出方向"></select>
+            <label for="direct">方向：</label>
+            <select type="text" class="form-control" style="width: 85%;" name="direct" placeholder="进出方向"></select>
         </div>
         <div class="form-group">
-            <label>通行时间</label>
-            <input type="text" class="form-control" name="passDatetime" id="passDatetime" placeholder="通行时间">
+            <label>时间：</label>
+            <input type="text" class="form-control" name="passDatetime" style="display: inline-block;" id="passDatetime" placeholder="通行时间">
+        </div>
+        <div class="form-group">
+            <label>原因：</label>
+            <input type="text" class="form-control" name="remark" style="display: inline-block;" placeholder="通行时间">
         </div>
         <div class="form-group">
             <button type="button" class="btn btn-success" id="saveBtn">保存</button>

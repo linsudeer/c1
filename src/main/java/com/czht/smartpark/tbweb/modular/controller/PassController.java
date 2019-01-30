@@ -7,6 +7,7 @@ import com.czht.smartpark.tbweb.modular.dto.PassDTO;
 import com.czht.smartpark.tbweb.modular.service.PassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -30,6 +31,17 @@ public class PassController {
         }
 
         return ResultTip.success(records, count);
+    }
+
+    /**
+     * 新增记录
+     * @param bean
+     * @return
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public Tip addPassRecords(PassBean bean) {
+
+        return ResultTip.success(bean);
     }
 
 }

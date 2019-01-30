@@ -32,13 +32,22 @@ function initTrack(params){
     drawHistoryAttend(params.userId);
 
     //监听查询按钮
-    $('form#query').on('click', 'button', function(e){
+    $('form#query').on('click', '#queryBtn', function(e){
         var params = $(this).parents('form').serializeJSON();
         console.log(params);
         table.clear();
         table.destroy();
         drawHistoryAttend(params.userId, params.starttime, params.endtime);
         drawTrack(params.userId, params.starttime, params.endtime);
+    });
+
+    // 监听新增按钮
+    $('form#query').on('click', '#addBtn', function (e){
+        layer.open({
+            type:1,
+            content:$(PASS_ADD_WRAP),
+            area: ['550px', '350px']
+        });
     });
 }
 

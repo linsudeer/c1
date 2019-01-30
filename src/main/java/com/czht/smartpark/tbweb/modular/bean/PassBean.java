@@ -23,6 +23,10 @@ public class PassBean extends Page {
 
     private String endtime;
 
+    // 新增通行记录
+    private String passtime;
+    private String remark;
+
     public Integer getDeptId() {
         return deptId;
     }
@@ -77,5 +81,21 @@ public class PassBean extends Page {
 
     public void setEndtime(String endtime) {
         this.endtime = endtime;
+    }
+
+    public String getPasstime() {
+        return passtime;
+    }
+
+    public void setPasstime(String passtime) {
+        this.passtime = passtime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

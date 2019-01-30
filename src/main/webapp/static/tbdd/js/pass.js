@@ -46,7 +46,7 @@ function initPass() {
         layer.open({
             type:1,
             content:$(PASS_ADD_WRAP),
-            area: ['500px', '300px']
+            area: ['550px', '350px']
         });
     });
 

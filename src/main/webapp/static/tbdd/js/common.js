@@ -16,7 +16,10 @@ var ROLE = {
 }
 
 $(function(){
-
+    layer.config({
+        // skin: 'purple-class',
+        zIndex:100
+    })
 
 });
 

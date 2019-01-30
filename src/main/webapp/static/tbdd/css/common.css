@@ -9,11 +9,33 @@ form .form-group .form-control {background-color: #fff;border-radius: 5px; width
 table.dataTable tbody th, table.dataTable tbody td{padding: 0;}
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate{color: #fff;margin-right: 100px;}
 .dataTables_wrapper .dataTables_info {clear: none;float: left;padding-top: 4px;}
+
 /*.row-fluid{padding-top: 10px;}*/
 table.dataTable.no-footer{border: none;}
+
+
+body .purple-class .layui-layer-title{
+    color: #fff!important;
+    border: 1px solid rgba(164, 81, 157, 0.52);
+    background-image: -webkit-linear-gradient(45deg, #9C27B0 10%, #673AB7 50%, #673AB7 50%, #9C27B0 67%, #673AB7);
+    background-image: -o-linear-gradient(45deg, #9C27B0 10%, #673AB7 50%, #673AB7 50%, #9C27B0 67%, #673AB7);
+    background-image: linear-gradient(45deg, #9C27B0 10%, #673AB7 50%, #673AB7 50%, #9C27B0 67%, #673AB7);
+    background-size: 100% 100%
+}
+body .purple-class .layui-layer-btn{border-top:1px solid #E9E7E7}
+body .purple-class .layui-layer-btn a{background:#333;}
+body .purple-class .layui-layer-btn .layui-layer-btn1{background:#999;}
+body .purple-class .layui-layer-content {
+    color: #fff;
+    background-color: #303a52;
+    background: url(../img/bodyBg.png) no-repeat 0 0 / 100% 100%!important;
+    background-size: cover!important
+}
 
 .m-t {margin-top: 10px;}
 .m-l {margin-left: 10px;}
 
 
 #query{padding-left: 20px;}
+
+#addPassWrap form{padding: 20px 10px;}

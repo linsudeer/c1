@@ -1,8 +1,11 @@
 
 // 加载头部时初始化方法
-var QUERY_UNAME = "#addPassWrap select[name='userId']"; // 用户名
-var QUERY_AREA = "#addPassWrap select[name='areaId']";//区域
-var QUERY_DIRECT = "#addPassWrap select[name='direct']";//进出方向
+var PASS_UNAME = "#addPassWrap select[name='userId']"; // 用户名
+var PASS_AREA = "#addPassWrap select[name='areaId']";//区域
+var PASS_DIRECT = "#addPassWrap select[name='direct']";//进出方向
+var PASS_REMARK = "#addPassWrap select[name='remark']";//进出方向
+
+
 
 var PASS_DATETIME = "#addPassWrap #passDatetime";//开始时间
 
@@ -28,10 +31,9 @@ function initHead(){
     });
 
     // 初始化公用部分
-    renderSelect($(QUERY_UNAME),'姓名', SERVER_URL.code_user);
-    renderSelect($(QUERY_AREA),'区域', SERVER_URL.code_area);
-    renderSelect($(QUERY_USERGROUP),'人员类型', SERVER_URL.code_usergroup);
-    renderSelect($(QUERY_DIRECT),'进出方向', SERVER_URL.code_direct);
+    renderSelect($(PASS_UNAME),'姓名', SERVER_URL.code_user);
+    renderSelect($(PASS_AREA),'区域', SERVER_URL.code_area);
+    renderSelect($(PASS_DIRECT),'进出方向', SERVER_URL.code_direct);
     laydate.render({ elem: PASS_DATETIME, type: 'datetime'});
 
     setData();

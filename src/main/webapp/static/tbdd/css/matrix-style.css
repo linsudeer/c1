@@ -7,7 +7,7 @@
 html, body{
 	height:100%;
 	min-height:930px;
-	background: url("../img/bodyBg.jpg") no-repeat  center ;
+	background: url("../img/bodyBg.png") no-repeat  center ;
 	background-size: 100% 100%;
 	    background-attachment: fixed;
 }
@@ -1518,7 +1518,7 @@ form {
 	padding:6px 5px 2px;
 }
 .input-prepend input, .input-append input, .input-prepend input[class*="span"], .input-append input[class*="span"] {
-	width:none;
+	width:auto;
 }
 .input-append input, .input-append select, .input-prepend span, .input-prepend input {
 	border-radius:0px!important;
