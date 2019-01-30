@@ -20,7 +20,6 @@ function initPass() {
         renderSelect($(QUERY_UNAME),'姓名', SERVER_URL.code_user,{deptId: deptId});
     });
 
-
     renderSelect($(QUERY_UNAME),'姓名', SERVER_URL.code_user);
     renderSelect($(QUERY_AREA),'区域', SERVER_URL.code_area);
     renderSelect($(QUERY_USERGROUP),'人员类型', SERVER_URL.code_usergroup);

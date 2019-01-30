@@ -16,7 +16,7 @@ public class PermissonBean {
     /**
      * 用户ID
      */
-    private Integer userId;
+    private Long userId;
 
     public Integer getDeptPid() {
         return deptPid;
@@ -26,11 +26,11 @@ public class PermissonBean {
         this.deptPid = deptPid;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 }

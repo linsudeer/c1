@@ -20,4 +20,22 @@ public interface PassService {
      * @return
      */
     Integer getPassCount(PassBean query);
+
+    /**
+     * 新增记录
+     * @param bean
+     */
+    void addPassRecord(PassBean bean);
+
+    /**
+     * 编辑记录
+     * @param bean
+     */
+    void updatePassRecord(PassBean bean);
+
+    /**
+     * 删除
+     * @param recordId
+     */
+    void deletePassRecord(Long recordId);
 }

@@ -71,6 +71,8 @@
     <result column="user_mobile" jdbcType="VARCHAR" property="userMobile" />
     <result column="dept_id" jdbcType="INTEGER" property="deptId" />
     <result column="dept_parent_id" jdbcType="INTEGER" property="deptPid" />
+    <result column="group_id" jdbcType="INTEGER" property="userGroup" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
     <result column="id_card" jdbcType="VARCHAR" property="idCard" />
     <result column="identification_pic_id" jdbcType="LONGVARBINARY" property="idPic" />

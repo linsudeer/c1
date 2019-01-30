@@ -40,8 +40,30 @@ public class PassController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Tip addPassRecords(PassBean bean) {
+        passService.addPassRecord(bean);
+        return ResultTip.success();
+    }
 
-        return ResultTip.success(bean);
+    /**
+     * 更新记录
+     * @param bean
+     * @return
+     */
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public Tip editPassRecords(PassBean bean) {
+        passService.updatePassRecord(bean);
+        return ResultTip.success();
+    }
+
+    /**
+     * 删除记录
+     * @param bean
+     * @return
+     */
+    @RequestMapping(value = "/del", method = RequestMethod.POST)
+    public Tip deletePassRecords(Long recordId) {
+        passService.deletePassRecord(recordId);
+        return ResultTip.success();
     }
 
 }

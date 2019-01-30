@@ -11,6 +11,10 @@ public class UserDTO {
     private String deptName;
     private String idCard;
 
+    private Integer userGroup;
+
+    private Integer userType;
+
     private byte[] idPic;
 
     public Integer getUserId() {
@@ -83,5 +87,21 @@ public class UserDTO {
 
     public void setDeptPid(Integer deptPid) {
         this.deptPid = deptPid;
+    }
+
+    public Integer getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(Integer userGroup) {
+        this.userGroup = userGroup;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 }

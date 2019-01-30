@@ -28,4 +28,6 @@ public interface Constant {
      * 可查看本部门的所有数据，以及其他部门的在岗情况，不可以查看具体通行记录
      */
     String ROLE_GENERAL = "general";
+
+
 }

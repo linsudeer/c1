@@ -11,7 +11,7 @@ public class PassBean extends Page {
 
     private Integer deptId;
 
-    private Integer userId;
+    private Long userId;
 
     private Integer userGroup;
 
@@ -24,6 +24,7 @@ public class PassBean extends Page {
     private String endtime;
 
     // 新增通行记录
+    private Long recordId;
     private String passtime;
     private String remark;
 
@@ -35,11 +36,13 @@ public class PassBean extends Page {
         this.deptId = deptId;
     }
 
-    public Integer getUserId() {
+    @Override
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    @Override
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -97,5 +100,13 @@ public class PassBean extends Page {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Long getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(Long recordId) {
+        this.recordId = recordId;
     }
 }

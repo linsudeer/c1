@@ -47,6 +47,12 @@
     <result column="reserve_blob" jdbcType="LONGVARBINARY" property="reserveBlob" />
   </resultMap>
 
+  <sql id="BaseColumn">
+    pass_record_id,pass_datetime,way_of_pass,register_flag,similarity_degree,user_id,device_id,user_name,user_sex,user_type,user_group,group_id,dept_id,
+    dept_parent_id,device_name,device_type,device_direction,device_area_id ,device_entrance_id,device_parent_id,device_auth,time_auth,live_auth,facesize_auth,
+    filter_flag,filter_time,search_id,classify_id,classify_score,full_fdfs_id,face_fdfs_id,pic_quality,pic_score,pass_feature_id,lock_flag,create_datetime
+  </sql>
+
   <resultMap id="PassResultMap" type="com.czht.smartpark.tbweb.modular.dto.PassDTO">
     <id column="pass_record_id" jdbcType="BIGINT" property="passRecordId" />
     <result column="pass_datetime" jdbcType="TIMESTAMP" property="passDatetime" />
@@ -202,6 +208,10 @@
         and pass.device_direction=#{direct}
       </if>
     </where>
+  </select>
+
+  <select id="getPassRecordById" resultMap="BaseResultMap">
+    select <include refid="BaseColumn"></include> from tb_pass_record where pass_record_id=#{recordId}
   </select>
 
 </mapper>
