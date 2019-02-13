@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pass")
-public class PassController {
+public class PassController{
 
     @Autowired
     private PassService passService;

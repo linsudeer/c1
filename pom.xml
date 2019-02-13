@@ -32,7 +32,7 @@
     <!-- zeromq -->
     <zeromq.version>0.4.3</zeromq.version>
     <!-- until -->
-    <jackson.version>2.8.11.1</jackson.version>
+    <jackson.version>2.9.8</jackson.version>
     <joda-time.version>2.9.9</joda-time.version>
     <commons-fileupload.version>1.3.3</commons-fileupload.version>
     <commons-collections.version>3.0</commons-collections.version>

@@ -88,7 +88,7 @@ public class PassServiceImpl implements PassService {
         record.setDeptId(user.getDeptId());
         passRecordMapper.updateByPrimaryKey(record);
 
-        // 操作日志TODO
+        // 操作日志 TODO
     }
 
     @Override

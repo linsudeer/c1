@@ -21,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/current")
-public class CurrentController extends BaseController{
+public class CurrentController{
 
     @Autowired
     private CurrentService currentService;

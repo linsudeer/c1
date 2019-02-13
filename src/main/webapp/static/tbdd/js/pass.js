@@ -31,6 +31,8 @@ function initPass() {
     //加载表格
     loadPassTable();
 
+    setDeptTreeData();
+
     //监听查询按钮
     $('form#query').on('click', '#queryBtn', function(e){
         var params = $(this).parents('form').serializeJSON();
@@ -45,7 +47,7 @@ function initPass() {
         layer.open({
             type:1,
             content:$(PASS_ADD_WRAP),
-            area: ['550px', '350px']
+            area: ['600px', '380px']
         });
     });
 
@@ -91,5 +93,31 @@ function loadPassTable(params) {
 
 function editPassRecord(row){
     // 这里加权限判断
-    layer.msg("请联系室办领导");
+    layer.msg("请联系本室办领导修改");
+}
+
+//加载部门树数据
+function setDeptTreeData() {
+    $.get(SERVER_URL.org_onWorkTree, {pid: 0},function(res){
+        var data = res.data;
+        renderTree(data, function(event, data){
+            if(data.type==1){// 单位
+                //draw24hData(true,'deptPId', data.id);
+            }else if(data.type==2){// 部门
+                //draw24hData(true,'deptId', data.id);
+            }else {// 所有
+               // draw24hData(true);
+            }
+
+        },function (event, data){
+            var path = 'onwork';
+            if(data.type==1){//单位
+                path += '/'+data.id;
+            }else if(data.type=2) {//部门
+                path += "/" + data.pId+"/"+data.id;
+            }
+            go(path);
+        });
+    });
+
 }

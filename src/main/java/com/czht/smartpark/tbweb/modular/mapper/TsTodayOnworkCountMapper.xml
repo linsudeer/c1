@@ -37,7 +37,8 @@
   </resultMap>
 
   <select id="countOnworkBy24h" resultMap="BaseResultMap">
-    SELECT record_id,data_time,count(data_count) as data_count,area_id,today.dept_id,data_desc FROM ts_today_onwork_count today left join tb_pf_department dept on today.dept_id=dept.dept_id    <where>
+    SELECT record_id,data_time,count(data_count) as data_count,area_id,today.dept_id,data_desc FROM ts_today_onwork_count today left join tb_pf_department dept on today.dept_id=dept.dept_id
+    <where>
       <if test="deptPid != null and deptPid > 0">
          and dept.parent_id=#{deptPid}
       </if>
@@ -92,7 +93,7 @@
     <where>
       area.area_id>1
       <if test="deptPid != null and deptPid>0">
-        and dept.parent_id = #{deptPId}
+        and dept.parent_id = #{deptPid}
       </if>
       <if test="deptId != null and deptId>0">
         and dept_id=#{deptId}
@@ -106,7 +107,7 @@
     FROM view_today_onwork_count_by_area area LEFT JOIN tb_pf_department dept on area.dept_id=dept.dept_id
     <where>
       <if test="deptPid != null and deptPid>0">
-        and dept.parent_id = #{deptPId}
+        and dept.parent_id = #{deptPid}
       </if>
       <if test="areaId != null and areaId>0">
         and area.id=#{areaId}
@@ -147,7 +148,7 @@
   </select>
 
   <select id="getOnWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
-    select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onworkStatus, u.identification_pic_id  from (
+    select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onwork_status, u.identification_pic_id  from (
     SELECT
         pass_datetime AS last_passtime,
         user_id,
@@ -157,7 +158,7 @@
         '进' as lastDirect,
         device_area_id AS area_id,
         area.area_name as area_name,
-        '在岗' AS onworkStatus
+        '在岗' AS onwork_status
     FROM
         view_today_pass_last pass left join tb_pf_area area on pass.device_area_id=area.area_id
         left outer join tb_pf_department dept on pass.dept_id=dept.dept_id
@@ -172,7 +173,7 @@
   </select>
 
   <select id="getTempWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
-    select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onworkStatus, u.identification_pic_id  from (
+    select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onwork_status, u.identification_pic_id  from (
     SELECT
         pass_datetime AS last_passtime,
         user_id,
@@ -182,7 +183,7 @@
         '出' as lastDirect,
         device_area_id AS area_id,
         area.area_name as area_name,
-        '临时离岗' AS onworkStatus
+        '临时离岗' AS onwork_status
     FROM
         view_today_pass_last pass left join tb_pf_area area on pass.device_area_id=area.area_id
         left outer join tb_pf_department dept on pass.dept_id=dept.dept_id
@@ -197,7 +198,7 @@
   </select>
 
   <select id="getOffWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
-    select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onworkStatus, u.identification_pic_id  from (
+    select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onwork_status, u.identification_pic_id  from (
     SELECT
     pass_datetime AS last_passtime,
     user_id,
@@ -207,7 +208,7 @@
     '出' as lastDirect,
     device_area_id AS area_id,
     area.area_name as area_name,
-    (case when oa.leave_name is not null then oa.leave_name else '不在岗' end) as onwork_status,
+    (case when oa.leave_name is not null then oa.leave_name else '不在岗' end) as onwork_status
     FROM
     view_today_pass_last pass left join tb_pf_area area on pass.device_area_id=area.area_id
     left outer join tb_pf_department dept on pass.dept_id=dept.dept_id

@@ -10,8 +10,8 @@ Q.reg('index',function(){
     load('attend', initAttend);
 }).reg('track', function(userId, start, end) {//个人轨迹
     load('track', initTrack, {userId: userId, starttime:start, endtime:end});
-}).reg('onwork', function(pid, id){// 部门在岗情况
-    load('onwork', initOnwork, {deptPid:pid, deptId:id});
+}).reg('onwork', function(pid, id, type){// 部门在岗情况
+    load('onwork', initOnwork, {deptPid:pid, deptId:id, type:type});
 });
 
 

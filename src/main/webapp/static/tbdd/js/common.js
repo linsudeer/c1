@@ -32,7 +32,6 @@ $(function(){
 function load(path, callback, params){
     var url = DOMAIN+HTML_PATH+path+'.html';
     $(INDEX_MAIN_ID).load(url,'',function(response,status,xhr){
-        console.log("load "+url);
         if(typeof callback == 'function'){
             callback(params);
         }

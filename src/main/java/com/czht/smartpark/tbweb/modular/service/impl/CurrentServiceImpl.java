@@ -54,7 +54,7 @@ public class CurrentServiceImpl implements CurrentService {
         }else if(bean.getType() == OnWorkTypeEnum.OFFWORK.getType()){// 不在岗
             list = onworkCountMapper.getOffWorkPassRecords(bean);
         }else {
-            list = onworkCountMapper.getUsersOnworkPassRecords(bean);
+            list = onworkCountMapper.getUsersOnworkPassRecords(bean);// 所有
         }
         return list;
     }

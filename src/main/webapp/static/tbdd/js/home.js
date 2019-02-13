@@ -167,7 +167,9 @@ function drawOnWorkByState(title){
             }
         }
         drawPie($(elem+" .chart")[0], legendData, data, function(param){
-            alert(param.name);
+            var path = 'onwork';
+            path += "/0/0/"+param.data.attendType;
+            go(path);
         });
 
         // 同时填充右侧人数

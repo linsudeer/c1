@@ -171,7 +171,7 @@ function drawHistoryAttend(userId,startDate,endDate) {
             { "data":"userName", "name": "姓名" ,"title": "姓名" ,"orderable": false, "render":renderUserName},
             { "data":"deptName", "name": "部门" ,"title": "部门" ,"orderable": false},
             { "data":"attendDate", "name": "考勤日期" ,"title": "考勤日期" ,"orderable": false, "render":renderAttendDate},
-            { "data":"week", "name": "星期" ,"title": "星期" ,"orderable": false},
+            { "data":"week", "name": "星期" ,"title": "星期" ,"orderable": false, "render": renderWeek},
             { "data":"absenceTime", "name": "应出勤(小时)" ,"title": "应出勤（小时）" ,"orderable": false},
             { "data":"actualTime", "name": "考勤时长（小时）" ,"title": "考勤时长（小时）" ,"orderable": false},
             { "data":"overTime", "name": "加班时长（小时）" ,"title": "加班时长（小时）" ,"orderable": false},
@@ -208,5 +208,26 @@ function drawHistoryAttend(userId,startDate,endDate) {
         }else {
             return "<i class='glyphicon glyphicon-list-alt' style='color:#aaa'></i>"
         }
+    }
+
+    function renderWeek(data){
+        var week = data;
+        if(data == 1){
+            week = '星期一';
+        }else if(data==2){
+            week = '星期二';
+        }else if(data==3){
+            week = '星期三';
+        }else if(data==4){
+            week = '星期四';
+        }else if(data==5){
+            week = '星期五';
+        }else if(data==6){
+            week = '星期六';
+        }
+        else if(data==7){
+            week = '星期日';
+        }
+        return week;
     }
 }

@@ -21,6 +21,8 @@ function initAttend(){
     laydate.render({ elem: QUERY_ENDTIME, type: 'date'});
 
     loadAttendTable();
+
+    setDeptTreeData();
     //监听查询按钮
     $('form#query').on('click', 'button', function(e){
         var params = $(this).parents('form').serializeJSON();
@@ -60,4 +62,30 @@ function loadAttendTable(params){
             return "<a href='#!track/"+row.userId+"'>"+data+"</a>";
         }
     }
+}
+
+//加载部门树数据
+function setDeptTreeData() {
+    $.get(SERVER_URL.org_onWorkTree, {pid: 0},function(res){
+        var data = res.data;
+        renderTree(data, function(event, data){
+            if(data.type==1){// 单位
+                //draw24hData(true,'deptPId', data.id);
+            }else if(data.type==2){// 部门
+                //draw24hData(true,'deptId', data.id);
+            }else {// 所有
+                // draw24hData(true);
+            }
+
+        },function (event, data){
+            var path = 'onwork';
+            if(data.type==1){//单位
+                path += '/'+data.id;
+            }else if(data.type=2) {//部门
+                path += "/" + data.pId+"/"+data.id;
+            }
+            go(path);
+        });
+    });
+
 }

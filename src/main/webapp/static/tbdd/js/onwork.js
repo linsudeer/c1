@@ -6,53 +6,73 @@ var PASS_TABLE = "#passTable";
 var CAROUSEWRAP = "#carousel";
 
 function initOnwork(params){
-    setTitleData(params.deptPid, params.deptId);
-    loadData(params.deptPid, params.deptId);
+    setTitleData(params.deptPid, params.deptId, params.type);
+    loadData(params.deptPid, params.deptId, params.type);
 
 }
 
 /**
  * 设置标题
  */
-function setTitleData(deptPid, deptId){
-    $.get(SERVER_URL.current_typegroup,{deptId:deptId, deptPid:deptPid}, function(res){
-        var data = res.data;
-        var onCnt=0, offCnt=0, total=0;
-        var deptName='';
-        if(data && data.length>0){
-            for(var i=0;i<data.length;i++){
-                if(data[i].id==1){
-                    onCnt = data[i].count;
-                }else {
-                    offCnt = data[i].count;
-                }
-            }
-            total = onCnt+offCnt;
-            deptName = data[0].deptName;
+function setTitleData(deptPid, deptId, type){
+    if(type){// 类型1-在岗 2-临时离岗 3-不在岗
+        if(type == 1){
+            $(HEADER).text("在岗人员");
+            var html='<span>在岗人员统计：</span>\n\t\t\t\t\t<span> 共 '+0+'人，  </span>\n';
+        }else if (type == 2){
+            $(HEADER).text("临时离岗人员");
+            var html='<span>临时离岗人员统计：</span>\n\t\t\t\t\t<span> 共 '+0+'人，  </span>\n';
+        }else if (type == 3){
+            $(HEADER).text("不在岗人员");
+            var html='<span>不在岗人员统计：</span>\n\t\t\t\t\t<span> 共 '+0+'人，  </span>\n';
         }
-        $(HEADER).text(deptName+"在岗人员");
-        var html='<span>'+deptName+'人员统计：</span>\n' +
-            '\t\t\t\t\t<span> 共 '+total+'人，  </span>\n' +
-            '\t\t\t\t\t<span> 在岗'+onCnt+'人， </span>\n' +
-            '\t\t\t\t\t<span> 不在岗'+offCnt+'人。</span>';
         $(CAROUSE_TITLE).html(html+'<a data-toggle="tab" href="#tab1">列表显示</a>');
         $(TABLE_TITLE).html(html + '<a data-toggle="tab" href="#tab2">图例显示</a>')
-    });
+    }else {// 没有类型，显示所有，根据部门显示
+        $.get(SERVER_URL.current_typegroup,{deptId:deptId, deptPid:deptPid}, function(res){
+            var data = res.data;
+            var onCnt=0, offCnt=0, total=0;
+            var deptName='';
+            if(data && data.length>0){
+                for(var i=0;i<data.length;i++){
+                    if(data[i].id==1){
+                        onCnt = data[i].count;
+                    }else {
+                        offCnt = data[i].count;
+                    }
+                    if(data[i].deptName){
+                        deptName = data[i].deptName;
+                    }
+                }
+                total = onCnt+offCnt;
+
+            }
+            $(HEADER).text(deptName+"在岗人员");
+            var html='<span>'+deptName+'人员统计：</span>\n' +
+                '\t\t\t\t\t<span> 共 '+total+'人，  </span>\n' +
+                '\t\t\t\t\t<span> 在岗'+onCnt+'人， </span>\n' +
+                '\t\t\t\t\t<span> 不在岗'+offCnt+'人。</span>';
+            $(CAROUSE_TITLE).html(html+'<a data-toggle="tab" href="#tab1">列表显示</a>');
+            $(TABLE_TITLE).html(html + '<a data-toggle="tab" href="#tab2">图例显示</a>')
+        });
+    }
+
 }
 
-function loadData(pid, id){
+function loadData(pid, id, type){
+    $.get(SERVER_URL.current_pass,{deptId:id, deptPid:pid, type:type}, function(ret){
 
-    $.get(SERVER_URL.current_pass,{deptId:id, deptPid:pid}, function(ret){
         var list = ret.data;
         if(list && list.length<100){// 数量太多则不显示图例
             drawCarousel(list);
         }else {
-            // $('#tab1').removeClass('active')
-            // $('#tab2').addClass('active')
+            $('#tab1').removeClass('active')
+            $('#tab2').addClass('active')
         }
         drawTable(list);
 
     });
+
 
 }
 
