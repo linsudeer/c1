@@ -141,9 +141,7 @@ function drawTable(list) {
         ]
     }
     table = renderTable($(PASS_TABLE), list,{},options);
-
-
-
+    
     function renderUserName(data, type,row,meta){
         if(row.userId<=0){
             return '<a href="javascript:void(0)">--</a>';
