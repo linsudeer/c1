@@ -23,20 +23,17 @@ public class PermissonBean {
     public PermissonBean(){}
 
     public Integer getDeptId() {
-        /*UserDTO user = getSessinonUser();
+        UserDTO user = getSessinonUser();
         if(user != null){
             // 这里开始数据权限判断
             String role = user.getDataRole();
-            if(AuthProperties.ROLE_ADMIN.equals(role)){
-                deptId = 0;
-            }else if(AuthProperties.ROLE_SENIOR.equals(role)){
-                deptId = 0;
-            }else if(AuthProperties.ROLE_VIEW.equals(role)){
-                deptId = 0;
-            }else {
+
+            if(role.contains(AuthProperties.ROLE_GENERAL)){// 最低权限，只可以看到本部门的通行记录
                 deptId = user.getDeptId();
+            }else {// 其他角色可以看到所有部门的
+                deptId = 0;
             }
-        }*/
+        }
         return deptId;
     }
 
@@ -46,20 +43,16 @@ public class PermissonBean {
 
     public Integer getDeptPid() {
 
-        /*UserDTO user = getSessinonUser();
+        UserDTO user = getSessinonUser();
         if(user != null){
             // 这里开始数据权限判断
             String role = user.getDataRole();
-            if(AuthProperties.ROLE_ADMIN.equals(role)){
-                deptId = 0;
-            }else if(AuthProperties.ROLE_SENIOR.equals(role)){
-                deptPid = user.getDeptId();
-            }else if(AuthProperties.ROLE_VIEW.equals(role)){
-                deptPid = user.getDeptId();
+            if(role.contains(AuthProperties.ROLE_ADMIN) || role.contains(AuthProperties.ROLE_VIEW)){// 只有管理员和数据查看两个角色可以查看所有数据，否则只能看本部门下的数据
+                deptPid = 0;
             }else {
-                deptPid = user.getDeptId();
+                deptPid = user.getDeptPid();
             }
-        }*/
+        }
         return deptPid;
     }
 

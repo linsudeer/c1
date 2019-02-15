@@ -3,7 +3,8 @@
 var PASS_UNAME = "#addPassWrap select[name='userId']"; // 用户名
 var PASS_AREA = "#addPassWrap select[name='areaId']";//区域
 var PASS_DIRECT = "#addPassWrap select[name='direct']";//进出方向
-var PASS_REMARK = "#addPassWrap select[name='remark']";//进出方向
+var PASS_RECORD_ID ="#addPassWrap input[name='recordId']";
+var PASS_REMARK = "#addPassWrap input[name='remark']";
 
 
 
@@ -47,4 +48,41 @@ function setData(){
         $('#headerUserName').text(user.userName);
     }
 
+}
+
+function savePass(){
+    var params = $("addPassWrap>form").serializeJSON();
+    if(!params.userId){
+        layser.msg("请选择姓名");
+        return;
+    }
+    if(!params.areaId){
+        layser.msg("请选择区域");
+        return;
+    }
+    if(!params.direct){
+        layser.msg("请选择方向");
+        return;
+    }
+    if(!params.passDatetime){
+        layser.msg("请选择时间");
+        return;
+    }
+
+    var recordId = $(PASS_RECORD_ID).val();
+    if(recordId){// 编辑
+        $.post(SERVER_URL.pass_edit,params, function(ret){
+            var record = ret.data;
+            layser.msg('修改成功!');
+            // 这里首页更新一行记录
+            table.row(index).data(record);
+        });
+    }else {//新增
+        $.post(SERVER_URL.pass_add,params, function(ret){
+            var record = ret.data;
+            layser.msg('成功!');
+            // 这里首页新增一行记录
+            table.row.add(record);
+        });
+    }
 }

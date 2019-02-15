@@ -152,8 +152,11 @@
       <if test="endtime != null and endtime != ''">
         and pass.pass_datetime &lt;= #{endtime}
       </if>
-      <if test="deptId != null">
+      <if test="deptId != null and deptId >0">
         and pass.dept_id=#{deptId}
+      </if>
+      <if test="deptPid != null and deptPid > 0">
+        and pass.dept_parent_id=#{deptPid}
       </if>
       <if test="userId != null">
         and pass.user_id=#{userId}
@@ -192,8 +195,11 @@
       <if test="endtime != null and endtime != ''">
         and pass.pass_datetime &lt;= #{endtime}
       </if>
-      <if test="deptId != null">
+      <if test="deptId != null and deptId >0">
         and pass.dept_id=#{deptId}
+      </if>
+      <if test="deptPid != null and deptPid > 0">
+        and pass.dept_parent_id=#{deptPid}
       </if>
       <if test="userId != null">
         and pass.user_id=#{userId}

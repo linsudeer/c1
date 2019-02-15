@@ -29,7 +29,12 @@ public class PassBean extends Page {
     private String remark;
 
     public Integer getDeptId() {
-        return deptId;
+        if(super.getDeptId() != null && super.getDeptId() > 0){
+            return super.getDeptId();
+        }else {
+            return deptId;
+        }
+
     }
 
     public void setDeptId(Integer deptId) {

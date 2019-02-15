@@ -1,7 +1,7 @@
 package com.czht.smartpark.tbweb.modular.dmo;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "tb_attendance_record_tb")
 public class AttendanceRecord {
@@ -52,25 +52,25 @@ public class AttendanceRecord {
      * 上午签到打卡时间：设备方向为进的时间点中最小的
      */
     @Column(name = "sign_in_time_am")
-    private Date signInTimeAm;
+    private String signInTimeAm;
 
     /**
      * 上午签退打卡时间：设备方向为出的时间点中最大的
      */
     @Column(name = "sign_out_time_am")
-    private Date signOutTimeAm;
+    private String signOutTimeAm;
 
     /**
      * 下午签到打卡时间：设备方向为进的时间点中最小的
      */
     @Column(name = "sign_in_time_pm")
-    private Date signInTimePm;
+    private String signInTimePm;
 
     /**
      * 下午签退打卡时间：设备方向为出的时间点中最大的
      */
     @Column(name = "sign_out_time_pm")
-    private Date signOutTimePm;
+    private String signOutTimePm;
 
     private String week;
 
@@ -299,7 +299,7 @@ public class AttendanceRecord {
      *
      * @return sign_in_time_am - 上午签到打卡时间：设备方向为进的时间点中最小的
      */
-    public Date getSignInTimeAm() {
+    public String getSignInTimeAm() {
         return signInTimeAm;
     }
 
@@ -308,7 +308,7 @@ public class AttendanceRecord {
      *
      * @param signInTimeAm 上午签到打卡时间：设备方向为进的时间点中最小的
      */
-    public void setSignInTimeAm(Date signInTimeAm) {
+    public void setSignInTimeAm(String signInTimeAm) {
         this.signInTimeAm = signInTimeAm;
     }
 
@@ -317,7 +317,7 @@ public class AttendanceRecord {
      *
      * @return sign_out_time_am - 上午签退打卡时间：设备方向为出的时间点中最大的
      */
-    public Date getSignOutTimeAm() {
+    public String getSignOutTimeAm() {
         return signOutTimeAm;
     }
 
@@ -326,7 +326,7 @@ public class AttendanceRecord {
      *
      * @param signOutTimeAm 上午签退打卡时间：设备方向为出的时间点中最大的
      */
-    public void setSignOutTimeAm(Date signOutTimeAm) {
+    public void setSignOutTimeAm(String signOutTimeAm) {
         this.signOutTimeAm = signOutTimeAm;
     }
 
@@ -335,7 +335,7 @@ public class AttendanceRecord {
      *
      * @return sign_in_time_pm - 下午签到打卡时间：设备方向为进的时间点中最小的
      */
-    public Date getSignInTimePm() {
+    public String getSignInTimePm() {
         return signInTimePm;
     }
 
@@ -344,7 +344,7 @@ public class AttendanceRecord {
      *
      * @param signInTimePm 下午签到打卡时间：设备方向为进的时间点中最小的
      */
-    public void setSignInTimePm(Date signInTimePm) {
+    public void setSignInTimePm(String signInTimePm) {
         this.signInTimePm = signInTimePm;
     }
 
@@ -353,7 +353,7 @@ public class AttendanceRecord {
      *
      * @return sign_out_time_pm - 下午签退打卡时间：设备方向为出的时间点中最大的
      */
-    public Date getSignOutTimePm() {
+    public String getSignOutTimePm() {
         return signOutTimePm;
     }
 
@@ -362,7 +362,7 @@ public class AttendanceRecord {
      *
      * @param signOutTimePm 下午签退打卡时间：设备方向为出的时间点中最大的
      */
-    public void setSignOutTimePm(Date signOutTimePm) {
+    public void setSignOutTimePm(String signOutTimePm) {
         this.signOutTimePm = signOutTimePm;
     }
 

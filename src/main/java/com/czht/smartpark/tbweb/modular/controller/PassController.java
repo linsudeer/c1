@@ -3,6 +3,7 @@ package com.czht.smartpark.tbweb.modular.controller;
 import com.czht.smartpark.tbweb.context.tip.ResultTip;
 import com.czht.smartpark.tbweb.context.tip.bean.Tip;
 import com.czht.smartpark.tbweb.modular.bean.PassBean;
+import com.czht.smartpark.tbweb.modular.dmo.PassRecord;
 import com.czht.smartpark.tbweb.modular.dto.PassDTO;
 import com.czht.smartpark.tbweb.modular.service.PassService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,8 @@ public class PassController{
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Tip addPassRecords(PassBean bean) {
-        passService.addPassRecord(bean);
-        return ResultTip.success();
+        PassRecord record = passService.addPassRecord(bean);
+        return ResultTip.success(record);
     }
 
     /**
@@ -52,8 +53,8 @@ public class PassController{
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public Tip editPassRecords(PassBean bean) {
-        passService.updatePassRecord(bean);
-        return ResultTip.success();
+        PassRecord record = passService.updatePassRecord(bean);
+        return ResultTip.success(record);
     }
 
     /**

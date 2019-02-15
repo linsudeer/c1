@@ -28,4 +28,11 @@ public interface AttendService {
      * @return
      */
     List<AttendanceRecord> getHistoryRecords(AttendBean bean);
+
+    /**
+     * 修改考勤异常情况
+     * @param id
+     * @param remark
+     */
+    void updateAttendCausa(Integer id, String remark);
 }

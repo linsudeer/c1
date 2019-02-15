@@ -37,6 +37,9 @@ public class LoginController {
         if(user == null){
             return ResultTip.error(ExceptionEnum.LOGIN_FAIL);
         }
+        if(StringUtils.isBlank(user.getDataRole())){// 没有数据权限
+            return ResultTip.error(ExceptionEnum.NO_PERMITION);
+        }
         // 保存Session
         HttpSession session = request.getSession();
         session.setAttribute(Constant.SESSION_USER, user);

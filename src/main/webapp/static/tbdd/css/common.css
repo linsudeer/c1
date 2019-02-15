@@ -34,8 +34,15 @@ body .purple-class .layui-layer-content {
 
 .m-t {margin-top: 10px;}
 .m-l {margin-left: 10px;}
-
+.m-r {margin-right: 10px;}
 
 #query{padding-left: 20px;}
 
 #addPassWrap form{padding: 20px 10px;}
+
+/*考勤异常修改*/
+.casua li > span{ width: 25%; display: inline-block;font-weight: bold;}
+.casua li > span:first-child{width: 5%;}
+.casua li > span:last-child{width: 35%;}
+.casua li > span.edit{width: 35%;}
+

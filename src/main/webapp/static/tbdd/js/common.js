@@ -70,14 +70,13 @@ function renderTree(data, selected, clickBadge){
 
 }
 
-function renderSelect(elem, placeholder, data, params,change) {
+function renderSelect(elem, placeholder, data, params,change, load) {
     elem.val('');
     var options = {
-        minimumInputLength: 5,
+        minimumInputLength: 0,
         tags: false,//允许手动添加
         allowClear: true,//允许清空
-        language: "zh-CN",
-        minimumInputLength: 0
+        language: "zh-CN"
     }
 
     options.placeholder = placeholder?placeholder:'';
@@ -86,6 +85,21 @@ function renderSelect(elem, placeholder, data, params,change) {
         options.data = data;
     }else {
         var url = data;
+
+        // 先加载
+        /*var p = params?params:{};
+        $.ajax({
+            dataType : 'json',
+            type : 'get',
+            url : url,
+            async : false,
+            data:p,
+            success: function(ret){
+                options.data = ret.data;
+            }
+        });*/
+
+        // 后加载
         options.ajax = {
             url: url,
             delay: 250,
@@ -108,13 +122,22 @@ function renderSelect(elem, placeholder, data, params,change) {
     }
     elem.select2(options);
 
-    if(typeof change == 'function'){
-        elem.on('change', function(e){
+    // 改变事件
+    elem.on('change', function(e){
+        if(typeof change == 'function'){
             change(e);
-        });
-    }
+        }
+    });
+}
 
-
+/**
+ * 给select2设置值
+ * @param elem
+ * @param value
+ */
+function setSelect2Val(elem, key, value){
+    elem.append('<option value="'+key+'" selected>'+value+'</option>');
+    elem.val(key).change();
 }
 
 function renderTable(elem, url, data, options){
@@ -156,7 +179,7 @@ function renderTable(elem, url, data, options){
                 json.recordsTotal = json.total;
                 json.recordsFiltered = json.total;
 
-                return json.data;
+                return json.data || [];
             }
 
         }
@@ -293,14 +316,14 @@ function getLeaveColor(type){
             color = "purpul";
             break;
         default:
-            color = "#fff";
+            color = "";
     }
     return color;
 }
 
 var tipIndex;
-function tip(data, elem){
-    tipIndex = layer.tips(data, elem, {tips: [2, '#6d7cb8'],time:0});
+function tip(content, elem){
+    tipIndex = layer.tips(content, elem, {tips: [2, '#6d7cb8'],time:0});
 }
 
 function closeTip() {

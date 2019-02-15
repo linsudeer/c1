@@ -15,10 +15,10 @@
     <result column="late_min_unit" jdbcType="DECIMAL" property="lateMinUnit" />
     <result column="over_min_unit" jdbcType="DECIMAL" property="overMinUnit" />
     <result column="attend_rule_id" jdbcType="TINYINT" property="attendRuleId" />
-    <result column="sign_in_time_am" jdbcType="TIMESTAMP" property="signInTimeAm" />
-    <result column="sign_out_time_am" jdbcType="TIMESTAMP" property="signOutTimeAm" />
-    <result column="sign_in_time_pm" jdbcType="TIMESTAMP" property="signInTimePm" />
-    <result column="sign_out_time_pm" jdbcType="TIMESTAMP" property="signOutTimePm" />
+    <result column="sign_in_time_am" jdbcType="VARCHAR" property="signInTimeAm" />
+    <result column="sign_out_time_am" jdbcType="VARCHAR" property="signOutTimeAm" />
+    <result column="sign_in_time_pm" jdbcType="VARCHAR" property="signInTimePm" />
+    <result column="sign_out_time_pm" jdbcType="VARCHAR" property="signOutTimePm" />
     <result column="week" jdbcType="VARCHAR" property="week" />
     <result column="review_flag" jdbcType="INTEGER" property="reviewFlag" />
     <result column="review_remark" jdbcType="VARCHAR" property="reviewRemark" />
@@ -33,6 +33,34 @@
     <result column="created" jdbcType="TIMESTAMP" property="created" />
   </resultMap>
 
+  <resultMap id="AttendResultMap" type="com.czht.smartpark.tbweb.modular.dto.AttendDTO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="dept_pid" jdbcType="INTEGER" property="deptPid" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="attend_date" jdbcType="DATE" property="attendDate" />
+    <result column="late_min_unit" jdbcType="DECIMAL" property="lateMinUnit" />
+    <result column="over_min_unit" jdbcType="DECIMAL" property="overMinUnit" />
+    <result column="attend_rule_id" jdbcType="TINYINT" property="attendRuleId" />
+    <result column="sign_in_time_am" jdbcType="VARCHAR" property="signInTimeAm" />
+    <result column="sign_out_time_am" jdbcType="VARCHAR" property="signOutTimeAm" />
+    <result column="sign_in_time_pm" jdbcType="VARCHAR" property="signInTimePm" />
+    <result column="sign_out_time_pm" jdbcType="VARCHAR" property="signOutTimePm" />
+    <result column="week" jdbcType="VARCHAR" property="week" />
+    <result column="review_flag" jdbcType="INTEGER" property="reviewFlag" />
+    <result column="review_remark" jdbcType="VARCHAR" property="reviewRemark" />
+    <result column="absence_time" jdbcType="REAL" property="absenceTime" />
+    <result column="actual_time" jdbcType="REAL" property="actualTime" />
+    <result column="over_time" jdbcType="REAL" property="overTime" />
+    <result column="leave_status" jdbcType="INTEGER" property="leaveStatus" />
+    <result column="leave_remark" jdbcType="VARCHAR" property="leaveRemark" />
+    <result column="compute_detail" jdbcType="VARCHAR" property="computeDetail" />
+    <result column="pair_flag" jdbcType="INTEGER" property="pairFlag" />
+    <collection property="causaRecords" ofType="com.czht.smartpark.tbweb.modular.dmo.AttendanceCausa" select="getAttendanceCausas" column="{userId=user_id,startDate=attend_date,endDate=attend_date}" />
+  </resultMap>
+
   <resultMap id="StatisticsResultMap" type="com.czht.smartpark.tbweb.modular.dto.AttendStatisticsDTO">
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
@@ -45,6 +73,22 @@
     <result column="attend_time" jdbcType="REAL" property="attendTime" />
     <result column="absence_time" jdbcType="REAL" property="absenceTime" />
     <result column="over_time" jdbcType="REAL" property="overTime" />
+    <collection property="causaRecords" ofType="com.czht.smartpark.tbweb.modular.dmo.AttendanceCausa" select="getAttendanceCausas" column="{userId=user_id,startDate=start_date,endDate=end_date}" />
+  </resultMap>
+
+  <resultMap id="AttendanceCausaResultMap" type="com.czht.smartpark.tbweb.modular.dmo.AttendanceCausa" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="attend_id" jdbcType="INTEGER" property="attendId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="attend_date" jdbcType="DATE" property="attendDate" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="causalName" jdbcType="VARCHAR" property="causalname" />
+    <result column="review_flag" jdbcType="INTEGER" property="reviewFlag" />
+    <result column="review_remark" jdbcType="VARCHAR" property="reviewRemark" />
+    <result column="review_user_id" jdbcType="INTEGER" property="reviewUserId" />
+    <result column="review_user_name" jdbcType="VARCHAR" property="reviewUserName" />
+    <result column="review_time" jdbcType="TIMESTAMP" property="reviewTime" />
   </resultMap>
 
   <select id="getAttendStatisticsRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.AttendBean" resultMap="StatisticsResultMap">
@@ -86,6 +130,10 @@
     group by user_id
   </select>
 
+  <select id="getAttendanceCausas" resultMap="AttendanceCausaResultMap" parameterType="java.util.Map">
+    select id,attend_id,user_id,attend_date,time,type,causalName,review_flag,review_remark,review_user_id,review_user_name,review_time from tb_attendance_causa_tb where user_id=#{userId} and attend_date &gt;=#{startDate} and attend_date &lt;=#{endDate}
+  </select>
+
   <select id="countHistoryRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.AttendBean" resultType="java.lang.Integer">
     select count(id) from tb_attendance_record_tb
     <where>
@@ -107,7 +155,7 @@
     </where>
   </select>
 
-  <select id="getHistoryRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.AttendBean" resultMap="BaseResultMap">
+  <select id="getHistoryRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.AttendBean" resultMap="AttendResultMap">
     select * from tb_attendance_record_tb
     <where>
       <if test="deptId != null and deptId>0">

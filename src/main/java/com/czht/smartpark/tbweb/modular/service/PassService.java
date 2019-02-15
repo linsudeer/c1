@@ -1,6 +1,7 @@
 package com.czht.smartpark.tbweb.modular.service;
 
 import com.czht.smartpark.tbweb.modular.bean.PassBean;
+import com.czht.smartpark.tbweb.modular.dmo.PassRecord;
 import com.czht.smartpark.tbweb.modular.dto.PassDTO;
 
 import java.util.List;
@@ -25,13 +26,13 @@ public interface PassService {
      * 新增记录
      * @param bean
      */
-    void addPassRecord(PassBean bean);
+    PassRecord addPassRecord(PassBean bean);
 
     /**
      * 编辑记录
      * @param bean
      */
-    void updatePassRecord(PassBean bean);
+    PassRecord updatePassRecord(PassBean bean);
 
     /**
      * 删除

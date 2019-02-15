@@ -8,6 +8,7 @@ import com.czht.smartpark.tbweb.modular.dto.AttendStatisticsDTO;
 import com.czht.smartpark.tbweb.modular.service.AttendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -41,5 +42,18 @@ public class AttendController {
 
         return ResultTip.success(list);
     }
+
+    /**
+     * 修改考勤异常记录
+     * @param id 异常id
+     * @param remark 原因
+     * @return
+     */
+    @RequestMapping(value = "/updateAttendCausa", method = RequestMethod.POST)
+    public Tip updateAttendCausa(Integer id, String remark) {
+        attendService.updateAttendCausa(id, remark);
+        return ResultTip.success();
+    }
+
 
 }

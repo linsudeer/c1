@@ -16,7 +16,7 @@ public enum ExceptionEnum{
 	SESSION_TIMEOUT(-2, "会话超时"),
 	ACCOUNT_FREEZED(-3, "账号被冻结"),
 	
-	NO_PERMITION(-4, "没有权限"),
+	NO_PERMITION(-4, "没有权限，请检查是否已授权！"),
 	
 	SERVER_ERROR(-99, "服务器异常");
 	

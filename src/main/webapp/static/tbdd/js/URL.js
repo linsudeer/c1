@@ -7,6 +7,9 @@ var SERVER_URL = {
     logout:DOMAIN+"/logout",//退出
     checklogin: DOMAIN+"/checklogin",//校验登陆
     pass_list: DOMAIN+"/pass/list", // 通行记录
+    pass_edit: DOMAIN +"/pass/edit",//编辑通行记录
+    pass_add: DOMAIN +"/pass/add",//新增通行记录
+    pass_del: DOMAIN +"/pass/del",//删除通行记录
 
     user_simple: DOMAIN+"/user/simple",// 用户基本信息
 
@@ -26,5 +29,7 @@ var SERVER_URL = {
 
     attend_statistics:DOMAIN+"/attend/statistics",//综合考勤
     attend_history: DOMAIN+"/attend/history",//个人历史考勤
+
+    attend_causal_review: DOMAIN+"/attend/updateAttendCausa",//修正考勤异常情况
 
 }

@@ -14,5 +14,15 @@ public interface Constant {
      */
     String ROLE_GENERAL = "general";
 
+    /**
+     * 考勤异常情况被修正
+     */
+    int ATTEND_CAUSAL_FLAG_YES = 1;
+
+    /**
+     * 考勤异常情况没有被修正
+     */
+    int ATTEND_CAUSAL_FLAG_NO = 0;
+
 
 }

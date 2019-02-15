@@ -36,7 +36,7 @@ public class PassServiceImpl implements PassService {
     }
 
     @Override
-    public void addPassRecord(PassBean bean) {
+    public PassRecord addPassRecord(PassBean bean) {
         // 用户名，公司，部门，区域名字，部门名字，头像，操作日志
         PassRecord record = new PassRecord();
 
@@ -70,10 +70,12 @@ public class PassServiceImpl implements PassService {
         passRecordMapper.insert(record);
 
         // 操作日志 TODO
+
+        return record;
     }
 
     @Override
-    public void updatePassRecord(PassBean bean) {
+    public PassRecord updatePassRecord(PassBean bean) {
         Long recordId = bean.getRecordId();
 
         PassRecord record = passRecordMapper.getPassRecordById(recordId);
@@ -89,6 +91,8 @@ public class PassServiceImpl implements PassService {
         passRecordMapper.updateByPrimaryKey(record);
 
         // 操作日志 TODO
+
+        return record;
     }
 
     @Override

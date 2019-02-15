@@ -1,13 +1,19 @@
 package com.czht.smartpark.tbweb.modular.service.impl;
 
+import com.czht.smartpark.tbweb.context.support.HttpServletRequestHolder;
 import com.czht.smartpark.tbweb.modular.bean.AttendBean;
+import com.czht.smartpark.tbweb.modular.constant.Constant;
+import com.czht.smartpark.tbweb.modular.dmo.AttendanceCausa;
 import com.czht.smartpark.tbweb.modular.dmo.AttendanceRecord;
 import com.czht.smartpark.tbweb.modular.dto.AttendStatisticsDTO;
+import com.czht.smartpark.tbweb.modular.dto.UserDTO;
+import com.czht.smartpark.tbweb.modular.mapper.AttendanceCausaMapper;
 import com.czht.smartpark.tbweb.modular.mapper.AttendanceRecordMapper;
 import com.czht.smartpark.tbweb.modular.service.AttendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -15,6 +21,9 @@ public class AttendServiceImpl implements AttendService {
 
     @Autowired
     private AttendanceRecordMapper attendMapper;
+
+    @Autowired
+    private AttendanceCausaMapper attendCausalMapper;
 
     @Override
     public List<AttendStatisticsDTO> getAttendStatisticsRecords(AttendBean bean) {
@@ -29,5 +38,24 @@ public class AttendServiceImpl implements AttendService {
     @Override
     public List<AttendanceRecord> getHistoryRecords(AttendBean bean) {
         return attendMapper.getHistoryRecords(bean);
+    }
+
+    @Override
+    public void updateAttendCausa(Integer id, String remark) {
+        AttendanceCausa causal = attendCausalMapper.selectByPrimaryKey(id);
+        if(causal != null){
+            causal.setReviewFlag(Constant.ATTEND_CAUSAL_FLAG_YES);
+            causal.setReviewRemark(remark);
+
+            UserDTO user = HttpServletRequestHolder.getSessionInfo();
+            causal.setReviewUserId(user.getUserId());
+            causal.setReviewUserName(user.getUserName());
+            causal.setReviewTime(new Date());
+            causal.setUpdated(new Date());
+
+            attendCausalMapper.updateByPrimaryKey(causal);
+
+            // 这里增加修改记录到系统日志 TODO
+        }
     }
 }

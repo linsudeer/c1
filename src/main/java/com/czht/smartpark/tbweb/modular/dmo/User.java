@@ -209,6 +209,9 @@ public class User {
     @Column(name = "plate_no")
     private String plateNo;
 
+    @Column(name = "data_role")
+    private String dataRole;
+
     @Column(name = "reserve_vchar")
     private String reserveVchar;
 
@@ -1238,5 +1241,13 @@ public class User {
      */
     public void setReserveBlob(byte[] reserveBlob) {
         this.reserveBlob = reserveBlob;
+    }
+
+    public String getDataRole() {
+        return dataRole;
+    }
+
+    public void setDataRole(String dataRole) {
+        this.dataRole = dataRole;
     }
 }

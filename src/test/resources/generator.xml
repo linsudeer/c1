@@ -39,9 +39,9 @@
     </plugin>
 
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                    connectionURL="jdbc:mysql://127.0.0.1:3306/smart_park"
+                    connectionURL="jdbc:mysql://192.168.10.206:3306/smart_park"
                     userId="root"
-                    password="root">
+                    password="123456">
     </jdbcConnection>
 
     <javaModelGenerator targetPackage="com.czht.smartpark.tbweb.modular.dmo" targetProject="src/main/java"/>
@@ -54,7 +54,7 @@
       <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
     </table> -->
 
-    <table tableName="tb_attendance_record_tb" domainObjectName="AttendanceRecord"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
+    <table tableName="tb_attendance_causa_tb" domainObjectName="AttendanceCausa"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
 
   </context>
 </generatorConfiguration>

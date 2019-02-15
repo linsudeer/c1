@@ -1,6 +1,6 @@
 
-var QUERY_DEPT = "select[name='deptId']";//部门
-var QUERY_UNAME = "select[name='userId']"; // 用户名
+var QUERY_DEPT = "#query select[name='deptId']";//部门
+var QUERY_UNAME = "#query select[name='userId']"; // 用户名
 var QUERY_STARTTIME = "#starttime";//开始时间
 var QUERY_ENDTIME = "#endtime";//开始时间
 
@@ -31,6 +31,7 @@ function initTrack(params){
     //加载此人历史考勤（历史考勤）
     drawHistoryAttend(params.userId);
 
+
     //监听查询按钮
     $('form#query').on('click', '#queryBtn', function(e){
         var params = $(this).parents('form').serializeJSON();
@@ -59,6 +60,11 @@ function setUserInfo(userId){
         $(USER_HEADER).attr('src','data:image/jpeg;base64,'+(user.idPic || ''));
         $(USER_NAME).text(user.userName || '');
         $(DEPT_NAME).text(user.deptName || '');
+
+        // 默认值
+        setSelect2Val($(QUERY_DEPT), user.deptId, user.deptName);
+        setSelect2Val($(QUERY_UNAME), userId, user.userName);
+
     });
 }
 
@@ -168,16 +174,44 @@ function drawHistoryAttend(userId,startDate,endDate) {
         serverSide: true,
         columns: [
             { "data":null, "width":50, "name": "序号" ,"title": "序号", "render":xh},
-            { "data":"userName", "name": "姓名" ,"title": "姓名" ,"orderable": false, "render":renderUserName},
-            { "data":"deptName", "name": "部门" ,"title": "部门" ,"orderable": false},
-            { "data":"attendDate", "name": "考勤日期" ,"title": "考勤日期" ,"orderable": false, "render":renderAttendDate},
-            { "data":"week", "name": "星期" ,"title": "星期" ,"orderable": false, "render": renderWeek},
-            { "data":"absenceTime", "name": "应出勤(小时)" ,"title": "应出勤（小时）" ,"orderable": false},
-            { "data":"actualTime", "name": "考勤时长（小时）" ,"title": "考勤时长（小时）" ,"orderable": false},
-            { "data":"overTime", "name": "加班时长（小时）" ,"title": "加班时长（小时）" ,"orderable": false},
-            { "data":"leaveRemark", "name": "状态" ,"title": "状态" ,"orderable": false, "render": renderLeaveRemark},
-            { "data":"computeDetail", "name": "计算详情" ,"title": "计算详情" ,"orderable": false,"render":renderCompuleDetail}
-        ]
+            { "data":"userName", "defaultContent":'',"name": "姓名" ,"title": "姓名" ,"orderable": false, "render":renderUserName},
+            { "data":"deptName", "defaultContent":'',"name": "部门" ,"title": "部门" ,"orderable": false},
+            { "data":"attendDate", "defaultContent":'',"name": "考勤日期" ,"title": "考勤日期" ,"orderable": false, "render":renderAttendDate},
+            { "data":"week", "defaultContent":'',"name": "星期" ,"title": "星期" ,"orderable": false, "render": renderWeek},
+            { "data":"absenceTime", "defaultContent":'',"name": "应出勤(小时)" ,"title": "应出勤（小时）" ,"orderable": false},
+            { "data":"actualTime", "defaultContent":'',"name": "考勤时长（小时）" ,"title": "考勤时长（小时）" ,"orderable": false},
+            { "data":"overTime", "defaultContent":'',"name": "加班时长（小时）" ,"title": "加班时长（小时）" ,"orderable": false},
+            { "data":"leaveRemark", "defaultContent":'',"name": "状态" ,"title": "状态" ,"orderable": false, "render": renderLeaveRemark},
+            { "data":"computeDetail", "defaultContent":'',"name": "计算详情" ,"title": "计算详情" ,"orderable": false,"render":renderCompuleDetail}
+        ],
+        rowCallback:function( row, data ){
+            if(data.causaRecords && data.causaRecords.length>0){// 考勤异常整行变红
+                var flag = 1;
+                var content = '';
+                for(var i=0; i<data.causaRecords.length; i++){
+                    var r = data.causaRecords[i];
+                    if(r.reviewFlag == 0){// 这里如果有一个0 则说明还有异常情况未处理
+                        flag = 0;
+                    }else {// 这里如果是1的话则说明有已经处理过的情况，要显示出来备注
+                        content += r.reviewUserName+"于"+ r.reviewTime+'修改了'+r.causalname+'状态，原因：'+r.reviewRemark+";<br />";
+                        $('td>a', row).on('mouseover', function(){
+                            tip(content,$(row));
+                        });
+                        $('td>a', row).on('mouseout', function(){
+                            closeTip();
+                        });
+                    }
+                }
+                if(flag == 0){
+                    $(row).css('color', 'red');
+                    $('td>a', row).css('color', 'red');
+                }else {// 这里说明全部是1 则应该显示黄色
+                    $(row).css('color', 'yellow');
+                    $('td>a', row).css('color', 'yellow');
+                }
+            }
+
+        }
     }
     var params = {userId:userId, startDate:startDate, endDate:endDate}
     table = renderTable($(ATTEMD_HISTORY), SERVER_URL.attend_history,params,options);
@@ -197,7 +231,16 @@ function drawHistoryAttend(userId,startDate,endDate) {
         }
     }
 
-    function renderLeaveRemark(data) {
+    function renderLeaveRemark(data, type, row) {
+        if(row.causaRecords && row.causaRecords.length>0 ){
+            for(var i=0; i<row.causaRecords.length; i++){
+                if(row.causaRecords[i].reviewFlag == 0){// 这里如果有一个0 则说明还有异常情况未处理
+                    data = row.causaRecords[i].causalname;
+                    break;
+                }
+            }
+
+        }
         return "<span style='color:"+getLeaveColor(data)+"'>"+data+"</span>";
     }
 

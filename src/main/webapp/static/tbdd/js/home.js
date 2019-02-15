@@ -206,12 +206,14 @@ function drawOnWorkByInTime(title){
 
     $(elem+' h5').text(title);
 
-    var legendData = ["在岗人员数","临时离岗人员数","不在岗人员数"];
+    var legendData = ["正常到岗人数","迟到10分中以内","迟到30分中以内","迟到60分中以内","未到岗人数"];
     var data = [];
     data.push(
-        {attendType:1,deptId:1,value:85,name:"在岗人员数"},
-        {attendType:2,deptId:1,value:10,name:"临时离岗人员数"},
-        {attendType:3,deptId:1,value:15,name:"不在岗人员数"}
+        {attendType:1,deptId:1,value:85,name:"正常到岗人数"},
+        {attendType:2,deptId:1,value:10,name:"迟到10分中以内"},
+        {attendType:3,deptId:1,value:15,name:"迟到30分中以内"},
+        {attendType:3,deptId:1,value:15,name:"迟到60分中以内"},
+        {attendType:3,deptId:1,value:15,name:"未到岗人数"}
     );
 
     drawPie($(elem+" .chart")[0], legendData, data, function(param){

@@ -21,7 +21,7 @@
         <property name="slowSqlMillis" value="10000"/>
         <property name="logSlowSql" value="true"/>
     </bean>
-    <bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter" />
+    <bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter"/>
 
     <!-- 配置druid支持spring监控 -->
     <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"/>

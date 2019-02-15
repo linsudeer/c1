@@ -131,17 +131,17 @@ function drawTable(list) {
         serverSide:false,
         columns: [
             { "data":null, "width":50, "name": "序号" ,"title": "序号", "render":xh},
-            { "data":"userName", "name": "姓名" ,"title": "姓名" ,"orderable": false, "render":renderUserName},
-            { "data":"deptName", "name": "部门" ,"title": "部门" ,"orderable": false},
-            { "data":"areaName", "name": "最后出现区域" ,"title": "最后出现区域" ,"orderable": false},
-            { "data":"lastPasstime", "name": "最后通行时间" ,"title": "时间" ,"orderable": false},
-            { "data":"lastDirect", "name": "进出方向" ,"title": "方向" ,"orderable": false},
-            { "data":"onworkStatus", "name": "状态" ,"title": "状态" ,"orderable": false,"render": renderOnworkStatus}
+            { "data":"userName", "defaultContent":'',"name": "姓名" ,"title": "姓名" ,"orderable": false, "render":renderUserName},
+            { "data":"deptName", "defaultContent":'',"name": "部门" ,"title": "部门" ,"orderable": false},
+            { "data":"areaName", "defaultContent":'',"name": "最后出现区域" ,"title": "最后出现区域" ,"orderable": false},
+            { "data":"lastPasstime", "defaultContent":'',"name": "最后通行时间" ,"title": "时间" ,"orderable": false},
+            { "data":"lastDirect", "defaultContent":'',"name": "进出方向" ,"title": "方向" ,"orderable": false},
+            { "data":"onworkStatus", "defaultContent":'',"name": "状态" ,"title": "状态" ,"orderable": false,"render": renderOnworkStatus}
 
         ]
     }
     table = renderTable($(PASS_TABLE), list,{},options);
-    
+
     function renderUserName(data, type,row,meta){
         if(row.userId<=0){
             return '<a href="javascript:void(0)">--</a>';

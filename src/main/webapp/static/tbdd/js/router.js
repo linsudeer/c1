@@ -20,7 +20,7 @@ Q.init({
     index:'index',/* 首页地址 如果访问到不能访问页面也会跳回此页 */
     pop:function(L,arg){/* 每次有url变更时都会触发pop回调 */
         // console.log(L);
-
+        layer.closeAll()
         // 校验登陆
         $.get(SERVER_URL.checklogin, function(res){
             var user = res.data;

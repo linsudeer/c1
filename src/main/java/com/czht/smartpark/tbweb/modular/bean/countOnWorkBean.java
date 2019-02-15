@@ -1,10 +1,12 @@
 package com.czht.smartpark.tbweb.modular.bean;
 
-public class countOnWorkBean extends PermissonBean {
+public class countOnWorkBean {
 
     private Integer areaId;
 
     private Integer deptId;
+
+    private Integer deptPid;
 
     /**
      * 类型1-在岗 2-临时离岗 3-不在岗
@@ -33,5 +35,13 @@ public class countOnWorkBean extends PermissonBean {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getDeptPid() {
+        return deptPid;
+    }
+
+    public void setDeptPid(Integer deptPid) {
+        this.deptPid = deptPid;
     }
 }

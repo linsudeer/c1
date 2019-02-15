@@ -1,11 +1,16 @@
 package com.czht.smartpark.tbweb.modular.dto;
 
-import java.util.Date;
+import com.czht.smartpark.tbweb.modular.dmo.AttendanceCausa;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 综合考勤（根据userId分组统计）
+ * 注解是解决 causaRecords 一对多关联查询中可能返回控制导致json序列号异常问题
  */
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class AttendStatisticsDTO {
 
     private Integer userId;
@@ -53,7 +58,7 @@ public class AttendStatisticsDTO {
     /**
      * 异常情况具体时间
      */
-    private List<AttendCausaDTO> causaRecords;
+    private List<AttendanceCausa> causaRecords;
 
     public Integer getUserId() {
         return userId;
@@ -143,11 +148,11 @@ public class AttendStatisticsDTO {
         this.causaTimes = causaTimes;
     }
 
-    public List<AttendCausaDTO> getCausaRecords() {
+    public List<AttendanceCausa> getCausaRecords() {
         return causaRecords;
     }
 
-    public void setCausaRecords(List<AttendCausaDTO> causaRecords) {
+    public void setCausaRecords(List<AttendanceCausa> causaRecords) {
         this.causaRecords = causaRecords;
     }
 

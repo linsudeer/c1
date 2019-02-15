@@ -41,6 +41,7 @@
     <result column="update_datetime" jdbcType="TIMESTAMP" property="updateDatetime" />
     <result column="create_datetime" jdbcType="TIMESTAMP" property="createDatetime" />
     <result column="plate_no" jdbcType="VARCHAR" property="plateNo" />
+    <result column="data_role" jdbcType="VARCHAR" property="dataRole" />
     <result column="reserve_vchar" jdbcType="VARCHAR" property="reserveVchar" />
     <result column="reserve_vchar1" jdbcType="VARCHAR" property="reserveVchar1" />
     <result column="reserve_vchar2" jdbcType="VARCHAR" property="reserveVchar2" />
@@ -75,6 +76,7 @@
     <result column="user_type" jdbcType="INTEGER" property="userType" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
     <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="data_role" jdbcType="VARCHAR" property="dataRole"></result>
     <result column="identification_pic_id" jdbcType="LONGVARBINARY" property="idPic" />
   </resultMap>
 
@@ -84,7 +86,7 @@
   </resultMap>
 
   <select id="loginVail" resultMap="SimpleUserResultMap">
-    select user_id, user_name, user_sex, user_mobile, dept_id, dept_parent_id, identification_pic_id from tb_user
+    select user_id, user_name, user_sex, user_mobile, dept_id, dept_parent_id,data_role, identification_pic_id from tb_user
     <where>
       <if test="username != null">
          and user_name=#{username}
@@ -114,7 +116,7 @@
   </select>
 
   <select id="getSimpleUserInfo" parameterType="java.lang.Integer" resultMap="SimpleUserResultMap">
-    select user_id, user_name, user_sex, user_mobile, u.dept_id,dept.dept_name, dept_parent_id, identification_pic_id from tb_user u left join tb_pf_department dept on u.dept_id=dept.dept_id where user_id=#{userId}
+    select user_id, user_name, user_sex, user_mobile, u.dept_id,dept.dept_name, dept_parent_id, data_role, identification_pic_id from tb_user u left join tb_pf_department dept on u.dept_id=dept.dept_id where user_id=#{userId}
   </select>
 
 </mapper>
