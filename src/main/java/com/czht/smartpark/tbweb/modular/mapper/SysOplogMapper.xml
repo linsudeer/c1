@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.SysOplogMapper">
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.SysOplog">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="pass_record_id" jdbcType="BIGINT" property="passRecordId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+    <result column="opt_type" jdbcType="VARCHAR" property="optType" />
+    <result column="opt_content" jdbcType="VARCHAR" property="optContent" />
+    <result column="opt_detail" jdbcType="VARCHAR" property="optDetail" />
+    <result column="client_ipaddress" jdbcType="VARCHAR" property="clientIpaddress" />
+    <result column="opt_time" jdbcType="TIMESTAMP" property="optTime" />
+  </resultMap>
+</mapper>

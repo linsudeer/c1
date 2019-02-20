@@ -2,6 +2,7 @@ package com.czht.smartpark.tbweb.modular.controller;
 
 import com.czht.smartpark.tbweb.context.tip.ResultTip;
 import com.czht.smartpark.tbweb.context.tip.bean.Tip;
+import com.czht.smartpark.tbweb.modular.bean.PermissonBean;
 import com.czht.smartpark.tbweb.modular.service.OrgService;
 import com.czht.smartpark.tbweb.modular.tree.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class OrgController {
      * @return
      */
     @RequestMapping(value = "/onWorkTree", method = RequestMethod.GET)
-    public Tip getOnWorkOrgTree(Integer pid){
-        List<TreeNode> tree = orgService.getOnWorkOrgTree(pid);
+    public Tip getOnWorkOrgTree(PermissonBean bean){
+        List<TreeNode> tree = orgService.getOnWorkOrgTree(bean.getDeptPid());
         return ResultTip.success(tree);
     }
 }

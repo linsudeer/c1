@@ -6,8 +6,9 @@ var PASS_TABLE = "#passTable";
 var CAROUSEWRAP = "#carousel";
 
 function initOnwork(params){
+    setDeptTreeData();
     setTitleData(params.deptPid, params.deptId, params.type);
-    loadData(params.deptPid, params.deptId, params.type);
+    loadData(params.deptPid, params.deptId, params.type, params.areaId);
 
 }
 
@@ -16,18 +17,7 @@ function initOnwork(params){
  */
 function setTitleData(deptPid, deptId, type){
     if(type){// 类型1-在岗 2-临时离岗 3-不在岗
-        if(type == 1){
-            $(HEADER).text("在岗人员");
-            var html='<span>在岗人员统计：</span>\n\t\t\t\t\t<span> 共 '+0+'人，  </span>\n';
-        }else if (type == 2){
-            $(HEADER).text("临时离岗人员");
-            var html='<span>临时离岗人员统计：</span>\n\t\t\t\t\t<span> 共 '+0+'人，  </span>\n';
-        }else if (type == 3){
-            $(HEADER).text("不在岗人员");
-            var html='<span>不在岗人员统计：</span>\n\t\t\t\t\t<span> 共 '+0+'人，  </span>\n';
-        }
-        $(CAROUSE_TITLE).html(html+'<a data-toggle="tab" href="#tab1">列表显示</a>');
-        $(TABLE_TITLE).html(html + '<a data-toggle="tab" href="#tab2">图例显示</a>')
+
     }else {// 没有类型，显示所有，根据部门显示
         $.get(SERVER_URL.current_typegroup,{deptId:deptId, deptPid:deptPid}, function(res){
             var data = res.data;
@@ -35,10 +25,10 @@ function setTitleData(deptPid, deptId, type){
             var deptName='';
             if(data && data.length>0){
                 for(var i=0;i<data.length;i++){
-                    if(data[i].id==1){
-                        onCnt = data[i].count;
+                    if(data[i].name=='在岗人员'){
+                        onCnt += data[i].count;
                     }else {
-                        offCnt = data[i].count;
+                        offCnt += data[i].count;
                     }
                     if(data[i].deptName){
                         deptName = data[i].deptName;
@@ -59,10 +49,27 @@ function setTitleData(deptPid, deptId, type){
 
 }
 
-function loadData(pid, id, type){
-    $.get(SERVER_URL.current_pass,{deptId:id, deptPid:pid, type:type}, function(ret){
+function loadData(pid, id, type, areaId){
+    $.get(SERVER_URL.current_pass,{deptId:id, deptPid:pid, type:type, areaId:areaId}, function(ret){
 
         var list = ret.data;
+        // 这里重复赋值主要是填充数量
+        var html = ""
+        if(type){
+            if(type == 1){
+                $(HEADER).text("在岗人员");
+                html='<span>在岗人员统计：</span>\n\t\t\t\t\t<span> 共 '+list.length+'人，  </span>\n';
+            }else if (type == 2){
+                $(HEADER).text("临时离岗人员");
+                html='<span>临时离岗人员统计：</span>\n\t\t\t\t\t<span> 共 '+list.length+'人，  </span>\n';
+            }else if (type == 3){
+                $(HEADER).text("不在岗人员");
+                html='<span>不在岗人员统计：</span>\n\t\t\t\t\t<span> 共 '+list.length+'人，  </span>\n';
+            }
+            $(CAROUSE_TITLE).html(html+'<a data-toggle="tab" href="#tab1">列表显示</a>');
+            $(TABLE_TITLE).html(html + '<a data-toggle="tab" href="#tab2">图例显示</a>')
+        }
+
         if(list && list.length<100){// 数量太多则不显示图例
             drawCarousel(list);
         }else {

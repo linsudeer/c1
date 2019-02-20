@@ -75,6 +75,7 @@
     <result column="face_fdfs_id" jdbcType="VARCHAR" property="faceFdfsId" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
     <result column="device_area_name" jdbcType="VARCHAR" property="deviceAreaName" />
+    <collection property="logs" ofType="com.czht.smartpark.tbweb.modular.dmo.SysOplog" select="getOptLogs" column="pass_record_id" />
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -82,13 +83,30 @@
     device_id, user_name, user_sex, user_type, user_group, group_id, dept_id, dept_parent_id, 
     device_name, device_type, device_direction, device_area_id, device_entrance_id, device_parent_id, 
     device_auth, time_auth, live_auth, facesize_auth, filter_flag, filter_time, search_id, 
-    classify_id, classify_score, full_fdfs_id, face_fdfs_id, pic_quality, pic_score, 
+    classify_id, classify_score, full_fdfs_id, face_fdfs_id, pic_quality, pic_score,
     pass_feature_id, lock_flag, create_datetime, reserve_int, reserve_bigint, reserve_double, 
     reserve_vchar
   </sql>
   <sql id="Blob_Column_List">
     reserve_blob
   </sql>
+
+  <resultMap id="OptlogResultMap" type="com.czht.smartpark.tbweb.modular.dmo.SysOplog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="pass_record_id" jdbcType="BIGINT" property="passRecordId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+    <result column="opt_type" jdbcType="VARCHAR" property="optType" />
+    <result column="opt_content" jdbcType="VARCHAR" property="optContent" />
+    <result column="opt_detail" jdbcType="VARCHAR" property="optDetail" />
+    <result column="client_ipaddress" jdbcType="VARCHAR" property="clientIpaddress" />
+    <result column="opt_time" jdbcType="TIMESTAMP" property="optTime" />
+  </resultMap>
+
+  <select id="getOptLogs" resultMap="OptlogResultMap">
+    select user_id, pass_record_id, user_name, opt_type, opt_content,client_ipaddress,opt_time from tb_sys_oplog where pass_record_id=#{pass_record_id}
+  </select>
 
   <select id="getPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.PassBean"  resultMap="PassResultMap">
   SELECT
@@ -143,6 +161,7 @@
     LEFT JOIN tb_pf_department dept ON pass.dept_id = dept.dept_id
     LEFT OUTER JOIN tb_pf_area area ON pass.device_area_id = area.area_id
     <where>
+      and pass.filter_flag=0
       <if test="starttime != null and starttime != ''">
         and pass.pass_datetime &gt;= #{starttime}
       </if>
@@ -186,6 +205,7 @@
   FROM
       tb_pass_record pass
     <where>
+      and pass.filter_flag=0
       <if test="starttime != null and starttime != ''">
         and pass.pass_datetime &gt;= #{starttime}
       </if>
@@ -216,8 +236,64 @@
     </where>
   </select>
 
-  <select id="getPassRecordById" resultMap="BaseResultMap">
-    select <include refid="BaseColumn"></include> from tb_pass_record where pass_record_id=#{recordId}
+  <select id="getPassRecordById" resultMap="PassResultMap">
+    SELECT
+    t.pass_record_id,
+    t.pass_datetime,
+    t.user_id,
+    t.device_id,
+    t.user_name,
+    t.user_sex,
+    t.user_type,
+    t.user_group,
+
+    t.group_id,
+    t.dept_id,
+    t.dept_name,
+    t.dept_parent_id,
+    t.device_name,t.user_group_name,
+    t.device_type,
+    t.device_direction,
+    t.direct,
+    t.device_area_id,
+    t.device_area_name,
+    concat(config.value,'/',t.full_fdfs_id) as full_fdfs_id,
+    concat(config.value,'/',t.face_fdfs_id) as face_fdfs_id
+    FROM
+    (
+    SELECT
+    pass.pass_record_id,
+    pass.pass_datetime,
+    pass.user_id,
+    pass.device_id,
+    pass.user_name,
+    pass.user_sex,
+    pass.user_type,
+    pass.user_group,
+    (select c.name from tb_sys_code c LEFT JOIN tb_sys_codetype t on c.codetype_id=t.codetype_id where t.`code`='user_group' and c.code=pass.user_group) as user_group_name,
+    pass.group_id,
+    pass.dept_id,
+    dept.dept_name,
+    pass.dept_parent_id,
+    pass.device_name,
+    pass.device_type,
+    pass.device_direction,
+    (case when pass.device_direction=1 then '进' else '出' end) as direct,
+    pass.device_area_id,
+    area.area_name as device_area_name,
+    pass.full_fdfs_id,
+    pass.face_fdfs_id,
+    'FDFS_URL' AS config_typename
+    FROM
+    tb_pass_record pass
+    LEFT JOIN tb_pf_department dept ON pass.dept_id = dept.dept_id
+    LEFT OUTER JOIN tb_pf_area area ON pass.device_area_id = area.area_id
+    where pass.pass_record_id = #{recordId}
+    ) t
+    LEFT JOIN tb_sys_config config ON t.config_typename = config.typename
+    WHERE
+    config.config_type = 'client_fdfs'
+
   </select>
 
 </mapper>

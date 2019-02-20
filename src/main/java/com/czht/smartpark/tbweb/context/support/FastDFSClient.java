@@ -16,7 +16,7 @@ public class FastDFSClient {
 
 
     public FastDFSClient(){
-        String CONFIG_FILENAME = FastDFSClient.class.getResource("/fdfs.conf").getPath();
+        String CONFIG_FILENAME = FastDFSClient.class.getResource("/conf/fdfs.conf").getPath();
         try {
 
             ClientGlobal.init(CONFIG_FILENAME);

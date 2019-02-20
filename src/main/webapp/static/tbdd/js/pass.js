@@ -45,15 +45,28 @@ function initPass() {
 
     // 监听新增按钮
     $('form#query').on('click', '#addBtn', function (e){
-        $(PASS_DIRECT).attr('disabled', false);
-        $(PASS_AREA).attr('disabled', false);
-        $(PASS_DATETIME).attr('disabled', false);
-        $(PASS_REMARK).parents('div').show();
-        $(PASS_RECORD_ID).val('');
+
         layer.open({
             type:1,
             content:$(PASS_ADD_WRAP),
-            area: ['600px', '380px']
+            area: ['600px', '400px'],
+            btn: ['保存', '关闭'],
+            yes: function(index){
+                savePass(index);
+            },
+            success:function(){
+                $(PASS_DIRECT).attr('disabled', false);
+                $(PASS_AREA).attr('disabled', false);
+                $(PASS_DATETIME).attr('disabled', false);
+                $(PASS_REMARK).parents('div').show();
+                $(PASS_RECORD_ID).val('');
+                $(PASS_DIRECT).val('').trigger('change');
+                $(PASS_AREA).val('').trigger('change');
+                $(PASS_DATETIME).val('');
+                $(PASS_UNAME).val('').trigger('change');
+                $(PASS_OLD_UNAME).val('');
+                $(PASS_REMARK).val('');
+            }
         });
     });
 
@@ -72,7 +85,27 @@ function loadPassTable(params) {
             { "data":"direct","defaultContent":'',"width":100, "name": "进出方向" ,"title": "方向" ,"orderable": false},
             { "data":"passDatetime","defaultContent":'',"width":100, "name": "通行时间" ,"title": "时间" ,"orderable": false},
             { "data":"", "name": "操作" ,"width":100,"title": "操作" ,"orderable": false,"render":renderOpt}
-        ]
+        ],
+        rowCallback:function( row, data ) {
+            var logs = data.logs;
+            var content = '';
+            if (logs.length > 0) {
+                $(row).css('color', 'yellow');
+                $('td>a', row).css('color', 'yellow');
+                for(var i=0; i<logs.length;i++){
+                    var log = logs[i];
+                    content += log.optContent+"<br>";
+                }
+                $(row).on('mouseover', function(){
+                    tip(content,$(row));
+                });
+                $(row).on('mouseout', function(){
+                    closeTip();
+                });
+            }
+
+        }
+
     }
     table = renderTable($(PASS_TABLE), SERVER_URL.pass_list,params,options);
 
@@ -99,13 +132,17 @@ function loadPassTable(params) {
 
 function editPassRecord(index){
     // 这里加权限判断
-    var row = table.row(index).data();
-    // layer.msg("请联系本室办领导修改");
 
+    // layer.msg("请联系本室办领导修改");
+    var row = table.row(index).data();
     layer.open({
         type:1,
         content:$(PASS_ADD_WRAP),
         area: ['600px', '380px'],
+        btn: ['保存', '关闭'],
+        yes: function(idx){
+            savePass(index);
+        },
         success: function(layero, index){
 
             $(PASS_DIRECT).prop('disabled', true);
@@ -113,11 +150,13 @@ function editPassRecord(index){
             $(PASS_DATETIME).attr('disabled', true);
             $(PASS_REMARK).parent('div').hide();
 
+
             setSelect2Val($(PASS_UNAME), row.userId, row.userName);
             setSelect2Val($(PASS_DIRECT), row.deviceDirection, row.direct);
             setSelect2Val($(PASS_AREA), row.deviceAreaId, row.deviceAreaName);
             $(PASS_DATETIME).val(row.passDatetime);
             $(PASS_RECORD_ID).val(row.passRecordId);
+            $(PASS_OLD_UNAME).val(row.userId);
         }
     });
 }
@@ -129,30 +168,4 @@ function delPassRecord(index){
         //这里删除一行
         table.row(index).remove();
     })
-}
-
-//加载部门树数据
-function setDeptTreeData() {
-    $.get(SERVER_URL.org_onWorkTree, {pid: 0},function(res){
-        var data = res.data;
-        renderTree(data, function(event, data){
-            if(data.type==1){// 单位
-                //draw24hData(true,'deptPId', data.id);
-            }else if(data.type==2){// 部门
-                //draw24hData(true,'deptId', data.id);
-            }else {// 所有
-               // draw24hData(true);
-            }
-
-        },function (event, data){
-            var path = 'onwork';
-            if(data.type==1){//单位
-                path += '/'+data.id;
-            }else if(data.type=2) {//部门
-                path += "/" + data.pId+"/"+data.id;
-            }
-            go(path);
-        });
-    });
-
 }

@@ -37,9 +37,7 @@ public class PermissonBean {
         return deptId;
     }
 
-    public void setDeptId(Integer deptId) {
-        this.deptId = deptId;
-    }
+
 
     public Integer getDeptPid() {
 
@@ -56,9 +54,7 @@ public class PermissonBean {
         return deptPid;
     }
 
-    public void setDeptPid(Integer deptPid) {
-        this.deptPid = deptPid;
-    }
+
 
     public Long getUserId() {
         return userId;

@@ -22,6 +22,11 @@
   </resultMap>
 
   <select id="getDics" resultMap="CodeResultMap">
-    select c.code,c.name from tb_sys_code c LEFT JOIN tb_sys_codetype t on c.codetype_id=t.codetype_id where t.code=#{key}
+    select c.code,c.name from tb_sys_code c LEFT JOIN tb_sys_codetype t on c.codetype_id=t.codetype_id where t.code=#{key} <if test="value != null"> and c.code=#{value}</if>
   </select>
+
+  <select id="getConfig" resultMap="CodeResultMap">
+    SELECT config_id as code, value as text FROM `tb_sys_config` where config_name=#{configName} and editable=1;
+  </select>
+
 </mapper>

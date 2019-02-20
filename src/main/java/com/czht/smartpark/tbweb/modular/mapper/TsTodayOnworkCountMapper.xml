@@ -19,6 +19,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name"/>
     <result column="dept_name" jdbcType="VARCHAR" property="deptName"></result>
+    <result column="dept_id" jdbcType="INTEGER" property="deptId"/>
     <result column="count" jdbcType="INTEGER" property="count"/>
   </resultMap>
 
@@ -37,7 +38,7 @@
   </resultMap>
 
   <select id="countOnworkBy24h" resultMap="BaseResultMap">
-    SELECT record_id,data_time,count(data_count) as data_count,area_id,today.dept_id,data_desc FROM ts_today_onwork_count today left join tb_pf_department dept on today.dept_id=dept.dept_id
+    SELECT record_id,data_time,sum(data_count) as data_count,area_id,today.dept_id,data_desc FROM ts_today_onwork_count today left join tb_pf_department dept on today.dept_id=dept.dept_id
     <where>
       <if test="deptPid != null and deptPid > 0">
          and dept.parent_id=#{deptPid}
@@ -88,17 +89,35 @@
   </select>
 
   <select id="countOnworkByArea" resultMap="OnWorkCntResultMap">
-    select area.area_id as id, area.area_name as `name`,sum(today.value) AS count  from tb_pf_area area left join view_today_onwork_count_by_area today on area.area_id=today.id
-    LEFT JOIN tb_pf_department dept on today.dept_id=dept.dept_id
-    <where>
-      area.area_id>1
-      <if test="deptPid != null and deptPid>0">
-        and dept.parent_id = #{deptPid}
-      </if>
-      <if test="deptId != null and deptId>0">
-        and dept_id=#{deptId}
-      </if>
-    </where>
+    SELECT
+    area.area_id AS id,
+    area.area_name AS `name`,
+    r.dept_id,
+    r.parent_id,
+    r.dept_name,
+    sum(r.count) as count
+    FROM
+    tb_pf_area area
+    LEFT JOIN (
+    SELECT
+    today.id,
+    dept.dept_id,
+    dept.parent_id,
+    dept.dept_name,
+    sum(today. VALUE) AS count
+    FROM
+    view_today_onwork_count_by_area today
+    LEFT JOIN tb_pf_department dept ON today.dept_id = dept.dept_id
+    GROUP BY
+    dept.dept_id
+    ) r ON area.area_id = r.id
+    <if test="deptId != null and deptId>0">
+      and r.dept_id=#{deptId}
+    </if>
+    <if test="deptPid != null and deptPid>0">
+      and r.parent_id = #{deptPid}
+    </if>
+    where area.area_id>0
     GROUP BY area.area_id
   </select>
 
@@ -143,8 +162,11 @@
       <if test="deptPid != null and deptPid >0">
         and dept.parent_id=#{deptPid}
       </if>
+      <if test="areaId != null and areaId>0">
+        and pass.device_area_id=#{areaId}
+      </if>
     </where>
-    order by pass.device_direction desc
+    order by lastDirect desc
   </select>
 
   <select id="getOnWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
@@ -165,6 +187,9 @@
     where pass.device_direction=1
     <if test="deptId != null and deptId>0">
       and pass.dept_id=#{deptId}
+    </if>
+    <if test="areaId != null and areaId>0">
+      and pass.device_area_id=#{areaId}
     </if>
     <if test="deptPid != null and deptPid >0">
       and dept.parent_id=#{deptPid}
@@ -194,35 +219,60 @@
     <if test="deptPid != null and deptPid >0">
       and dept.parent_id=#{deptPid}
     </if>
+    <if test="areaId != null and areaId>0">
+      and pass.device_area_id=#{areaId}
+    </if>
     ) t left join tb_user u on t.user_id=u.user_id
   </select>
 
   <select id="getOffWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
-    select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onwork_status, u.identification_pic_id  from (
+    select t.user_id, t.user_name,t.identification_pic_id,t.dept_id,dept.dept_name,t.last_passtime,t.lastDirect,t.onwork_status, area.area_name from (
     SELECT
-    pass_datetime AS last_passtime,
-    user_id,
-    pass.dept_id,
-    dept.dept_name,
-    user_name,
-    '出' as lastDirect,
-    device_area_id AS area_id,
-    area.area_name as area_name,
-    (case when oa.leave_name is not null then oa.leave_name else '不在岗' end) as onwork_status
+    u.user_id,
+    u.user_name,
+    u.identification_pic_id,
+    (case when oa.leave_name is not null then oa.leave_name when pass.user_id IS NOT NULL THEN '在岗' else '不在岗' end) as onwork_status,
+    u.dept_id,
+    pass.device_area_id,
+    pass.pass_datetime AS last_passtime,
+    (CASE WHEN pass.device_direction=1 then '进' when pass.device_direction=2 then '出'  ELSE '' END ) AS lastDirect
     FROM
-    view_today_pass_last pass left join tb_pf_area area on pass.device_area_id=area.area_id
-    left outer join tb_pf_department dept on pass.dept_id=dept.dept_id
-    left outer join
-    (select leaveuser.userName, leavetype.name as leave_name from tb_third_oa_leaveuser leaveuser, tb_third_oa_leavetype leavetype
-    where leaveuser.leaveType=leavetype.id and  now() BETWEEN leaveuser.beginTime and if(leaveuser.cancelLeaveTime is not null,if(leaveuser.endTime>leaveuser.cancelLeaveTime,leaveuser.cancelLeaveTime, leaveuser.cancelLeaveTime),leaveuser.endTime)) oa on pass.user_name=oa.userName
-    where pass.device_direction=2 and pass.pass_datetime &lt; DATE_SUB(now(),INTERVAL 1 HOUR)
+    tb_user u
+    LEFT JOIN view_today_pass_last_in pass ON u.user_id = pass.user_id
+    LEFT JOIN (
+    SELECT
+    leaveuser.userName,
+    leavetype. NAME AS leave_name
+    FROM
+    tb_third_oa_leaveuser leaveuser,
+    tb_third_oa_leavetype leavetype
+    WHERE
+    leaveuser.leaveType = leavetype.id
+    AND now() BETWEEN leaveuser.beginTime
+    AND
+    IF (
+    leaveuser.cancelLeaveTime IS NOT NULL,
+
+    IF (
+    leaveuser.endTime > leaveuser.cancelLeaveTime,
+    leaveuser.cancelLeaveTime,
+    leaveuser.cancelLeaveTime
+    ),
+    leaveuser.endTime
+    )
+    ) oa ON u.user_name = oa.userName
+    ) t left join tb_pf_area area on t.device_area_id=area.area_id
+    left outer join tb_pf_department dept on t.dept_id=dept.dept_id
+    where t.onwork_status='不在岗'
     <if test="deptId != null and deptId>0">
-      and pass.dept_id=#{deptId}
+      and t.dept_id=#{deptId}
     </if>
     <if test="deptPid != null and deptPid >0">
       and dept.parent_id=#{deptPid}
     </if>
-    ) t left join tb_user u on t.user_id=u.user_id
+    <if test="areaId != null and areaId>0">
+      and pass.device_area_id=#{areaId}
+    </if>
   </select>
 </mapper>
 

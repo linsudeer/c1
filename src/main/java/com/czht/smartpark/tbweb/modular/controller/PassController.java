@@ -42,7 +42,7 @@ public class PassController{
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Tip addPassRecords(PassBean bean) {
-        PassRecord record = passService.addPassRecord(bean);
+        PassDTO record = passService.addPassRecord(bean);
         return ResultTip.success(record);
     }
 
@@ -53,7 +53,7 @@ public class PassController{
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public Tip editPassRecords(PassBean bean) {
-        PassRecord record = passService.updatePassRecord(bean);
+        PassDTO record = passService.updatePassRecord(bean);
         return ResultTip.success(record);
     }
 

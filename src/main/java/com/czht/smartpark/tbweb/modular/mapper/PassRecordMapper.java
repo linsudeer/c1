@@ -29,5 +29,5 @@ public interface PassRecordMapper extends Mapper<PassRecord>{
      * @param recordId
      * @return
      */
-    PassRecord getPassRecordById(@Param("recordId") Long recordId);
+    PassDTO getPassRecordById(@Param("recordId") Long recordId);
 }

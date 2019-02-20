@@ -20,6 +20,7 @@ function initTrack(params){
     });
     renderSelect($(QUERY_UNAME),'姓名', SERVER_URL.code_user);
 
+
     //初始化日期
     laydate.render({ elem: QUERY_STARTTIME});
     laydate.render({ elem: QUERY_ENDTIME});
@@ -31,15 +32,17 @@ function initTrack(params){
     //加载此人历史考勤（历史考勤）
     drawHistoryAttend(params.userId);
 
+    setDeptTreeData();
+
 
     //监听查询按钮
     $('form#query').on('click', '#queryBtn', function(e){
-        var params = $(this).parents('form').serializeJSON();
-        console.log(params);
+        var p = $(this).parents('form').serializeJSON();
         table.clear();
         table.destroy();
-        drawHistoryAttend(params.userId, params.starttime, params.endtime);
-        drawTrack(params.userId, params.starttime, params.endtime);
+        setUserInfo(p.userId);
+        drawHistoryAttend(p.userId, p.starttime, p.endtime);
+        drawTrack(p.userId, p.starttime, p.endtime);
     });
 
     // 监听新增按钮
@@ -47,7 +50,7 @@ function initTrack(params){
         layer.open({
             type:1,
             content:$(PASS_ADD_WRAP),
-            area: ['550px', '350px']
+            area: ['600px', '380px']
         });
     });
 }
@@ -60,10 +63,7 @@ function setUserInfo(userId){
         $(USER_HEADER).attr('src','data:image/jpeg;base64,'+(user.idPic || ''));
         $(USER_NAME).text(user.userName || '');
         $(DEPT_NAME).text(user.deptName || '');
-
-        // 默认值
-        setSelect2Val($(QUERY_DEPT), user.deptId, user.deptName);
-        setSelect2Val($(QUERY_UNAME), userId, user.userName);
+        setSelect2Val($(QUERY_UNAME), userId, user.userName)
 
     });
 }
@@ -74,6 +74,7 @@ function setUserInfo(userId){
  * @param startdate 开始日期 2019-01-18
  * @param endtime 结束日期 2019-01-19
  */
+
 function drawTrack(userId, startdate, enddate){
     startdate = startdate?(startdate+' 00:00:00'):new Date().minOfCurdate();
     enddate = enddate?(enddate+' 23:59:59'):new Date().maxOfCurdate();
@@ -82,13 +83,13 @@ function drawTrack(userId, startdate, enddate){
 
     $.get(SERVER_URL.pass_list, {userId:userId, starttime:startdate, endtime:enddate}, function(res){
         var list = res.data;
-        if(!list) return;
+        // if(!list) return;
 
         // 获取所有区域
         var areas = getAreas();
         if(areas.length==0) return;
 
-        var seriesData = {};
+        var seriesData = [];
         var xAxisData = [];
         var obj = {};
         var areaNames = [];
@@ -97,29 +98,39 @@ function drawTrack(userId, startdate, enddate){
         var colors=['#fffc79ee',"#06f1c9ee","#04b4f0ee"]; // 这里是固定区域，如果区域不固定用上面的函数随机生成颜色
         var mySeries = [];
 
+        // 初始化数据
         for(var i=0;i<length;i++){
-            obj[areas[i].id] = areas[i].text;
+            obj[i] = areas[i].text;
             seriesData[areas[i].id] = [];
+            mySeries[i]={};
         }
 
+        //对数据进行分类，属于那个区域
         for(var i=list.length-1;i>=0; i--){
             var item = list[i];
             var value = +item.deviceAreaId ;
             var direct = item.direct;
-            var areaName = obj[value];
+            var areaName = item.deviceAreaName;
             var xtime = item.passDatetime.split(' ');
-            var title = xtime[0] + "\r\n"+xtime[1]+" / "+(obj[value])+" / "+item.direct ;//年月日时分/位置
-            seriesData[value].push({value:value,symbol:"image://" + item.faceFdfsId,title:title,fullFdfsId:item.fullFdfsId});
-            seriesData[((value-2)+1)%3+2].push({});
-            seriesData[((value-2)+2)%3+2].push({});
+            var title = xtime[0] + "\r\n"+xtime[1]+" / "+areaName+" / "+item.direct ;//年月日时分/位置
+
+            for(var j=0;j<length;j++){
+                if(value==areas[j].id){
+                    seriesData[areas[j].id].push({value:j,symbol:"image://" + item.faceFdfsId,title:title,fullFdfsId:item.fullFdfsId});
+                }else {
+                    seriesData[areas[j].id].push({});
+                }
+            }
             xAxisData.push(item.passDatetime)
+
+
         }
 
         for(var i=0;i<length;i++){
             var areaId = areas[i].id;
             var areaName = areas[i].text;
-            areaNames.push(areaName);
-            mySeries.push({name:areaName,type:'line',symbol:"rectangle",symbolSize: [60,70],data:seriesData[areaId],itemStyle:{normal:{lineStyle:{width:10},label : {color:colors[length-i],formatter:function(obj){return obj.data.title;},show: true,position: 'top'}}}});
+            areaNames[i]=areaName;
+            mySeries[i]={name:areaName,type:'line',symbol:"rectangle",symbolSize: [60,70],data:seriesData[areaId],itemStyle:{normal:{lineStyle:{width:10},label : {color:colors[i],formatter:function(o){return o.data.title;},show: true,position: 'top'}}}};
         }
         option = {
             tooltip : {trigger: 'item'},
@@ -138,15 +149,15 @@ function drawTrack(userId, startdate, enddate){
             calculable : true,
             xAxis : [{type : 'category',show:false,axisLabel : {formatter: '',textStyle:{color:"#fff"}},
                 axisLine:{lineStyle:{color: '#ffffff',width: 5,type: 'solid'}} ,splitLine:{show:true  },boundaryGap : true,data : xAxisData}],
-            yAxis : {show:true,type : 'value',splitNumber:2,min:2,max:4,axisLine:{show:true},
-                axisLabel:{formatter:function(index,data){return obj[index]},textStyle:{color: '#FFF',fontSize:14}},
-                splitLine:{show:true,lineStyle:{width: 1,color: colors}}},
+            yAxis : {show:true,type : 'value',splitNumber:length-1,min:0, max:length-1, axisLine:{show:true},
+                axisLabel:{formatter:function(index,data){console.log(index);return obj[index]},textStyle:{color: '#FFF',fontSize:14}},
+                splitLine:{show:true,lineStyle:{width: 1,color: colors.reverse()}}},
             series : mySeries
         };
+        var trackChart = echarts.init(document.getElementById(TRACK_WRAP));
+        trackChart.setOption(option);
 
-        var myCharts = echarts.init(document.getElementById(TRACK_WRAP));
-        myCharts.setOption(option);
-        myCharts.on('click',function(params){
+        trackChart.on('click',function(params){
             alert("点击了轨迹");
         });
     })

@@ -1,6 +1,7 @@
 
 // 加载头部时初始化方法
 var PASS_UNAME = "#addPassWrap select[name='userId']"; // 用户名
+var PASS_OLD_UNAME = "#addPassWrap input[name='oldUserId']"; // 用户名
 var PASS_AREA = "#addPassWrap select[name='areaId']";//区域
 var PASS_DIRECT = "#addPassWrap select[name='direct']";//进出方向
 var PASS_RECORD_ID ="#addPassWrap input[name='recordId']";
@@ -21,6 +22,7 @@ function initHead(){
     $('#header li').on('mouseleave', function(){
         $(this).children('div').css('display','none');
     });
+
 
     $('#logout').on('click', function(e){
         $.post(SERVER_URL.logout, function(res){
@@ -50,39 +52,60 @@ function setData(){
 
 }
 
-function savePass(){
-    var params = $("addPassWrap>form").serializeJSON();
-    if(!params.userId){
-        layser.msg("请选择姓名");
-        return;
-    }
-    if(!params.areaId){
-        layser.msg("请选择区域");
-        return;
-    }
-    if(!params.direct){
-        layser.msg("请选择方向");
-        return;
-    }
-    if(!params.passDatetime){
-        layser.msg("请选择时间");
-        return;
-    }
-
+function savePass(index){
+    var params = {}
+    var userId = $(PASS_UNAME).val();
+    var oldUserId = $(PASS_OLD_UNAME).val();
+    var areaId = $(PASS_AREA).val();
+    var direct = $(PASS_DIRECT).val();
+    var passtime = $(PASS_DATETIME).val();
     var recordId = $(PASS_RECORD_ID).val();
+    var remark = $(PASS_REMARK).val();
+
+    if(!userId){
+        layer.msg("请选择姓名!");
+        return;
+    }
+    if(!areaId){
+        layer.msg("请选择区域!");
+        return;
+    }
+    if(!direct){
+        layer.msg("请选择方向!");
+        return;
+    }
+    if(!passtime){
+        layer.msg("请选择时间!");
+        return;
+    }
+    params = {userId:userId, areaId:areaId, direct:direct, passtime:passtime, recordId:recordId, oldUserId:oldUserId, remark:remark}
     if(recordId){// 编辑
         $.post(SERVER_URL.pass_edit,params, function(ret){
             var record = ret.data;
-            layser.msg('修改成功!');
+
             // 这里首页更新一行记录
-            table.row(index).data(record);
+            if(record){
+                table.row(index).data(record);
+                layer.msg('修改成功!');
+            }
+
         });
     }else {//新增
+        if(!remark){
+            layer.msg("请输入新增原因!");
+            return;
+        }
         $.post(SERVER_URL.pass_add,params, function(ret){
             var record = ret.data;
-            layser.msg('成功!');
+
             // 这里首页新增一行记录
-            table.row.add(record);
+            if(record){
+                table.row.add(record);
+                table.draw(false);
+                layer.msg('保存成功!');
+            }
+
         });
     }
+    layer.closeAll();
 }

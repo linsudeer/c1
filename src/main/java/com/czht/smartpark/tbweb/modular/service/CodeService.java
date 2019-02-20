@@ -24,6 +24,8 @@ public interface CodeService {
      */
     List<CodeDTO> getAreas(String key, Integer limit);
 
+    CodeDTO getArea(Integer areaId);
+
     /**
      * 查找所有部门
      * @param deptName
@@ -32,12 +34,23 @@ public interface CodeService {
      */
     List<CodeDTO> getDepts(String deptName, Integer deptPid, Integer limit);
 
+    CodeDTO getDept(Integer deptPid);
+
     /**
      * 查找字典值
      * @param key
      * @param limit
      * @return
      */
+    CodeDTO getDict(String key, String value);
+
     List<CodeDTO> getDicts(String key);
+
+    /**
+     * 从配置文件中查 tb_sys_config
+     * @param configName
+     * @return
+     */
+    CodeDTO getConfig(String configName);
 }
 

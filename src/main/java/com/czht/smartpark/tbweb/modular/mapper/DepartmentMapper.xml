@@ -23,6 +23,7 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="leader_id" property="leaderId" jdbcType="INTEGER" />
     <result column="on_work_cnt" property="onWorkCnt" jdbcType="INTEGER" />
+    <result column="total" property="total" jdbcType="INTEGER" />
   </resultMap>
 
   <resultMap id="CodeResultMap" type="com.czht.smartpark.tbweb.modular.dto.CodeDTO">
@@ -41,7 +42,9 @@
   </select>
 
   <select id="getOnWorkOrgTree" resultMap="OnWorkOrgTreeResultMap">
-    select dept.dept_id,dept.parent_id,dept.type,dept.leader_id,dept.dept_name,case when today.on_work_cnt is null then 0 else today.on_work_cnt end on_work_cnt from tb_pf_department dept left join
+    select dept.dept_id,dept.parent_id,dept.type,dept.leader_id,dept.dept_name,
+    (select count(*) from tb_user where dept_id=dept.dept_id) as total,
+    case when today.on_work_cnt is null then 0 else today.on_work_cnt end on_work_cnt from tb_pf_department dept left join
     (select dept_id,count(user_id) as on_work_cnt from view_today_pass_last_in group by dept_id) today on dept.dept_id=today.dept_id
     <where>
       <if test="deptPid != null and deptPid > 0">

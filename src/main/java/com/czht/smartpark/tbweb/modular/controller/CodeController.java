@@ -2,6 +2,7 @@ package com.czht.smartpark.tbweb.modular.controller;
 
 import com.czht.smartpark.tbweb.context.tip.ResultTip;
 import com.czht.smartpark.tbweb.context.tip.bean.Tip;
+import com.czht.smartpark.tbweb.modular.bean.PermissonBean;
 import com.czht.smartpark.tbweb.modular.dto.CodeDTO;
 import com.czht.smartpark.tbweb.modular.service.CodeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,8 @@ public class CodeController {
 
     @RequestMapping("/dept")
     public Tip getDepts(String key, Integer limit) {
-        List<CodeDTO> codes = codeService.getDepts(key, 0, limit);
+        PermissonBean bean = new PermissonBean();
+        List<CodeDTO> codes = codeService.getDepts(key, bean.getDeptPid(), limit);
         return ResultTip.success(codes);
     }
 

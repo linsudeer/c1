@@ -19,5 +19,5 @@ public interface AreaMapper extends Mapper<Area> {
      * 查找区域，字典用
      * @return
      */
-    List<CodeDTO> getAreasForCode(@Param("key") String key, @Param("limit") Integer limit);
+    List<CodeDTO> getAreasForCode(@Param("key") String key, @Param("value") String value, @Param("limit") Integer limit);
 }

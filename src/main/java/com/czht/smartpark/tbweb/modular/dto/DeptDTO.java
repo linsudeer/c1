@@ -28,6 +28,11 @@ public class DeptDTO {
     private Integer leaderId;
 
     /**
+     * 部门总人数
+     */
+    private Integer total;
+
+    /**
      * 在岗人数
      */
     private Integer onWorkCnt;
@@ -86,5 +91,13 @@ public class DeptDTO {
 
     public void setOnWorkCnt(Integer onWorkCnt) {
         this.onWorkCnt = onWorkCnt;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
     }
 }

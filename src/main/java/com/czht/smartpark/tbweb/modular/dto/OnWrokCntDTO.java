@@ -21,6 +21,8 @@ public class OnWrokCntDTO {
      */
     private String deptName;
 
+    private Integer deptId;
+
     /**
      * 数量
      */
@@ -56,5 +58,13 @@ public class OnWrokCntDTO {
 
     public void setDeptName(String deptName) {
         this.deptName = deptName;
+    }
+
+    public Integer getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
     }
 }

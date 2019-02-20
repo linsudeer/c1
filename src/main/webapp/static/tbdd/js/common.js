@@ -57,7 +57,10 @@ function renderTree(data, selected, clickBadge){
     });
 
     $(HOME_TREE_ID).on('nodeSelected', function(event, data) {
-        selected(event, data);
+        if(typeof selected == 'function'){
+            selected(event, data);
+        }
+
     });
 
     $(HOME_TREE_ID).on('click', '.list-group-item .badge', function(event, data) {
@@ -175,7 +178,10 @@ function renderTable(elem, url, data, options){
             url: url,
             data:data,
             dataSrc: function (json) {
-                json.draw = json.data;
+                if(json.data && json.data.length>0){
+                    json.draw = json.data;
+                }
+
                 json.recordsTotal = json.total;
                 json.recordsFiltered = json.total;
 

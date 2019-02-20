@@ -26,13 +26,13 @@ public interface PassService {
      * 新增记录
      * @param bean
      */
-    PassRecord addPassRecord(PassBean bean);
+    PassDTO addPassRecord(PassBean bean);
 
     /**
      * 编辑记录
      * @param bean
      */
-    PassRecord updatePassRecord(PassBean bean);
+    PassDTO updatePassRecord(PassBean bean);
 
     /**
      * 删除

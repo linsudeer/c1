@@ -9,9 +9,15 @@ import java.util.Date;
  */
 public class PassBean extends Page {
 
+    private Long passRecordId;
+
     private Integer deptId;
 
     private Long userId;
+
+    private Long oldUserId;
+
+    private String oldUserName;
 
     private Integer userGroup;
 
@@ -113,5 +119,29 @@ public class PassBean extends Page {
 
     public void setRecordId(Long recordId) {
         this.recordId = recordId;
+    }
+
+    public Long getOldUserId() {
+        return oldUserId;
+    }
+
+    public void setOldUserId(Long oldUserId) {
+        this.oldUserId = oldUserId;
+    }
+
+    public String getOldUserName() {
+        return oldUserName;
+    }
+
+    public void setOldUserName(String oldUserName) {
+        this.oldUserName = oldUserName;
+    }
+
+    public Long getPassRecordId() {
+        return passRecordId;
+    }
+
+    public void setPassRecordId(Long passRecordId) {
+        this.passRecordId = passRecordId;
     }
 }

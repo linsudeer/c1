@@ -74,6 +74,7 @@
     <result column="dept_parent_id" jdbcType="INTEGER" property="deptPid" />
     <result column="group_id" jdbcType="INTEGER" property="userGroup" />
     <result column="user_type" jdbcType="INTEGER" property="userType" />
+    <result column="user_group" jdbcType="INTEGER" property="userGroup" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
     <result column="id_card" jdbcType="VARCHAR" property="idCard" />
     <result column="data_role" jdbcType="VARCHAR" property="dataRole"></result>
@@ -116,7 +117,7 @@
   </select>
 
   <select id="getSimpleUserInfo" parameterType="java.lang.Integer" resultMap="SimpleUserResultMap">
-    select user_id, user_name, user_sex, user_mobile, u.dept_id,dept.dept_name, dept_parent_id, data_role, identification_pic_id from tb_user u left join tb_pf_department dept on u.dept_id=dept.dept_id where user_id=#{userId}
+    select user_id, user_name, user_sex, user_mobile, u.dept_id,dept.dept_name,user_type,user_group, dept_parent_id, data_role, identification_pic_id from tb_user u left join tb_pf_department dept on u.dept_id=dept.dept_id where user_id=#{userId}
   </select>
 
 </mapper>

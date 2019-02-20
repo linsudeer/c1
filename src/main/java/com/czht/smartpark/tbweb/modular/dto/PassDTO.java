@@ -1,10 +1,16 @@
 package com.czht.smartpark.tbweb.modular.dto;
 
+import com.czht.smartpark.tbweb.modular.dmo.SysOplog;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * 通行记录modal
  */
+
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class PassDTO {
 
     private Long passRecordId;
@@ -48,6 +54,13 @@ public class PassDTO {
     private String fullFdfsId;
 
     private String faceFdfsId;
+
+    /**
+     * 修改标识
+     */
+    private Integer reviewFlag;
+
+    private List<SysOplog> logs;
 
     public Long getPassRecordId() {
         return passRecordId;
@@ -215,5 +228,21 @@ public class PassDTO {
 
     public void setUserGroupName(String userGroupName) {
         this.userGroupName = userGroupName;
+    }
+
+    public Integer getReviewFlag() {
+        return reviewFlag;
+    }
+
+    public void setReviewFlag(Integer reviewFlag) {
+        this.reviewFlag = reviewFlag;
+    }
+
+    public List<SysOplog> getLogs() {
+        return logs;
+    }
+
+    public void setLogs(List<SysOplog> logs) {
+        this.logs = logs;
     }
 }

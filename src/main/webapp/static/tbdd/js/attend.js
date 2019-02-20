@@ -45,7 +45,7 @@ function loadAttendTable(params){
             { "data":"absenceDays","defaultContent":'', "name": "应出勤（天）" ,"title": "应出勤（天）" ,"orderable": true},
             { "data":"leaveDays", "defaultContent":'',"name": "请假（天）" ,"title": "请假（天）" ,"orderable": true},
             { "data":"absenceTime", "defaultContent":'',"name": "应出勤（小时）" ,"title": "应出勤（小时" ,"orderable": true},
-            { "data":"absenceTime", "defaultContent":'',"name": "考勤时长（小时）" ,"title": "考勤时长（小时）" ,"orderable": true},
+            { "data":"attendTime", "defaultContent":'',"name": "考勤时长（小时）" ,"title": "考勤时长（小时）" ,"orderable": true},
             { "data":"overTime", "defaultContent":'',"name": "加班时长（小时）" ,"title": "加班时长（小时）" ,"orderable": true},
             { "data":"null", "name": "状态" ,"title": "状态" ,"orderable": false, "render":renderStatus}
         ],
@@ -178,30 +178,4 @@ function causalOk(e, id, rowindex){
         }
         table.ajax.reload( null, false );
     });
-}
-
-//加载部门树数据
-function setDeptTreeData() {
-    $.get(SERVER_URL.org_onWorkTree, {pid: 0},function(res){
-        var data = res.data;
-        renderTree(data, function(event, data){
-            if(data.type==1){// 单位
-                //draw24hData(true,'deptPId', data.id);
-            }else if(data.type==2){// 部门
-                //draw24hData(true,'deptId', data.id);
-            }else {// 所有
-                // draw24hData(true);
-            }
-
-        },function (event, data){
-            var path = 'onwork';
-            if(data.type==1){//单位
-                path += '/'+data.id;
-            }else if(data.type=2) {//部门
-                path += "/" + data.pId+"/"+data.id;
-            }
-            go(path);
-        });
-    });
-
 }

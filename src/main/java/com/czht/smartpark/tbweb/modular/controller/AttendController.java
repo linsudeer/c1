@@ -6,6 +6,7 @@ import com.czht.smartpark.tbweb.modular.bean.AttendBean;
 import com.czht.smartpark.tbweb.modular.dmo.AttendanceRecord;
 import com.czht.smartpark.tbweb.modular.dto.AttendStatisticsDTO;
 import com.czht.smartpark.tbweb.modular.service.AttendService;
+import com.czht.smartpark.tbweb.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +23,14 @@ public class AttendController {
 
     @RequestMapping("/statistics")
     public Tip getStatisticsRecords(AttendBean bean){
+        //这里控制时间
+        if(DateUtil.getWeek()==1){
+            bean.setStartDate(DateUtil.getLastMonday());
+            bean.setEndDate(DateUtil.getLastSunday());
+        }else {
+            bean.setStartDate(DateUtil.getMonday());
+            bean.setEndDate(DateUtil.getSunday());
+        }
         List<AttendStatisticsDTO> list = attendService.getAttendStatisticsRecords(bean);
         return ResultTip.success(list);
     }

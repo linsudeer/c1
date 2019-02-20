@@ -27,7 +27,9 @@ public class TreeUtil {
                 node.setpId(org.getParentId());
                 node.setType(org.getType());
                 if(org.getOnWorkCnt() != null){
-                    node.setTags(new String[]{org.getOnWorkCnt()+""});
+                    node.setTotal(org.getTotal());
+                    node.setOnworkCnt(org.getOnWorkCnt());
+                    node.setTags(new String[]{org.getOnWorkCnt()+"/"+org.getTotal()});
                 }
                 TreeState state = new TreeState();
                 state.setSelected(false);
@@ -54,7 +56,9 @@ public class TreeUtil {
                 TreeNode cnode = it.next();
                 if(cnode.getpId()!=null && cnode.getpId().equals(pnode.getId())){
                     childrens.add(cnode);
-                    pnode.setTags(new String[]{(Integer.parseInt(pnode.getTags()[0])+Integer.parseInt(cnode.getTags()[0]))+""});
+                    pnode.setOnworkCnt(pnode.getOnworkCnt()+cnode.getOnworkCnt());
+                    pnode.setTotal(pnode.getTotal()+cnode.getTotal());
+                    pnode.setTags(new String[]{(pnode.getOnworkCnt()+"/"+pnode.getTotal())});
                     removeNodes.add(cnode);
                 }
             }

@@ -14,6 +14,24 @@ public interface Constant {
      */
     String ROLE_GENERAL = "general";
 
+
+    String PASS_LOG_MODULE = "通行记录模块";
+
+    /**
+     * 添加
+     */
+    int PASS_LOG_TYPE_ADD = 1;
+
+    /**
+     * 修改
+     */
+    int PASS_LOG_TYPE_EDIT = 2;
+
+    /**
+     * 删除
+     */
+    int PASS_LOG_TYPE_DEL = 3;
+
     /**
      * 考勤异常情况被修正
      */

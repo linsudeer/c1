@@ -17,6 +17,8 @@ public class TreeNode {
     private Boolean selectable = true;
     private TreeState state;
     private String[] tags;
+    private Integer onworkCnt;// 在岗人数
+    private Integer total;//部门总人数
     private List<TreeNode> nodes;
 
     public Integer getId() {
@@ -123,4 +125,19 @@ public class TreeNode {
         this.type = type;
     }
 
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public Integer getOnworkCnt() {
+        return onworkCnt;
+    }
+
+    public void setOnworkCnt(Integer onworkCnt) {
+        this.onworkCnt = onworkCnt;
+    }
 }

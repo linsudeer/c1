@@ -1,6 +1,8 @@
 package com.czht.smartpark.tbweb.modular.service.impl;
 
 import com.czht.smartpark.tbweb.modular.constant.Constant;
+import com.czht.smartpark.tbweb.modular.dmo.Area;
+import com.czht.smartpark.tbweb.modular.dmo.Department;
 import com.czht.smartpark.tbweb.modular.dto.CodeDTO;
 import com.czht.smartpark.tbweb.modular.mapper.AreaMapper;
 import com.czht.smartpark.tbweb.modular.mapper.DepartmentMapper;
@@ -35,7 +37,19 @@ public class CodeServiceImpl implements CodeService {
 
     @Override
     public List<CodeDTO> getAreas(String key, Integer limit) {
-        return areaMapper.getAreasForCode(key, limit);
+        return areaMapper.getAreasForCode(key, null, limit);
+    }
+
+    @Override
+    public CodeDTO getArea(Integer areaId) {
+        Area area = areaMapper.selectByPrimaryKey(areaId);
+        if(area != null){
+            CodeDTO code = new CodeDTO();
+            code.setId(area.getAreaId());
+            code.setText(area.getAreaName());
+            return code;
+        }
+        return null;
     }
 
     @Override
@@ -44,7 +58,35 @@ public class CodeServiceImpl implements CodeService {
     }
 
     @Override
-    public List<CodeDTO> getDicts(String key) {
-        return dictMapper.getDics(key);
+    public CodeDTO getDept(Integer deptPid) {
+        Department dept = deptMapper.selectByPrimaryKey(deptPid);
+        if(dept != null){
+            CodeDTO code = new CodeDTO();
+            code.setId(dept.getDeptId());
+            code.setText(dept.getDeptName());
+            return code;
+        }
+        return null;
     }
+
+    @Override
+    public CodeDTO getDict(String key, String value) {
+        List<CodeDTO> list = dictMapper.getDics(key, value);
+        if(list !=  null && list.size()>0){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<CodeDTO> getDicts(String key) {
+        return dictMapper.getDics(key, null);
+    }
+
+    @Override
+    public CodeDTO getConfig(String configName) {
+        return dictMapper.getConfig(configName);
+    }
+
+
 }

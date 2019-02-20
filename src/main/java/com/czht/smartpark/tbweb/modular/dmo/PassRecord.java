@@ -38,7 +38,7 @@ public class PassRecord {
     @Column(name = "user_group")
     private Integer userGroup;
 
-    @Column(name = "groupId")
+    @Column(name = "group_id")
     private Integer groupId;
 
     @Column(name = "dept_id")
@@ -98,7 +98,7 @@ public class PassRecord {
     @Column(name = "face_fdfs_id")
     private String faceFdfsId;
 
-    @Column(name = "pic_qulity")
+    @Column(name = "pic_quality")
     private Integer picQuality;
 
     @Column(name = "pic_score")
@@ -455,4 +455,5 @@ public class PassRecord {
     public void setReserveBlob(byte[] reserveBlob) {
         this.reserveBlob = reserveBlob;
     }
+
 }
