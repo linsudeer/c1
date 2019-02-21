@@ -196,12 +196,12 @@
     LEFT JOIN tb_sys_config config ON t.config_typename = config.typename
     WHERE
     config.config_type = 'client_fdfs'
-
+    order by t.pass_datetime desc
   </select>
 
   <select id="getPassCount" parameterType="com.czht.smartpark.tbweb.modular.bean.PassBean" resultType="java.lang.Integer">
     SELECT
-      count(*)
+      count(*)getPassRecords
   FROM
       tb_pass_record pass
     <where>

@@ -32,8 +32,6 @@ function initPass() {
     //加载表格
     loadPassTable();
 
-    setDeptTreeData();
-
     //监听查询按钮
     $('form#query').on('click', '#queryBtn', function(e){
         var params = $(this).parents('form').serializeJSON();
@@ -75,15 +73,16 @@ function initPass() {
 function loadPassTable(params) {
 
     var options = {
+        ordering:false,
         columns: [
             { "data":null, "width":50, "name": "序号" ,"title": "序号", "render":xh},
-            { "data":"faceFdfsId","defaultContent":'', "width":100, "name": "人脸图片" ,"title": "图片" ,"orderable": false, "render":renderImage},
-            { "data":"userName","defaultContent":'',"width":100, "name": "姓名" ,"title": "姓名" ,"orderable": false, "render":renderUserName},
-            { "data":"userGroupName","defaultContent":'',"width":100, "name": "人员类型" ,"title": "人员类型" ,"orderable": false},
-            { "data":"deptName","defaultContent":'',"width":100, "name": "部门" ,"title": "部门" ,"orderable": false},
-            { "data":"deviceAreaName","defaultContent":'',"width":100, "name": "通行区域" ,"title": "区域" ,"orderable": false},
-            { "data":"direct","defaultContent":'',"width":100, "name": "进出方向" ,"title": "方向" ,"orderable": false},
-            { "data":"passDatetime","defaultContent":'',"width":100, "name": "通行时间" ,"title": "时间" ,"orderable": false},
+            { "data":"faceFdfsId","defaultContent":'', "width":100, "name": "人脸图片" ,"title": "图片" , "render":renderImage},
+            { "data":"userName","defaultContent":'',"width":100, "name": "姓名" ,"title": "姓名" , "render":renderUserName},
+            { "data":"userGroupName","defaultContent":'',"width":100, "name": "人员类型" ,"title": "人员类型"},
+            { "data":"deptName","defaultContent":'',"width":100, "name": "部门" ,"title": "部门"},
+            { "data":"deviceAreaName","defaultContent":'',"width":100, "name": "通行区域" ,"title": "区域"},
+            { "data":"direct","defaultContent":'',"width":100, "name": "进出方向" ,"title": "方向"},
+            { "data":"passDatetime","defaultContent":'',"width":100, "name": "通行时间" ,"title": "时间"},
             { "data":"", "name": "操作" ,"width":100,"title": "操作" ,"orderable": false,"render":renderOpt}
         ],
         rowCallback:function( row, data ) {

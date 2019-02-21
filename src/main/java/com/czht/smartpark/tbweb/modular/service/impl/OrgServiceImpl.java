@@ -21,4 +21,9 @@ public class OrgServiceImpl implements OrgService {
         List<DeptDTO> depts = deptMapper.getOnWorkOrgTree(deptPid);
         return TreeUtil.treeWrap(depts);
     }
+
+    @Override
+    public List<DeptDTO> getOnWorkOrg(Integer deptPid) {
+        return deptMapper.getOnWorkOrgTree(deptPid);
+    }
 }

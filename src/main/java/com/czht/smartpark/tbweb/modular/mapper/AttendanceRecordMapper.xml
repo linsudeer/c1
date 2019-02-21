@@ -128,6 +128,7 @@
       </if>
     </where>
     group by user_id
+    order by attend_time desc;
   </select>
 
   <select id="getAttendanceCausas" resultMap="AttendanceCausaResultMap" parameterType="java.util.Map">

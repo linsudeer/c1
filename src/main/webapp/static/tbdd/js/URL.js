@@ -21,11 +21,14 @@ var SERVER_URL = {
 
     area_list: DOMAIN+"/area/list",//区域列表
     org_onWorkTree: DOMAIN+"/org/onWorkTree",//在岗人员树
+    org_onWorkList: DOMAIN+"/org/onWorkList",
 
     current_24h: DOMAIN+"/current/onwork/24h",//24小时在岗人员统计
     current_typegroup: DOMAIN+"/current/count/typeGroup",//根据在岗类型分组统计、
     current_areagroup: DOMAIN+"/current/count/areaGroup",//不同区域在岗情况
     current_pass: DOMAIN+"/current/pass",//最新的记录
+    current_count_attend: DOMAIN+"/current/count/attendGroup",//考勤人数
+    current_pass_attend: DOMAIN+"/current/attendPass",//考勤人数
 
     attend_statistics:DOMAIN+"/attend/statistics",//综合考勤
     attend_history: DOMAIN+"/attend/history",//个人历史考勤

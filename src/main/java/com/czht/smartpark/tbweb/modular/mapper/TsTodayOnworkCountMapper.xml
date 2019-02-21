@@ -231,14 +231,25 @@
     u.user_id,
     u.user_name,
     u.identification_pic_id,
-    (case when oa.leave_name is not null then oa.leave_name when pass.user_id IS NOT NULL THEN '在岗' else '不在岗' end) as onwork_status,
+    (
+    CASE
+    WHEN oa.leave_name IS NOT NULL THEN
+    oa.leave_name
+    WHEN (pass.user_id IS NOT NULL &amp;&amp; pass.device_direction = 1) THEN
+    '在岗'
+    when (pass.user_id is null || (pass.user_id is not null &amp;&amp; pass.device_direction = 2 &amp;&amp; pass.pass_datetime &lt; DATE_SUB(now(),INTERVAL 1 HOUR))) THEN
+    '不在岗'
+    ELSE
+    '临时离岗'
+    END
+    ) AS onwork_status,
     u.dept_id,
     pass.device_area_id,
     pass.pass_datetime AS last_passtime,
     (CASE WHEN pass.device_direction=1 then '进' when pass.device_direction=2 then '出'  ELSE '' END ) AS lastDirect
     FROM
     tb_user u
-    LEFT JOIN view_today_pass_last_in pass ON u.user_id = pass.user_id
+    LEFT JOIN view_today_pass_last pass ON u.user_id = pass.user_id
     LEFT JOIN (
     SELECT
     leaveuser.userName,
@@ -273,6 +284,97 @@
     <if test="areaId != null and areaId>0">
       and pass.device_area_id=#{areaId}
     </if>
+  </select>
+
+
+  <select id="countOnWorkByAttend" resultMap="OnWorkCntResultMap">
+    select r.type as id,
+    (
+    case when r.type=1 then '正常到岗人数'
+    when r.type=2 then '迟到10分钟以内'
+    when r.type=3 then '迟到30分钟以内'
+    when r.type=4 then '迟到60分钟以内'
+    else '未到岗人数' end
+    ) as name,
+    count(*) as count from (
+    select t.user_id,t.user_name,min(t.pass_datetime) as last_passtime,t.dept_id,min(t.type) as type from (
+    select
+    r.user_id,
+    r.user_name,
+    r.dept_id,
+    r.dept_name,
+    r.dept_parent_id,
+    pass.pass_datetime,
+    pass.user_id as uid,
+    pass.device_direction as lastDirect,
+    pass.device_area_id as area_id,
+    (
+    CASE WHEN UNIX_TIMESTAMP(pass.pass_datetime)-UNIX_TIMESTAMP(r.work_start) &lt;= 0 THEN 1
+    WHEN UNIX_TIMESTAMP(pass.pass_datetime)-UNIX_TIMESTAMP(r.work_start) &lt;= 10*60 THEN 2
+    WHEN UNIX_TIMESTAMP(pass.pass_datetime)-UNIX_TIMESTAMP(r.work_start) &lt;= 30*60 THEN 3
+    WHEN UNIX_TIMESTAMP(pass.pass_datetime)-UNIX_TIMESTAMP(r.work_start) &lt;= 60*60 THEN 4
+    ELSE 9 END
+    ) AS type
+    from (
+    select u.user_id,u.user_name,u.dept_parent_id,u.identification_pic_id,u.dept_id,dept.dept_name,rule.work_start,rule.rest_start FROM tb_user u
+    left join (SELECT id, if(now() &lt;= work_start,DATE_FORMAT(work_start,'%Y-%m-%d %H:%i:%s'),DATE_FORMAT(work_rest_end,'%Y-%m-%d %H:%i:%s')) as work_start,
+    if(now() &lt;= work_start,DATE_FORMAT(CURDATE(),'%Y-%m-%d 00:00:00'),DATE_FORMAT(work_rest_start,'%Y-%m-%d %H:%i:%s')) as rest_start
+    FROM tb_attendance_rule) rule on u.attendance_sign = rule.id
+    LEFT OUTER JOIN tb_pf_department dept on u.dept_id=dept.dept_id
+    ) r left join  tb_pass_record_today pass on r.user_id = pass.user_id
+    and pass.pass_datetime &lt;= DATE_ADD(r.work_start,INTERVAL 1 HOUR) and pass.pass_datetime &gt;= r.rest_start
+    <where>
+      <if test="deptPid!=null and deptPid>0">
+        and r.dept_parent_id=#{deptPid}
+      </if>
+    </where>
+    ) t GROUP BY t.user_id
+    ) r GROUP BY r.type
+  </select>
+
+
+  <select id="getOnWorkAttendPassRecords" resultMap="OnWorkPassResultMap">
+    select t.user_id,t.user_name,t.dept_name,min(t.pass_datetime) as last_passtime,t.area_name,t.dept_id,min(t.type) as type from (
+    select
+    r.user_id,
+    r.user_name,
+    r.dept_id,
+    r.dept_name,
+    r.dept_parent_id,
+    pass.pass_datetime,
+    pass.user_id as uid,
+    pass.device_direction as lastDirect,
+    pass.device_area_id as area_id,
+    area.area_name,
+    (
+    CASE WHEN UNIX_TIMESTAMP(pass.pass_datetime)-UNIX_TIMESTAMP(r.work_start) &lt;= 0 THEN 1
+    WHEN UNIX_TIMESTAMP(pass.pass_datetime)-UNIX_TIMESTAMP(r.work_start) &lt;= 10*60 THEN 2
+    WHEN UNIX_TIMESTAMP(pass.pass_datetime)-UNIX_TIMESTAMP(r.work_start) &lt;= 30*60 THEN 3
+    WHEN UNIX_TIMESTAMP(pass.pass_datetime)-UNIX_TIMESTAMP(r.work_start) &lt;= 60*60 THEN 4
+    ELSE 9 END
+    ) AS type
+    from (
+    select u.user_id,u.user_name,u.dept_parent_id,u.identification_pic_id,u.dept_id,dept.dept_name,rule.work_start,rule.rest_start FROM tb_user u
+    left join (SELECT id, if(now() &lt;= work_start,DATE_FORMAT(work_start,'%Y-%m-%d %H:%i:%s'),DATE_FORMAT(work_rest_end,'%Y-%m-%d %H:%i:%s')) as work_start,
+    if(now() &lt;= work_start,DATE_FORMAT(CURDATE(),'%Y-%m-%d 00:00:00'),DATE_FORMAT(work_rest_start,'%Y-%m-%d %H:%i:%s')) as rest_start
+    FROM tb_attendance_rule) rule on u.attendance_sign = rule.id
+    LEFT OUTER JOIN tb_pf_department dept on u.dept_id=dept.dept_id
+    ) r left join  tb_pass_record_today pass on r.user_id = pass.user_id
+    and pass.pass_datetime &lt;= DATE_ADD(r.work_start,INTERVAL 1 HOUR) and pass.pass_datetime &gt;= r.rest_start
+    LEFT JOIN tb_pf_area area on pass.device_area_id=area.area_id
+    <where>
+      <if test="deptPid != null and deptPid>0">
+        and r.dept_parent_id=#{deptPid}
+      </if>
+      <if test="deptId != null and deptId>0">
+        and.r.dept_id=#{deptId}
+      </if>
+      <if test="userId!=null and userId>0">
+        and r.user_id=#{userId}
+      </if>
+    </where>
+    ) t GROUP BY t.user_id
+    HAVING type=#{type}
   </select>
 </mapper>
 

@@ -13,7 +13,33 @@ var PASS_DATETIME = "#addPassWrap #passDatetime";//开始时间
 
 var PASS_ADD_WRAP = "#addPassWrap";// 新增记录，编辑记录弹出框
 
-function initHead(){
+$(function(){
+    init();
+});
+
+function init(){
+
+    setAreaData();
+
+    //加载部门树数据
+    setDeptTreeData(function(event, data){
+        // 判断是不是home页，如果不是则跳转到home页
+        var hash = location.hash.replace('#!', '');
+        if(hash.indexOf('attend') > -1 || hash.indexOf('attendpass') > -1 || hash.indexOf('pass') > -1){
+            // 这里填充右边部门并查询
+            var deptId = data.pId?data.id:0;
+            setSelect2Val($(QUERY_DEPT), deptId, data.text);
+            $("#queryBtn").click();
+
+            return;
+        }
+        if(hash.indexOf('home') > -1) {
+            if(!data.pId) {data.pId = data.id;data.id = 0;}// 这种情况说明点击的是单位，id对应的是父部门
+            drawAllChart(data.text, data.id, data.pId);
+
+        }
+
+    });
 
     $('#header li').on('mouseover', function(){
         $(this).children('div').css('display','block');
@@ -40,6 +66,29 @@ function initHead(){
     laydate.render({ elem: PASS_DATETIME, type: 'datetime'});
 
     setData();
+
+}
+
+// 加载区域数据
+function setAreaData() {
+    var user = getCacheObj(SESSION_USER);
+    $("#userImg").attr('src','data:image/jpeg;base64,'+(user.idPic || ''));
+}
+
+//加载部门树数据
+function setDeptTreeData(callbackSelected) {
+    $.get(SERVER_URL.org_onWorkTree, {pid: 0},function(res){
+        var data = res.data;
+        renderTree(data, callbackSelected,function (event, data){
+            var path = 'onwork';
+            if(data.type==1){//单位
+                path += '/'+data.id;
+            }else if(data.type=2) {//部门
+                path += "/" + data.pId+"/"+data.id;
+            }
+            go(path);
+        });
+    });
 
 }
 
@@ -108,4 +157,11 @@ function savePass(index){
         });
     }
     layer.closeAll();
+}
+
+function drawAllChart(text, deptId, deptPid){
+    draw24hData(true,'deptId', deptId);
+    drawOnWorkByState(text+'人员在岗统计', {deptId:deptId,deptPid:deptPid});
+    drawOnWorkByArea(text+'在岗人员位置分布', {deptId:deptId,deptPid:deptPid});
+    drawOnWorkByInTime(text+'考勤情况统计', {deptId:deptId,deptPid:deptPid})
 }

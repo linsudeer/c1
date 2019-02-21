@@ -54,7 +54,7 @@
       <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
     </table> -->
 
-    <table tableName="tb_sys_oplog" domainObjectName="SysOplog"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
+    <table tableName="tb_pass_record_today" domainObjectName="PassRecordToday"><generatedKey column="new_pass_record_id" sqlStatement="Mysql" identity="true"/></table>
 
   </context>
 </generatorConfiguration>

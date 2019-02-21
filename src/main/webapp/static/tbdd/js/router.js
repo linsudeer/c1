@@ -6,6 +6,8 @@ Q.reg('index',function(){
     load('home', initHome);
 }).reg('pass', function(){//记录查询
     load('pass',  initPass);
+}).reg('attendpass', function(type){//记录查询
+    load('attendpass',  initAttendPass, {type:type});
 }).reg('attend', function() {//综合考勤
     load('attend', initAttend);
 }).reg('track', function(userId, start, end) {//个人轨迹

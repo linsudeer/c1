@@ -87,4 +87,26 @@ public class CurrentController{
         return ResultTip.success(list);
     }
 
+    /**
+     * 考勤情况
+     * @param bean
+     * @return
+     */
+    @RequestMapping("/count/attendGroup")
+    public Tip countOnWorkByAttend(countOnWorkBean bean) {
+        List<OnWrokCntDTO> list = currentService.countOnWorkByAttend(bean);
+        return ResultTip.success(list);
+    }
+
+    /**
+     * 考勤情况
+     * @param bean
+     * @return
+     */
+    @RequestMapping("/attendPass")
+    public Tip getOnWorkAttendPassRecords(countOnWorkBean bean) {
+        List<OnWorkPassDTO> list = currentService.getOnWorkAttendPassRecords(bean);
+        return ResultTip.success(list);
+    }
+
 }

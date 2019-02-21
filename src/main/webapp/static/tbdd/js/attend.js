@@ -22,7 +22,6 @@ function initAttend(){
 
     loadAttendTable();
 
-    setDeptTreeData();
     //监听查询按钮
     $('form#query').on('click', 'button', function(e){
         var params = $(this).parents('form').serializeJSON();

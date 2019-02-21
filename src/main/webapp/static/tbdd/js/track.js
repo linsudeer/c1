@@ -32,9 +32,6 @@ function initTrack(params){
     //加载此人历史考勤（历史考勤）
     drawHistoryAttend(params.userId);
 
-    setDeptTreeData();
-
-
     //监听查询按钮
     $('form#query').on('click', '#queryBtn', function(e){
         var p = $(this).parents('form').serializeJSON();
@@ -112,7 +109,7 @@ function drawTrack(userId, startdate, enddate){
             var direct = item.direct;
             var areaName = item.deviceAreaName;
             var xtime = item.passDatetime.split(' ');
-            var title = xtime[0] + "\r\n"+xtime[1]+" / "+areaName+" / "+item.direct ;//年月日时分/位置
+            var title = xtime[0] + "\r\n"+xtime[1]+"\n"+areaName+" / "+item.direct ;//年月日时分/位置
 
             for(var j=0;j<length;j++){
                 if(value==areas[j].id){
@@ -130,7 +127,7 @@ function drawTrack(userId, startdate, enddate){
             var areaId = areas[i].id;
             var areaName = areas[i].text;
             areaNames[i]=areaName;
-            mySeries[i]={name:areaName,type:'line',symbol:"rectangle",symbolSize: [60,70],data:seriesData[areaId],itemStyle:{normal:{lineStyle:{width:10},label : {color:colors[i],formatter:function(o){return o.data.title;},show: true,position: 'top'}}}};
+            mySeries[i]={name:areaName,type:'line',symbol:"rectangle",symbolSize: [60,70],data:seriesData[areaId],itemStyle:{normal:{lineStyle:{width:10},label : {color:colors[length-1-i],formatter:function(o){return o.data.title;},show: true,position: 'top'}}}};
         }
         option = {
             tooltip : {trigger: 'item'},
@@ -150,7 +147,7 @@ function drawTrack(userId, startdate, enddate){
             xAxis : [{type : 'category',show:false,axisLabel : {formatter: '',textStyle:{color:"#fff"}},
                 axisLine:{lineStyle:{color: '#ffffff',width: 5,type: 'solid'}} ,splitLine:{show:true  },boundaryGap : true,data : xAxisData}],
             yAxis : {show:true,type : 'value',splitNumber:length-1,min:0, max:length-1, axisLine:{show:true},
-                axisLabel:{formatter:function(index,data){console.log(index);return obj[index]},textStyle:{color: '#FFF',fontSize:14}},
+                axisLabel:{formatter:function(index,data){return obj[index]},textStyle:{color: '#FFF',fontSize:14}},
                 splitLine:{show:true,lineStyle:{width: 1,color: colors.reverse()}}},
             series : mySeries
         };
@@ -158,7 +155,7 @@ function drawTrack(userId, startdate, enddate){
         trackChart.setOption(option);
 
         trackChart.on('click',function(params){
-            alert("点击了轨迹");
+
         });
     })
 
@@ -182,6 +179,7 @@ function getAreas(){
 
 function drawHistoryAttend(userId,startDate,endDate) {
     var options = {
+        ordering:false,
         serverSide: true,
         columns: [
             { "data":null, "width":50, "name": "序号" ,"title": "序号", "render":xh},

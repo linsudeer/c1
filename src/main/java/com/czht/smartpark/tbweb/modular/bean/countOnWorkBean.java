@@ -6,6 +6,7 @@ public class countOnWorkBean extends PermissonBean{
 
     private Integer deptId;
     private Integer deptPid;
+
     /**
      * 类型1-在岗 2-临时离岗 3-不在岗
      */

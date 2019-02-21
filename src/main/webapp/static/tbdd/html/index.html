@@ -15,8 +15,10 @@
     <link rel="stylesheet" href="../lib/datatables-1.10.18/datatables.min.css">
     <link rel="stylesheet" href="../lib/select2-4.0.5/css/select2.min.css">
     <link rel="stylesheet" href="../lib/lightbox2/lightbox.min.css">
+    <link rel="stylesheet" href="../lib/pace-0.5.6/themes/pace-theme-minimal.css" rel="external nofollow"  rel="external nofollow">
     <link rel="stylesheet" href="../css/matrix-style.css">
     <link rel="stylesheet" href="../css/matrix-media.css">
+
     <link rel="stylesheet" href="../css/common.css">
     <script src="../lib/jquery-3.3.1.min.js"></script>
     <script src="../lib/jquery.serializejson.min.js"></script>
@@ -33,6 +35,7 @@
     <script src="../lib/jquery.mousewheel.js"></script>
     <script src="../lib/jquery.carousel.min.js"></script>
     <script src="../lib/layer-v3.1.1/layer/layer.js"></script>
+    <script src="../lib/pace-0.5.6/pace.min.js"></script>
     <script src="../js/URL.js"></script>
     <script src="../js/common.js"></script>
 </head>
@@ -62,6 +65,36 @@
         </div>
     </nav>
 </header>
+<div id="sidebar">
+    <ul id="function-list" class="leftUl area-list">
+        <li class="leftLi leftLiFir">
+            <a href="#">
+                <img src="../img/allPalce.png" alt="" id="userImg" class="leftNavImg">
+                <!--<div class="leftNavText">照片</div>-->
+            </a>
+        </li>
+        <li class="leftLi">
+            <a href="javascript:void(0);">
+                <img src="../img/bgl.png" alt="" class="leftNavImg">
+                <div class="leftNavText">在岗状态</div>
+            </a>
+        </li>
+        <li class="leftLi">
+            <a href="#">
+                <img src="../img/sd.png" alt="" class="leftNavImg">
+                <div class="leftNavText">上班打卡</div>
+            </a>
+        </li>
+        <li class="leftLi">
+            <a href="#">
+                <img src="../img/yz.png" alt="" class="leftNavImg">
+                <div class="leftNavText">下班打卡</div>
+            </a>
+        </li>
+    </ul>
+
+    <div id="deptTree"></div>
+</div>
 <!-- 页面变化区 -->
 <main id="main"></main>
 
@@ -75,15 +108,15 @@
         <input type="hidden" name="recordId">
         <input type="hidden" name="oldUserId">
         <div class="form-group">
-            <label for="userId">姓名：</label>
+            <label>姓名：</label>
             <select type="text" class="form-control" style="width: 85%;" name="userId" placeholder="姓名"></select>
         </div>
         <div class="form-group">
-            <label for="areaId">区域：</label>
+            <label>区域：</label>
             <select type="text" class="form-control" style="width: 85%;" name="areaId" placeholder="区域"></select>
         </div>
         <div class="form-group">
-            <label for="direct">方向：</label>
+            <label>方向：</label>
             <select type="text" class="form-control" style="width: 85%;" name="direct" placeholder="进出方向"></select>
         </div>
         <div class="form-group">
@@ -97,20 +130,15 @@
     </form>
 </div>
 
-<script src="../js/head.js"></script>
+<script src="../js/index.js"></script>
 <script src="../js/home.js"></script>
 <script src="../js/pass.js"></script>
+<script src="../js/attendpass.js"></script>
 <script src="../js/track.js"></script>
 <script src="../js/onwork.js"></script>
 <script src="../js/attend.js"></script>
 
 <script src="../js/router.js"></script>
-
-<script>
-    $(function(){
-        initHead();
-    });
-</script>
 
 </body>
 </html>

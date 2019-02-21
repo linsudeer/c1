@@ -9,39 +9,16 @@ var RIGHT_OFFDUTYPERSON = '#offDutyPerson';//不在岗人员
 
 //初始化home页时加载的方法
 function initHome() {
-    // 加载区域数据
-    setAreaData();
-    //加载部门树数据
-    setDeptTreeData(function(event, data){
-        if(data.type==1){// 单位
-            draw24hData(true,'deptPId', data.id);
-        }else if(data.type==2){// 部门
-            draw24hData(true,'deptId', data.id);
-            drawOnWorkByState(data.text+'人员在岗统计', {deptId:data.id,deptPid:data.pId});
-            drawOnWorkByArea(data.text+'在岗人员位置分布', {deptId:data.id,deptPid:data.pId});
-            drawOnWorkByInTime(data.text+'考勤情况统计', {deptId:data.id,deptPid:data.pId});
-        }else {// 所有
-            draw24hData(true);
-        }
-
-    });
-
 
     //加载考勤排行数据
     setAttendRankData();
-    //绘制24小时实时在岗数据折线图
-    draw24hData();
+    drawOrgOnWorkBar();
     //绘制不同在岗状态饼图
     drawOnWorkByState('总体人员在岗统计', {deptPid:0});
     //绘制各个区域在岗统计饼图
     drawOnWorkByArea('在岗人员位置分布', {deptPid:0});
     //绘制上午下午上班时间分布饼图
     drawOnWorkByInTime('考勤情况统计', {deptPid:0});
-    //绘制某个区域本单位和访客人数统计饼图
-
-    //绘制某个区域各部门在岗情况统计饼图
-
-    //绘制某个区域进出人次统计饼图
 
     $('#totalPerson').parent('a').click(function(){
         // 实际在岗人数
@@ -72,27 +49,6 @@ function initHome() {
         go(path);
     });
 }
-// 加载区域数据
-function setAreaData() {
-    var user = getCacheObj(SESSION_USER);
-    $("#userImg").attr('src','data:image/jpeg;base64,'+(user.idPic || ''));
-}
-//加载部门树数据
-function setDeptTreeData(callbackSelected) {
-    $.get(SERVER_URL.org_onWorkTree, {pid: 0},function(res){
-        var data = res.data;
-        renderTree(data, callbackSelected,function (event, data){
-            var path = 'onwork';
-            if(data.type==1){//单位
-                path += '/'+data.id;
-            }else if(data.type=2) {//部门
-                path += "/" + data.pId+"/"+data.id;
-            }
-            go(path);
-        });
-    });
-
-}
 
 //加载考勤排行数据
 function setAttendRankData(){
@@ -102,14 +58,72 @@ function setAttendRankData(){
         var html = [];
         var length = data.length>rankLength?rankLength:data.length;
         for(var i=0;i<length;i++){
-            var width = data[i].poor/35*100;
+            var width = data[i].attendTime/35*100;
             width = (width>100)?100:width;
             html.push('<div class="text-left msg-block"><div class="span5"><div class=""><i class="icon icon-user paihangIcon"></i><a href="#!attend"><strong>'+data[i].userName+'</strong></a></div></div>');
-            html.push('<div class="span6"><div class="progress progress-striped '+(i<3?"progress-success":(i<7?"":"progress-warning"))+'" title="'+data[i].attendTime+'小时"><div style="width: '+width+'%;" class="bar">'+data[i].attendTime+'小时</div></div></div> </div>')
+            html.push('<div class="span6"><div class="progress progress-striped '+(i<3?"progress-success":(i<7?"":"progress-warning"))+'" title="'+data[i].attendTime+'小时"><div style="background-color:#058FFE;width: '+width+'%;">'+data[i].attendTime+'小时</div></div></div> </div>')
         }
         $('#paihang .msg-block').remove();
         $('#paihang').append(html.join(""));
     })
+}
+// 绘制 各部门在岗情况
+function drawOrgOnWorkBar(isDraw, key,value){
+
+    var url = SERVER_URL.org_onWorkList;
+    if(key && value){
+        url += "?"+key+"="+value;
+    }
+    $.get(url, function(ret){
+        var myChart = echarts.init(document.getElementById('onWork24h'));
+
+        var orgs = ret.data;
+        if(!orgs) return;
+
+        var xdata = [], ydata = [];
+        for(var i=0;i<orgs.length;i++){
+            if(!orgs[i].parentId) continue;
+            xdata.push(orgs[i].deptName);
+            var total = orgs[i].total==0?1:orgs[i].total;
+            ydata.push({deptId:orgs[i].deptId,deptPid:orgs[i].parentId,deptName:orgs[i].deptName, value:(orgs[i].onWorkCnt/total).toFixed(2)*100,onWorkCnt:orgs[i].onWorkCnt});
+        }
+
+
+        // 指定图表的配置项和数据
+        var option = {
+            title:{show:false,text:"各部门在岗情况",textStyle:{color: '#fff'}},
+            // tooltip:{trigger:"axis",formatter:"{a}<br/>{b}:{c0}人在岗<br/>占比{c}%"},
+            tooltip:{trigger:"axis", axisPointer : {type : 'line'},formatter:function(params, ticket, callback){
+                var data = params[0].data;
+                var cnt = data.onWorkCnt;
+                var content = "在岗情况<br/>"+data.deptName+"："+data.onWorkCnt+"人在岗<br/>到岗率："+params[0].value+"%";
+                return content;
+            }},
+            color:["#ADFF2F"],
+            grid:{x:50,y:10,x2:10,y2:30,show:false},
+            legend: {show:true, data:['到岗率']},
+            xAxis:{type : 'category',boundaryGap:true,data:xdata,axisLabel:{textStyle:{color:"#FFFFFF"},interval:0},axisTick: {show: false},splitLine: {show: false}},
+            yAxis:{type:"value",min:0, max:100,axisLabel:{textStyle:{color:"#FFFFFF"},formatter: '{value} %'},splitLine: {show: true,lineStyle:{color: ['#252d39']}},axisTick: {show: false},nameTextStyle:{color:"#FFFFFF"}},
+            series: [
+                {name: '在岗情况',barWidth:40,smooth:false,symbol:"none",type: 'bar',data: ydata},
+                ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option, isDraw);
+        myChart.off('click');//先清除事件，再创建，防止出现多次加载事件
+        myChart.on('click', function(p){
+            if(p.data.value<=0) return;
+            var path = 'onwork';
+            if(p.data.deptId){
+                path += "/"+p.data.deptPid+"/"+p.data.deptId+"/1";
+            }else {
+                path += "/"+p.data.deptPid+"/0/1";
+            }
+            go(path);
+        });
+    });
+
 }
 //绘制24小时实时在岗数据折线图
 function draw24hData(isDraw, key,value){
@@ -137,8 +151,8 @@ function draw24hData(isDraw, key,value){
         var myChart = echarts.init(document.getElementById('onWork24h'));
         myChart.setOption(option, isDraw);
         myChart.off('click');//先清除事件，再创建，防止出现多次加载事件
-        myChart.on('click', function(param){
-            alert('点击了');
+        myChart.on('click', function(p){
+
         });
 
     });
@@ -200,8 +214,6 @@ function drawOnWorkByState(title, params){
             }else {
                 path += "/"+params.deptPid+"/0/"+p.data.attendType;
             }
-
-
             go(path);
         });
 
@@ -245,35 +257,26 @@ function drawOnWorkByInTime(title, params){
 
     $(elem+' h5').text(title);
 
-    var legendData = ["正常到岗人数","迟到10分中以内","迟到30分中以内","迟到60分中以内","未到岗人数"];
-    var data = [];
-    data.push(
-        {attendType:1,deptId:1,value:85,name:"正常到岗人数"},
-        {attendType:2,deptId:1,value:10,name:"迟到10分中以内"},
-        {attendType:3,deptId:1,value:15,name:"迟到30分中以内"},
-        {attendType:3,deptId:1,value:15,name:"迟到60分中以内"},
-        {attendType:3,deptId:1,value:15,name:"未到岗人数"}
-    );
-
-    drawPie($(elem+" .chart")[0], legendData, data, function(param){
-        alert(param.name);
+    $.get(SERVER_URL.current_count_attend, function(ret){
+        var data = ret.data;
+        var legendData = [], xdata = [];
+        if(data){
+            for(var i=0;i<data.length;i++){
+                legendData.push(data[i].name);
+                xdata.push({attendType:data[i].id,value:data[i].count,name:data[i].name})
+            }
+        }
+        drawPie($(elem+" .chart")[0], legendData, xdata, function(p){
+            if(p.data.value<=0) return;
+            var path = 'attendpass/'+p.data.attendType;
+            go(path);
+        });
     });
 
 
-}
-//绘制某个区域本单位和访客人数统计饼图
-function drawStaticByUserType(){
+
 
 }
-//绘制某个区域各部门在岗情况统计饼图
-function drawOnWorkByDept(){
-
-}
-//绘制某个区域进出人次统计饼图
-function drawStaticByDirect(){
-
-}
-
 
 function drawPie(elem , legendData, data, clickEvent){
     var option={

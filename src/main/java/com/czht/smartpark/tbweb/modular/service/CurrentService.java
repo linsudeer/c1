@@ -55,4 +55,18 @@ public interface CurrentService {
      * @return
      */
     List<OnWorkPassDTO> getOnWorkPassRecords(countOnWorkBean bean);
+
+    /**
+     * 统计迟到人数 10分钟，20分钟以内等
+     * @param bean
+     * @return
+     */
+    List<OnWrokCntDTO> countOnWorkByAttend(countOnWorkBean bean);
+
+    /**
+     * 考勤情况
+     * @param bean
+     * @return
+     */
+    List<OnWorkPassDTO> getOnWorkAttendPassRecords(countOnWorkBean bean);
 }

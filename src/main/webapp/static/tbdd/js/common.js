@@ -46,9 +46,9 @@ function renderTree(data, selected, clickBadge){
     $(HOME_TREE_ID).treeview({
         data: data,
         showTags: true,
-        backColor:'#2a3747',
+        backColor:'rgba(47,60,80,0.5)',
         selectable: true,
-        borderColor:'#2a3747',
+        borderColor:'rgba(47,60,80,0)',
         expandIcon: 'glyphicon glyphicon-plus',
         collapseIcon: 'glyphicon glyphicon-minus',
         emptyIcon:'glyphicon',

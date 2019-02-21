@@ -5,14 +5,16 @@ import com.czht.smartpark.tbweb.context.support.HttpServletRequestHolder;
 import com.czht.smartpark.tbweb.modular.bean.PassBean;
 import com.czht.smartpark.tbweb.modular.constant.Constant;
 import com.czht.smartpark.tbweb.modular.dmo.PassRecord;
+import com.czht.smartpark.tbweb.modular.dmo.PassRecordToday;
 import com.czht.smartpark.tbweb.modular.dmo.SysOplog;
 import com.czht.smartpark.tbweb.modular.dto.PassDTO;
 import com.czht.smartpark.tbweb.modular.dto.UserDTO;
 import com.czht.smartpark.tbweb.modular.mapper.PassRecordMapper;
-import com.czht.smartpark.tbweb.modular.service.CodeService;
+import com.czht.smartpark.tbweb.modular.mapper.PassRecordTodayMapper;
 import com.czht.smartpark.tbweb.modular.service.PassService;
 import com.czht.smartpark.tbweb.modular.service.SysOptlogService;
 import com.czht.smartpark.tbweb.modular.service.UserService;
+import com.czht.smartpark.tbweb.util.BeanUtil;
 import com.czht.smartpark.tbweb.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,10 +32,10 @@ public class PassServiceImpl implements PassService {
     private UserService userService;
 
     @Autowired
-    private CodeService codeService;
+    private SysOptlogService logService;
 
     @Autowired
-    private SysOptlogService logService;
+    private PassRecordTodayMapper passTodayMapper;
 
     @Override
     public List<PassDTO> getPassRecords(PassBean query) {
@@ -62,6 +64,11 @@ public class PassServiceImpl implements PassService {
         record.setDeviceAreaId(bean.getAreaId());
         record.setUserId(bean.getUserId());
         record.setDeviceDirection(bean.getDirect());
+        record.setUserSex(user.getUserSex());
+        record.setFilterFlag(0);
+        record.setGroupId(user.getUserGroup());
+        record.setWayOfPass(0);
+        record.setRegisterFlag(1);
 
         try {
             record.setPassDatetime(DateUtil.parseDate(bean.getPasstime(), "yyyy-MM-dd HH:mm:ss"));
@@ -80,7 +87,10 @@ public class PassServiceImpl implements PassService {
         }
         passRecordMapper.insert(record);
 
-        // 操作日志 TODO
+        //today表
+        passTodayMapper.insert(BeanUtil.convert(record, PassRecordToday.class));
+
+        // 操作日志
         StringBuilder sb = new StringBuilder();
         sb.append(DateUtil.getDate("yyyy年MM月dd日 HH时mm分ss秒")).append(HttpServletRequestHolder.getNickName()).append("新增记录").append(bean.getRemark()==null?".":(",原因："+bean.getRemark()+"。"));
         logService.add(createLog(Constant.PASS_LOG_TYPE_ADD, Constant.PASS_LOG_MODULE, bean.getUserId().intValue(), record.getPassRecordId(), sb.toString()));
@@ -106,7 +116,9 @@ public class PassServiceImpl implements PassService {
         record.setDeptId(user.getDeptId());
         passRecordMapper.updateByPrimaryKey(record);
 
-        // 操作日志 TODO
+        // 跟新today表 TODO
+
+        // 操作日志
         StringBuilder sb = new StringBuilder();
         sb.append(DateUtil.getDate("yyyy年MM月dd日HH时mm分ss秒,")).append(HttpServletRequestHolder.getNickName()).append("修改了记录。");
         logService.add(createLog(Constant.PASS_LOG_TYPE_EDIT, Constant.PASS_LOG_MODULE, bean.getUserId().intValue(), record.getPassRecordId(), sb.toString()));
@@ -126,7 +138,9 @@ public class PassServiceImpl implements PassService {
         fast.deleteFile(record.getFaceFdfsId());
         fast.deleteFile(record.getFullFdfsId());
 
-        // 操作日志 TODO
+        //删除today表  TODO
+
+        // 操作日志
         StringBuilder sb = new StringBuilder();
         sb.append(DateUtil.getDate("yyyy年MM月dd日 HH时mm分ss秒")).append(HttpServletRequestHolder.getNickName()).append("删除记录");
         logService.add(createLog(Constant.PASS_LOG_TYPE_ADD, Constant.PASS_LOG_MODULE, recordId.intValue(), record.getPassRecordId(), sb.toString()));
@@ -153,58 +167,6 @@ public class PassServiceImpl implements PassService {
      * @return
      */
     private PassDTO wrapPassRecord(Long recordId){
-       /* PassDTO pass = new PassDTO();
-        pass.setPassRecordId(record.getPassRecordId());
-        pass.setPassDatetime(record.getPassDatetime());
-        pass.setUserId(record.getUserId());
-        pass.setDeviceId(record.getDeviceId());
-        pass.setDeviceType(record.getDeviceType());
-        pass.setDeviceDirection(record.getDeviceDirection());
-
-        if(record.getDeviceDirection() != null){
-            CodeDTO directCode = codeService.getDict("PASS_DIRECTION", record.getDeviceDirection().toString());
-            if(directCode != null){
-                pass.setDirect(directCode.getText());
-            }
-        }
-
-
-        pass.setDeviceName(record.getDeviceName());
-        pass.setDeviceAreaId(record.getDeviceAreaId());
-        if(record.getDeviceAreaId() != null){
-            CodeDTO areaCode = codeService.getArea(record.getDeviceAreaId());
-            if(areaCode != null){
-                pass.setDeviceAreaName(areaCode.getText());
-            }
-        }
-
-        pass.setUserName(record.getUserName());
-        pass.setUserSex(record.getUserSex());
-        pass.setUserType(record.getUserType());
-        pass.setUserGroup(record.getUserGroup());
-        if(record.getUserGroup() != null){
-            CodeDTO userGroupCode = codeService.getDict("USER_GROUP", record.getUserGroup().toString());
-            if(userGroupCode != null){
-                pass.setUserGroupName(userGroupCode.getText());
-            }
-        }
-        pass.setGroupId(record.getGroupId());
-        pass.setDeptId(record.getDeptId());
-        if(record.getDeptId() != null){
-            CodeDTO deptCode = codeService.getDept(record.getDeptId());
-            if(deptCode != null){
-                pass.setDeptName(deptCode.getText());
-            }
-        }
-        pass.setDeptParentId(record.getDeptParentId());
-
-        CodeDTO fdfsCode = codeService.getConfig("fdfs_url");
-        if(fdfsCode != null){
-            pass.setFullFdfsId(fdfsCode.getText()+"/"+record.getFullFdfsId());
-            pass.setFaceFdfsId(fdfsCode.getText()+"/"+record.getFaceFdfsId());
-        }
-
-        return pass;*/
 
        return passRecordMapper.getPassRecordById(recordId);
     }

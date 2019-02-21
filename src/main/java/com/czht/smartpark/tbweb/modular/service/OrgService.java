@@ -1,5 +1,6 @@
 package com.czht.smartpark.tbweb.modular.service;
 
+import com.czht.smartpark.tbweb.modular.dto.DeptDTO;
 import com.czht.smartpark.tbweb.modular.tree.TreeNode;
 
 import java.util.List;
@@ -12,4 +13,11 @@ public interface OrgService {
      * @return
      */
     List<TreeNode> getOnWorkOrgTree(Integer deptPid);
+
+    /**
+     * 部门在岗情况
+     * @param deptPid
+     * @return
+     */
+    List<DeptDTO> getOnWorkOrg(Integer deptPid);
 }

@@ -6,7 +6,6 @@ var PASS_TABLE = "#passTable";
 var CAROUSEWRAP = "#carousel";
 
 function initOnwork(params){
-    setDeptTreeData();
     setTitleData(params.deptPid, params.deptId, params.type);
     loadData(params.deptPid, params.deptId, params.type, params.areaId);
 

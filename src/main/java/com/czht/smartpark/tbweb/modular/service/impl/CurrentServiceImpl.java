@@ -52,10 +52,21 @@ public class CurrentServiceImpl implements CurrentService {
         }else if(bean.getType() == OnWorkTypeEnum.TEMPWORK.getType()){// 临时离岗
             list = onworkCountMapper.getTempWorkPassRecords(bean);
         }else if(bean.getType() == OnWorkTypeEnum.OFFWORK.getType()){// 不在岗
+            // 这一个方法可以包括所有类型，sql里根据 type判断即可（理论上可行，没有验证）
             list = onworkCountMapper.getOffWorkPassRecords(bean);
         }else {
             list = onworkCountMapper.getUsersOnworkPassRecords(bean);// 所有
         }
         return list;
+    }
+
+    @Override
+    public List<OnWrokCntDTO> countOnWorkByAttend(countOnWorkBean bean) {
+        return onworkCountMapper.countOnWorkByAttend(bean);
+    }
+
+    @Override
+    public List<OnWorkPassDTO> getOnWorkAttendPassRecords(countOnWorkBean bean) {
+        return onworkCountMapper.getOnWorkAttendPassRecords(bean);
     }
 }
