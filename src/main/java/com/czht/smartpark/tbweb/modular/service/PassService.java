@@ -1,10 +1,14 @@
 package com.czht.smartpark.tbweb.modular.service;
 
+import com.czht.smartpark.tbweb.context.tip.bean.Tip;
 import com.czht.smartpark.tbweb.modular.bean.PassBean;
 import com.czht.smartpark.tbweb.modular.dmo.PassRecord;
 import com.czht.smartpark.tbweb.modular.dto.PassDTO;
+import com.czht.smartpark.tbweb.modular.dto.ScreenDTO;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface PassService {
 
@@ -39,4 +43,19 @@ public interface PassService {
      * @param recordId
      */
     void deletePassRecord(Long recordId);
+
+    /**
+     * 通行记录心跳检查
+     * @param areaId
+     * @return
+     */
+    Map<String, Object> screenHearBeat(Integer areaId);
+
+    /**
+     * 投屏数据
+     * @param areaId
+     * @param limit
+     * @return
+     */
+    ScreenDTO getScreenData(Long passRecordId, Integer areaId);
 }

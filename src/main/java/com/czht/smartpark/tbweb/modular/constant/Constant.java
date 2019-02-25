@@ -43,4 +43,16 @@ public interface Constant {
     int ATTEND_CAUSAL_FLAG_NO = 0;
 
 
+
+    /**
+     * 统计本单位总数（今天之前的所有数据）
+     */
+    String SCREEN_ALL_SELF_CNT = "SCREEN_ALL_SELF_CNT";
+
+    /**
+     * 统计访客总数（今天之前的所有数据）
+     */
+    String SCREEN_ALL_OTHER_CNT = "SCREEN_ALL_OTHER_CNT";
+
+
 }

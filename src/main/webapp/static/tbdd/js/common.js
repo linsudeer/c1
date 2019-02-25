@@ -4,6 +4,35 @@ var SESSION_USER = "session_user";
 var INDEX_MAIN_ID = "#main";
 var HOME_TREE_ID = "#deptTree";
 
+var ROLE = {
+    /**
+     * 拥有最大权限，可以查看系统所有数据，以及所有修改权限；可以查看后台管理系统
+     */
+    admin: "admin",
+
+    /**
+     * 拥有高级权限，可以查看所有数据，但是可以修改大队领导和军事办的权限
+     */
+    senior: "senior",
+
+    /**
+     * 拥有中级权限，可以查看本部门以及修改所有本部门的数据
+     */
+    middle: "middle",
+
+    /**
+     * 拥有普通用户的权限，可以查看1.本部门所有数据，但不可以修改数据2.可以查看其他部门的基本数据，除过与通行记录有关的数据
+     */
+    general: "general",
+
+    /**
+     * 可以查看所有数据，但是不能修改任何数据
+     */
+    role_view: "view"
+}
+
+
+
 var SUCCESS = 200;
 var NOLOGIN = -1;
 
@@ -240,6 +269,13 @@ Date.prototype.format = function(fmt){
     return fmt;
 }
 
+Date.prototype.getWeek = function() {
+    var day = this.getDay();
+    var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+    var week = weeks[day];
+    return week;
+}
+
 Date.prototype.curdate = function (){
     return this.format('yyyy-MM-dd');
 }
@@ -273,7 +309,7 @@ function getColors(n){
 
 function go(path) {
     var hash = location.hash.replace('#!', '');
-    if(hash === path) {
+    if(hash == path) {
         location.reload(true);
     }else {
         Q.go(path);
@@ -328,8 +364,8 @@ function getLeaveColor(type){
 }
 
 var tipIndex;
-function tip(content, elem){
-    tipIndex = layer.tips(content, elem, {tips: [2, '#6d7cb8'],time:0});
+function tip(content, elem, pos){
+    tipIndex = layer.tips(content, elem, {tips: [pos?pos:2, '#6d7cb8'],time:0});
 }
 
 function closeTip() {

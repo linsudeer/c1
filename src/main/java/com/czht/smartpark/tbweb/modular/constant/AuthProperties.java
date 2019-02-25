@@ -8,7 +8,7 @@ public class AuthProperties {
     public static String ROLE_ADMIN = "admin";
 
     /**
-     * 拥有高级权限，可以查看本单位以及修改所有本单位的数据；不可以查看后台管理系统
+     * 可以查看所有数据，但是可以修改大队领导和军事办的权限
      */
     public static String ROLE_SENIOR = "senior";
 

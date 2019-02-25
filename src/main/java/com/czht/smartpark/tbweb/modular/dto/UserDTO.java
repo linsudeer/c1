@@ -1,6 +1,8 @@
 package com.czht.smartpark.tbweb.modular.dto;
 
-public class UserDTO {
+import java.io.Serializable;
+
+public class UserDTO implements Serializable {
 
     private Integer userId;
     private String userName;

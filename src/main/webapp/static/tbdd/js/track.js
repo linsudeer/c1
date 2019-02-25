@@ -37,17 +37,44 @@ function initTrack(params){
         var p = $(this).parents('form').serializeJSON();
         table.clear();
         table.destroy();
-        setUserInfo(p.userId);
+
+        //跳转页面
+        var curdate = new Date().format("yyyy-MM-dd");
+        p.starttime = p.starttime?p.starttime:curdate;
+        p.endtime = p.endtime?p.endtime:curdate;
+        go("track/"+p.userId+"/"+p.starttime+"/"+p.endtime);
+
+        // 这里是页面内加载
+        /*setUserInfo(p.userId);
         drawHistoryAttend(p.userId, p.starttime, p.endtime);
-        drawTrack(p.userId, p.starttime, p.endtime);
+        drawTrack(p.userId, p.starttime, p.endtime);*/
     });
 
     // 监听新增按钮
     $('form#query').on('click', '#addBtn', function (e){
+
         layer.open({
             type:1,
             content:$(PASS_ADD_WRAP),
-            area: ['600px', '380px']
+            area: ['600px', '400px'],
+            btn: ['保存', '关闭'],
+            yes: function(index){
+                savePass(index);
+            },
+            success:function(){
+
+                $(PASS_DIRECT).attr('disabled', false);
+                $(PASS_AREA).attr('disabled', false);
+                $(PASS_DATETIME).attr('disabled', false);
+                $(PASS_REMARK).parents('div').show();
+                $(PASS_RECORD_ID).val('');
+                $(PASS_DIRECT).val('').trigger('change');
+                $(PASS_AREA).val('').trigger('change');
+                $(PASS_DATETIME).val('');
+                $(PASS_UNAME).val('').trigger('change');
+                $(PASS_OLD_UNAME).val('');
+                $(PASS_REMARK).val('');
+            }
         });
     });
 }

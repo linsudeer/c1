@@ -294,7 +294,7 @@
     when r.type=2 then '迟到10分钟以内'
     when r.type=3 then '迟到30分钟以内'
     when r.type=4 then '迟到60分钟以内'
-    else '未到岗人数' end
+    else '其他' end
     ) as name,
     count(*) as count from (
     select t.user_id,t.user_name,min(t.pass_datetime) as last_passtime,t.dept_id,min(t.type) as type from (
@@ -317,8 +317,8 @@
     ) AS type
     from (
     select u.user_id,u.user_name,u.dept_parent_id,u.identification_pic_id,u.dept_id,dept.dept_name,rule.work_start,rule.rest_start FROM tb_user u
-    left join (SELECT id, if(now() &lt;= work_start,DATE_FORMAT(work_start,'%Y-%m-%d %H:%i:%s'),DATE_FORMAT(work_rest_end,'%Y-%m-%d %H:%i:%s')) as work_start,
-    if(now() &lt;= work_start,DATE_FORMAT(CURDATE(),'%Y-%m-%d 00:00:00'),DATE_FORMAT(work_rest_start,'%Y-%m-%d %H:%i:%s')) as rest_start
+    left join (SELECT id, if(now() &lt;= work_rest_start,DATE_FORMAT(work_start,'%Y-%m-%d %H:%i:%s'),DATE_FORMAT(work_rest_end,'%Y-%m-%d %H:%i:%s')) as work_start,
+    if(now() &lt;= work_rest_start,DATE_FORMAT(CURDATE(),'%Y-%m-%d 00:00:00'),DATE_FORMAT(work_rest_start,'%Y-%m-%d %H:%i:%s')) as rest_start
     FROM tb_attendance_rule) rule on u.attendance_sign = rule.id
     LEFT OUTER JOIN tb_pf_department dept on u.dept_id=dept.dept_id
     ) r left join  tb_pass_record_today pass on r.user_id = pass.user_id
@@ -355,8 +355,8 @@
     ) AS type
     from (
     select u.user_id,u.user_name,u.dept_parent_id,u.identification_pic_id,u.dept_id,dept.dept_name,rule.work_start,rule.rest_start FROM tb_user u
-    left join (SELECT id, if(now() &lt;= work_start,DATE_FORMAT(work_start,'%Y-%m-%d %H:%i:%s'),DATE_FORMAT(work_rest_end,'%Y-%m-%d %H:%i:%s')) as work_start,
-    if(now() &lt;= work_start,DATE_FORMAT(CURDATE(),'%Y-%m-%d 00:00:00'),DATE_FORMAT(work_rest_start,'%Y-%m-%d %H:%i:%s')) as rest_start
+    left join (SELECT id, if(now() &lt;= work_rest_start,DATE_FORMAT(work_start,'%Y-%m-%d %H:%i:%s'),DATE_FORMAT(work_rest_end,'%Y-%m-%d %H:%i:%s')) as work_start,
+    if(now() &lt;= work_rest_start,DATE_FORMAT(CURDATE(),'%Y-%m-%d 00:00:00'),DATE_FORMAT(work_rest_start,'%Y-%m-%d %H:%i:%s')) as rest_start
     FROM tb_attendance_rule) rule on u.attendance_sign = rule.id
     LEFT OUTER JOIN tb_pf_department dept on u.dept_id=dept.dept_id
     ) r left join  tb_pass_record_today pass on r.user_id = pass.user_id
@@ -367,7 +367,7 @@
         and r.dept_parent_id=#{deptPid}
       </if>
       <if test="deptId != null and deptId>0">
-        and.r.dept_id=#{deptId}
+        and r.dept_id=#{deptId}
       </if>
       <if test="userId!=null and userId>0">
         and r.user_id=#{userId}

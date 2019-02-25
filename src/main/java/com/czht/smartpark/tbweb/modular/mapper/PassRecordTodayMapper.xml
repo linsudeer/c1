@@ -48,4 +48,14 @@
     <result column="reserve_vchar" property="reserveVchar" jdbcType="VARCHAR" />
     <result column="reserve_blob" property="reserveBlob" jdbcType="LONGVARBINARY" />
   </resultMap>
+
+
+  <select id="getByPassRecordId" resultMap="BaseResultMap">
+    select * from tb_pass_record_today where pass_record_id=#{passRecordId}
+  </select>
+
+  <delete id="deleteByPassRecordId">
+    delete from tb_pass_record_today where pass_record_id=#{passRecordId}
+  </delete>
+
 </mapper>

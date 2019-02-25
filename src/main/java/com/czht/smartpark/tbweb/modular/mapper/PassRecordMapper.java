@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PassRecordMapper extends Mapper<PassRecord>{
 
@@ -30,4 +31,11 @@ public interface PassRecordMapper extends Mapper<PassRecord>{
      * @return
      */
     PassDTO getPassRecordById(@Param("recordId") Long recordId);
+
+    /**
+     * 通行记录心跳检测
+     * @param areaId
+     * @return
+     */
+    Map<String, Object> screenHearBeat(Integer areaId);
 }

@@ -1245,7 +1245,7 @@ span.icon .checker {
 	cursor: pointer;
 }
 .dataTables_paginate .paginate_button:hover{
-	background-color: #573b64;
+	background-color: #145CCD;
 }
 .dataTables_paginate .paginate_button.disabled,.dataTables_paginate .paginate_button.disabled:hover {
     color: #777777;
@@ -1720,9 +1720,9 @@ form {
 .panel-left2 {
 	margin-left:0px;
 }
-.dataTables_paginate .paginate_button, .pagination.alternate li a {
+/*.dataTables_paginate .paginate_button, .pagination.alternate li a {
 	padding:4px 4px!important;
-}
+}*/
 .table th {
 	padding: 5px 4px 2px;
 }
@@ -2029,7 +2029,7 @@ a.list-group-item-danger.active:focus {
 }
 .list-group-item > .badge {
     float: right;
-	background-color: #EE2C2C;
+	/*background-color: #EE2C2C;*/
 }
 
 .person-count-per-region  h1{    font-size: 25px;
@@ -2480,7 +2480,7 @@ label{
 }
 .leftLi{
 	width: 98px;
-	height: 98px;
+	height: 105px;
 	float: left;
 	border: 1px solid rgba(255,255,255,0.2);
 	/*border-radius: 5px;*/

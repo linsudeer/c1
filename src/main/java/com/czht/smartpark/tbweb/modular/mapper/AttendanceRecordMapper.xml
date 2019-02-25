@@ -178,4 +178,12 @@
     order by attend_date desc
     limit #{start}, #{length}
   </select>
+
+  <select id="getAttend" resultMap="BaseResultMap">
+    select * from tb_attendance_record_tb where attend_date=#{attendDate} and user_id=#{userId}
+  </select>
+
+  <select id="generalAttend">
+    call p_attendance_calculate_tb(#{attendDate}, #{userId})
+  </select>
 </mapper>

@@ -20,18 +20,29 @@ function initAttend(){
     laydate.render({ elem: QUERY_STARTTIME, type: 'date'});
     laydate.render({ elem: QUERY_ENDTIME, type: 'date'});
 
-    loadAttendTable();
+    // 这里判断权限
+    var user = getCacheObj(SESSION_USER);
+    if(user){
+        var role = user.dataRole;
+        if(role.indexOf(ROLE.general)>-1 || role.indexOf(ROLE.middle)>-1){// 部门以下的权限 不可以查看其他部门的通行数据
+            loadAttendTable({deptId:user.deptId});
+            setSelect2Val($(QUERY_DEPT), user.deptId, user.deptName);
+            $(QUERY_DEPT).attr('disabled', true);
+        }else {// 其他权限可以查看
+            loadAttendTable();
+        }
+    }
 
     //监听查询按钮
     $('form#query').on('click', 'button', function(e){
         var params = $(this).parents('form').serializeJSON();
         console.log(params);
-        table.clear();
-        table.destroy();
+        attendTable.clear();
+        attendTable.destroy();
         loadAttendTable(params);
     });
 }
-
+var attendTable;
 function loadAttendTable(params){
     var options = {
         serverSide: false,
@@ -58,12 +69,6 @@ function loadAttendTable(params){
                         flag = 0;
                     }else {// 这里如果是1的话则说明有已经处理过的情况，要显示出来备注
                         content += r.reviewUserName+"于"+ r.reviewTime+'修改了'+r.causalname+'状态，原因：'+r.reviewRemark+";<br />";
-                        $(row).on('mouseover', function(){
-                            tip(content,$(row));
-                        });
-                        $(row).on('mouseout', function(){
-                            closeTip();
-                        });
                     }
                 }
                 if(flag == 0){
@@ -72,12 +77,19 @@ function loadAttendTable(params){
                 }else {// 这里说明全部是1 则应该显示黄色
                     $(row).css('color', 'yellow');
                     $('td>a', row).css('color', 'yellow');
+
+                    $(row).on('mouseover', function(){
+                        tip(content,$(row), 1);
+                    });
+                    $(row).on('mouseout', function(){
+                        closeTip();
+                    });
                 }
             }
 
         }
     }
-    table = renderTable($(ATTEND_TABLE), SERVER_URL.attend_statistics,params,options);
+    attendTable = renderTable($(ATTEND_TABLE), SERVER_URL.attend_statistics,params,options);
 
     function renderAttendDate(data, type, row){
         return data?data.split(' ')[0]:'';
@@ -107,7 +119,7 @@ function loadAttendTable(params){
                 }
             }
             if(flag == 0){
-                return '<a href="javascript:void(0)" onclick="casuaDetail('+meta.row+')">异常</a>';
+                return '<a href="javascript:void(0)" onclick="casuaDetail('+meta.row+')" onmouseover="showCasua(this, '+meta.row+')" onmouseout="closeTip()">异常</a>';
             }else {
                 return '正常';
             }
@@ -120,13 +132,31 @@ function loadAttendTable(params){
 
 }
 
+function showCasua(e, index){
+    event.stopPropagation();
+    var data = attendTable.row(index).data();
+    var causas = data.causaRecords;// 对应的异常记录
+    var content = "";
+    for(var i=0;i<causas.length;i++){
+        var r = causas[i];
+
+        if(r.reviewFlag==1){
+            content += "<div style='color: yellow'>"+(r.attendDate.substr(0, 10)+" "+r.time)+r.causalname+"\t已修改;</div>";
+        }else {
+            content += (r.attendDate.substr(0, 10)+" "+r.time)+r.causalname+"<br>";
+        }
+
+    }
+    tip(content, $(e));
+}
+
 /**
  * 异常考勤点击事件
  * @param detail
  */
 var causalLayerIndex;
 function casuaDetail(index){
-    var data = table.row(index).data();
+    var data = attendTable.row(index).data();
     var causas = data.causaRecords;// 对应的异常记录
     var html = '<ul class="list-group casua"><li class="list-group-item text-center"><span>序号</span><span>离岗状态</span><span>时间</span><span>操作</span></li>';
     for(var i=0;i<causas.length;i++){
@@ -175,6 +205,6 @@ function causalOk(e, id, rowindex){
         if($(e).parents('li').length == 1){
             layer.close(causalLayerIndex);
         }
-        table.ajax.reload( null, false );
+        attendTable.ajax.reload( null, false );
     });
 }

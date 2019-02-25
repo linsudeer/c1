@@ -94,7 +94,7 @@ function drawCarousel(list){
         var activeStyle="border: 3px #fff solid;";
         var active = row.onworkStatus=='在岗'?true:false;
         carouselHtml += '<li>' +
-            '<a href="#!track/'+row.userId+'">' +
+            '<a href="javascript:goTrack('+row.userId+','+row.deptId+')">' +
             '<img src="data:image/jpeg;base64,'+(row.userPic || '')+'" active="'+active+'"/>' +
             '</a>' +
             '<div class="tooltip">' +
@@ -152,7 +152,7 @@ function drawTable(list) {
         if(row.userId<=0){
             return '<a href="javascript:void(0)">--</a>';
         }else {
-            return "<a href='#!track/"+row.userId+"'>"+data+"</a>";
+            return "<a href='javascript:goTrack("+row.userId+","+row.deptId+")'>"+data+"</a>";
         }
     }
 
@@ -161,3 +161,18 @@ function drawTable(list) {
     }
 }
 
+
+function goTrack(userId, deptId){
+    var user = getCacheObj(SESSION_USER);
+    if(user){
+        var role = user.dataRole;
+        if(role.indexOf(ROLE.general)>-1 || role.indexOf(ROLE.middle)>-1){// 部门以下的权限 不可以查看其他部门的通行数据
+            if(user.deptId == deptId){// 只可以看本部门的
+                go("track/"+userId);
+            }
+        }else {// 其他权限可以查看
+            go("track/"+userId);
+        }
+    }
+
+}

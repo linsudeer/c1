@@ -5,6 +5,7 @@ import com.czht.smartpark.tbweb.context.tip.bean.Tip;
 import com.czht.smartpark.tbweb.modular.bean.PassBean;
 import com.czht.smartpark.tbweb.modular.dmo.PassRecord;
 import com.czht.smartpark.tbweb.modular.dto.PassDTO;
+import com.czht.smartpark.tbweb.modular.dto.ScreenDTO;
 import com.czht.smartpark.tbweb.modular.service.PassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -68,5 +70,16 @@ public class PassController{
         return ResultTip.success();
     }
 
+    @RequestMapping(value="/screenHearBeat", method=RequestMethod.GET)
+    public Tip screenHearBeat(Integer areaId) {
+
+        return ResultTip.success(passService.screenHearBeat(areaId));
+    }
+
+    @RequestMapping(value="/getScreenData", method=RequestMethod.GET)
+    public Tip getScreenData(Long passRecordId, Integer areaId){
+        ScreenDTO dto = passService.getScreenData(passRecordId, areaId);
+        return ResultTip.success(dto);
+    }
 
 }

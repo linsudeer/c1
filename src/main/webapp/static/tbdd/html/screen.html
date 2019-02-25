@@ -1,0 +1,62 @@
+<!-- 屏幕投影显示 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>屏幕投影显示</title>
+
+	<link rel="stylesheet" href="../lib/bootstrap-3.3.7/css/bootstrap.min.css">
+
+	<script src="../lib/jquery-3.3.1.min.js"></script>
+	<script src="../lib/layer-v3.1.1/layer/layer.js"></script>
+	<script src="../js/URL.js"></script>
+	<script src="../js/common.js"></script>
+
+	<style type="text/css">
+		.btn-ul li{float: left;margin-left: 15px;margin-right: 15px;}
+		.btn-ul li:nth-of-type(1){margin-left: 0;}
+		.btn-ul li img{width:134px;height: 178px;}
+	</style>
+</head>
+<body style="background-color: #000; color: #fff; font-size: 25px;" class="container-fluid" id="screen">
+<div class="row">
+	<div class="col-xs-12" id="screenTitle" style="text-align: center;font-size: 4em; margin-top: 0.4em; margin-bottom: 0.2em; letter-spacing: 0.2em;"></div>
+</div>
+<div class="row">
+	<div class="col-xs-4">
+		<div class="row">
+			<div class="col-xs-12">
+				<div style="width: 300px; margin-left:auto; margin-right:auto; text-align:center; margin-top:3.5em;" id="img">
+					<img id="header" onerror="thumb_onerror(this)" src="../img/header.jpg" style="width: 100%;height:350px;">
+				</div>
+			</div>
+			<div class="col-xs-12" style="font-size: 1.5em;padding: 1.0em; text-align: center;" id="topOneInfo">
+				<!-- 					高文剑已于13:54<br>进入战备执勤区域 -->
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-8" style="font-size: 2em; line-height: 1.6em;">
+		<p style="margin-top: 0.5em;" id="allTotal">
+			<!-- 		    截止目前，战备执勤区域已进入 <span style="color: #FFFF00">12356</span>人次，本单位<span style="color: #FFFF00">8985</span>人次，访客4012人次。 -->
+		</p>
+		<p style="margin-top: 1em;" id="todayTotal">
+			<!-- 				今日进入执勤区域<span style="color: #FFFF00">123</span>人次，本单位<span style="color: #FFFF00">102</span>人次，访客<span style="color: #FFFF00">21</span>人次。 -->
+		</p>
+		<ul class="btn-ul list-unstyled" style="margin-top: 0.5em;">
+
+		</ul>
+	</div>
+</div>
+<div class="row" style="font-size: 1.5em;">
+	<div class="col-xs-12" style="position:fixed;bottom:50px;text-align: center;">
+		<p><span id="dateWeekTime"></span> <span id="hourAndMin"></span></p>
+	</div>
+</div>
+
+
+
+	<script type="text/javascript" src="../js/screen.js"></script>
+</body>
+</html>

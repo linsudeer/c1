@@ -35,4 +35,7 @@ var SERVER_URL = {
 
     attend_causal_review: DOMAIN+"/attend/updateAttendCausa",//修正考勤异常情况
 
+    screen_heartbeat:DOMAIN+"/pass/screenHearBeat",//心跳
+    screen_data:DOMAIN+"/pass/getScreenData",//心跳
+
 }

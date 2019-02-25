@@ -296,4 +296,19 @@
 
   </select>
 
+
+
+  <!-- 检测监控数据增加 -->
+  <select id="screenHearBeat" resultType="java.util.HashMap">
+    select pass_record_id as passRecordId, pass_datetime as passDatetime from tb_pass_record_today where pass_record_id = (
+    select max(pass_record_id) from tb_pass_record_today
+    <where>
+      <if test="areaId != null and areaId >0">
+        and device_area_id=#{areaId}
+      </if>
+    </where>
+    )
+
+  </select>
+
 </mapper>

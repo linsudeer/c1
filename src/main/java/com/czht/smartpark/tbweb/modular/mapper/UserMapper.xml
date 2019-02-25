@@ -87,16 +87,16 @@
   </resultMap>
 
   <select id="loginVail" resultMap="SimpleUserResultMap">
-    select user_id, user_name, user_sex, user_mobile, dept_id, dept_parent_id,data_role, identification_pic_id from tb_user
+    select u.user_id, u.user_name, u.user_sex, u.user_mobile, u.dept_id, dept.dept_name, u.dept_parent_id,u.data_role, u.identification_pic_id from tb_user u left join tb_pf_department dept on u.dept_id=dept.dept_id
     <where>
       <if test="username != null">
-         and user_name=#{username}
+         and u.user_name=#{username}
       </if>
       <if test="password != null">
-        and password=#{password}
+        and u.password=#{password}
       </if>
       <if test="deptPid != null and deptPid > 0">
-        and dept_parent_id=#{deptPid}
+        and u.dept_parent_id=#{deptPid}
       </if>
     </where>
   </select>

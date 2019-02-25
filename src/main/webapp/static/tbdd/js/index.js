@@ -26,14 +26,22 @@ function init(){
         // 判断是不是home页，如果不是则跳转到home页
         var hash = location.hash.replace('#!', '');
         if(hash.indexOf('attend') > -1 || hash.indexOf('attendpass') > -1 || hash.indexOf('pass') > -1){
-            // 这里填充右边部门并查询
-            var deptId = data.pId?data.id:0;
-            setSelect2Val($(QUERY_DEPT), deptId, data.text);
-            $("#queryBtn").click();
 
-            return;
+
+            var user = getCacheObj(SESSION_USER);
+            if(user){
+                var role = user.dataRole;
+                if(role.indexOf(ROLE.general)>-1 || role.indexOf(ROLE.middle)>-1){// 部门以下的权限 不可以查看其他部门的通行数据
+
+                }else {// 其他权限可以查看
+                    // 这里填充右边部门并查询
+                    var deptId = data.pId?data.id:0;
+                    setSelect2Val($(QUERY_DEPT), deptId, data.text);
+                    $("#queryBtn").click();
+                }
+            }
         }
-        if(hash.indexOf('home') > -1) {
+        if(hash == "" || hash.indexOf('home') > -1) {
             if(!data.pId) {data.pId = data.id;data.id = 0;}// 这种情况说明点击的是单位，id对应的是父部门
             drawAllChart(data.text, data.id, data.pId);
 
@@ -60,6 +68,8 @@ function init(){
     });
 
     // 初始化公用部分
+    // 对姓名进行权限判断，如果senior权限，则可以修改本部门和大队领导的权限
+
     renderSelect($(PASS_UNAME),'姓名', SERVER_URL.code_user);
     renderSelect($(PASS_AREA),'区域', SERVER_URL.code_area);
     renderSelect($(PASS_DIRECT),'进出方向', SERVER_URL.code_direct);
@@ -73,8 +83,37 @@ function init(){
 function setAreaData() {
     var user = getCacheObj(SESSION_USER);
     $("#userImg").attr('src','data:image/jpeg;base64,'+(user.idPic || ''));
-}
 
+    //**************** 监听事件***************
+
+    // 打卡
+    $(".signin").on('click', function(e){
+        var elem = e.target;
+        var type = $(elem).data("type");
+        var params = {}
+        var user = getCacheObj(SESSION_USER);
+        params.userId = user.userId;
+        params.areaId = 1;// 区域ID根据具体IP 判断
+        params.direct = (type==1?1:2);
+        params.passtime = new Date().format("yyyy-MM-dd hh:mm:ss");
+        params.remark = (type==1?"上班打":"下班打卡");
+        $.post(SERVER_URL.pass_add,params, function(ret){
+            var record = ret.data;
+
+            // 这里首页新增一行记录
+            if(record){
+                if(table) {
+                    table.row.add(record);
+                    table.draw(false);
+                }
+                layer.msg('打卡成功!');
+            }
+
+        });
+
+    })
+
+}
 //加载部门树数据
 function setDeptTreeData(callbackSelected) {
     $.get(SERVER_URL.org_onWorkTree, {pid: 0},function(res){
@@ -149,14 +188,20 @@ function savePass(index){
 
             // 这里首页新增一行记录
             if(record){
-                table.row.add(record);
-                table.draw(false);
+
+                var hash = location.hash.replace('#!', '');
+                if(hash.indexOf("track") > -1) {
+                    location.reload(true);
+                }else if(hash.indexOf("pass") > -1){
+                    table.row.add(record);
+                    table.draw(false);
+                }
                 layer.msg('保存成功!');
             }
 
         });
     }
-    layer.closeAll();
+    layer.close(index);
 }
 
 function drawAllChart(text, deptId, deptPid){

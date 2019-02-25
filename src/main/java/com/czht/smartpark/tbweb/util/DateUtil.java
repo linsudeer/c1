@@ -3,6 +3,8 @@ package com.czht.smartpark.tbweb.util;
 import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Date;
 
@@ -14,6 +16,27 @@ public class DateUtil extends DateUtils{
 
     public static String getDate(String pattern) {
         return new DateTime().toString(pattern);
+    }
+
+    /**
+     * 格式化
+     * @param date
+     * @param pattern
+     * @return
+     */
+    public static String format(Date date, String pattern) {
+        return new DateTime(date).toString(pattern);
+    }
+
+    /**
+     * 格式化时间
+     * @param dateTimeStr
+     * @param pattern
+     * @return
+     */
+    public static String format(String dateTimeStr, String pattern){
+        DateTime date = DateTime.parse(dateTimeStr,DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+        return date.toString(pattern);
     }
 
     /**
@@ -63,7 +86,7 @@ public class DateUtil extends DateUtils{
     }
 
     public static void main(String[] args) {
-        System.out.println(getWeek());
+        System.out.println(format("2019-02-21 15:41:45", "yyyy-MM-dd"));
     }
 
 }
