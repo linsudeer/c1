@@ -6,7 +6,6 @@ import com.czht.smartpark.tbweb.modular.dto.AttendStatisticsDTO;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
-import java.util.Date;
 import java.util.List;
 
 public interface AttendanceRecordMapper extends Mapper<AttendanceRecord> {
@@ -46,4 +45,11 @@ public interface AttendanceRecordMapper extends Mapper<AttendanceRecord> {
      * @param userId
      */
     void generalAttend(@Param("attendDate") String attendDate, @Param("userId") Long userId);
+
+    /**
+     * 修改考勤状态
+     * @param attendId
+     * @param status
+     */
+    void updateAttendStatus(@Param("attendId") Integer attendId, @Param("status") String status, @Param("remark") String remark);
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.ThirdLeaveuserMapper">
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.ThirdLeaveuser">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="organId" jdbcType="VARCHAR" property="organid" />
+    <result column="cancelUserId" jdbcType="VARCHAR" property="canceluserid" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="createdTime" jdbcType="TIMESTAMP" property="createdtime" />
+    <result column="modifiedTime" jdbcType="TIMESTAMP" property="modifiedtime" />
+    <result column="beginTime" jdbcType="TIMESTAMP" property="begintime" />
+    <result column="cancelContent" jdbcType="VARCHAR" property="cancelcontent" />
+    <result column="cancelLeave" jdbcType="CHAR" property="cancelleave" />
+    <result column="endTime" jdbcType="TIMESTAMP" property="endtime" />
+    <result column="zoneName" jdbcType="VARCHAR" property="zonename" />
+    <result column="leaveType" jdbcType="VARCHAR" property="leavetype" />
+    <result column="zoneId" jdbcType="VARCHAR" property="zoneid" />
+    <result column="cancelLeaveTime" jdbcType="TIMESTAMP" property="cancelleavetime" />
+    <result column="directorAble" jdbcType="CHAR" property="directorable" />
+    <result column="userId" jdbcType="VARCHAR" property="userid" />
+    <result column="cancelUserName" jdbcType="VARCHAR" property="cancelusername" />
+    <result column="userName" jdbcType="VARCHAR" property="username" />
+    <result column="requisitionId" jdbcType="VARCHAR" property="requisitionid" />
+    <result column="organName" jdbcType="VARCHAR" property="organname" />
+    <result column="converting" jdbcType="CHAR" property="converting" />
+  </resultMap>
+</mapper>

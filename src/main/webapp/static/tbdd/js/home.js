@@ -99,7 +99,7 @@ function drawOrgOnWorkBar(isDraw, key,value){
                 var content = "在岗情况<br/>"+data.deptName+"："+data.onWorkCnt+"人在岗<br/>到岗率："+params[0].value+"%";
                 return content;
             }},
-            color:["#ADFF2F"],
+            color:["#79c4e7"],// 替换5ac0c8
             grid:{x:50,y:10,x2:10,y2:30,show:false},
             legend: {show:true, data:['到岗率']},
             xAxis:{type : 'category',boundaryGap:true,data:xdata,axisLabel:{textStyle:{color:"#FFFFFF"},interval:0},axisTick: {show: false},splitLine: {show: false}},
@@ -115,53 +115,62 @@ function drawOrgOnWorkBar(isDraw, key,value){
         myChart.on('click', function(p){
             if(p.data.value<=0) return;
             var path = 'onwork';
-            if(p.data.deptId){
-                path += "/"+p.data.deptPid+"/"+p.data.deptId+"/1";
-            }else {
-                path += "/"+p.data.deptPid+"/0/1";
-            }
+            p.data.deptId = p.data.deptId?p.data.deptId:0;
+            p.data.deptPid = p.data.deptPid?p.data.deptPid:0;
+            path += "/"+p.data.deptPid+"/"+p.data.deptId+"/1";
             go(path);
         });
     });
 
 }
 //绘制24小时实时在岗数据折线图
-function draw24hData(isDraw, key,value){
-
+function draw24hData(isDraw, params){
+    var myChart = echarts.init(document.getElementById('onWork24h'));
     var url = SERVER_URL.current_24h;
-    if(key && value){
-        url += "?"+key+"="+value;
-    }
-    $.get(url, function(res){
+
+    $.get(url, params, function(res){
 
         var axisLabel = {textStyle:{color:"#FFFFFF"}};
 
         var option={
             title:{show:false,text:"",textStyle:{color: '#fff'}},
             tooltip:{trigger:"axis",formatter:"{b} - {c}人在岗"},
-            grid:{x:30,y:20,x2:20,y2:30,show:false},
+            grid:{left:30,top:20,right:20,bottom :30,show:false},
             color:["#adff2f"],
             legend:{show:false,data:["在岗人数"]},
             calculable:true,
-            xAxis:{type:"category",boundaryGap:false,data:getAxis(),axisLabel:axisLabel,axisTick: {show: false},splitLine: {show: false}},
+            xAxis:{type:"category",boundaryGap:false,data:getAxis(res),axisLabel:axisLabel,axisTick: {show: false},splitLine: {show: false}},
             yAxis:{type:"value",name:"人数（人）",axisLabel:axisLabel,splitLine: {show: true,lineStyle:{color: ['#252d39']}},axisTick: {show: false}},
-            series:[{type:"line",smooth:true,symbol:"none",data:getData(res)}]
+            series:[{type:"line",showSymbol:false,smooth:true,symbolSize:4,data:getData(res)}]
             //,name:seriesName
         };
-        var myChart = echarts.init(document.getElementById('onWork24h'));
+
         myChart.setOption(option, isDraw);
         myChart.off('click');//先清除事件，再创建，防止出现多次加载事件
         myChart.on('click', function(p){
-
+            if(p.data.value<=0) return;
+            var path = 'onwork';
+            p.data.deptId = p.data.deptId?p.data.deptId:0;
+            p.data.deptPid = p.data.deptPid?p.data.deptPid:0;
+            var datetime = new Date().format('yyyy-MM-dd')+" "+p.data.endDatetime+':00'
+            path += "/"+p.data.deptPid+"/"+p.data.deptId+"/4/0/"+datetime;
+            go(path);
         });
 
     });
 
     //x轴坐标
-    function getAxis(){
+    function getAxis(res){
+        /*if(!res.data) return;
+        var list = [];
+        for(var i=0;i<res.data.length; i++){
+            list.push((res.data[i].dataTime));
+        }
+        return list;*/
+
         var xAxis = [];
         for(var i=0; i<24; i++){
-            for(var j=0;j<60; j+=5){
+            for(var j=4;j<60; j+=5){
                 xAxis.push((i<10?'0':'') + i + ":" + (j<10?'0':'') + j );
             }
         }
@@ -176,7 +185,7 @@ function draw24hData(isDraw, key,value){
         if(!res.data) return;
         var list = [];
         for(var i=0;i<res.data.length; i++){
-            list.push(res.data[i].dataCount);
+            list.push({value:res.data[i].dataCount, deptId:params.deptId,deptPid: params.deptPid,endDatetime:res.data[i].dataTime});
         }
         return list;
     }

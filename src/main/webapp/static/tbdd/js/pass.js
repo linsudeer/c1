@@ -29,12 +29,11 @@ function initPass() {
     laydate.render({ elem: QUERY_STARTTIME, type: 'datetime'});
     laydate.render({ elem: QUERY_ENDTIME, type: 'datetime'});
 
-    //加载表格
     // 这里判断权限
     var user = getCacheObj(SESSION_USER);
     if(user){
         var role = user.dataRole;
-        if(role.indexOf(ROLE.general)>-1 || role.indexOf(ROLE.middle)>-1){// 部门以下的权限 不可以修改其他部门的通行数据， 这里判断senoir权限，可以修改 大队领导和军事办的权限 TODO
+        if(role.indexOf(ROLE.general)>-1 || role.indexOf(ROLE.middle)>-1){// 部门以下的权限可以查看本部门的数据
             loadPassTable({deptId:user.deptId});
             setSelect2Val($(QUERY_DEPT), user.deptId, user.deptName);
             $(QUERY_DEPT).attr('disabled', true);
@@ -62,14 +61,8 @@ function initPass() {
                 layer.msg("请联系本室办领导新增!");
                 return;
             }
-            if(role.indexOf(ROLE.middle)>-1){
-                if(user.deptId != row.deptId){
-                    layer.msg("请联系本室办领导新增!");
-                    return;
-                }
-            }
         }else {
-            layer.msg("请联系本室办领导新增");
+            layer.msg("请联系本室办领导新增!");
             return;
         }
         layer.open({
@@ -105,7 +98,7 @@ function loadPassTable(params) {
         columns: [
             { "data":null, "width":50, "name": "序号" ,"title": "序号", "render":xh},
             { "data":"faceFdfsId","defaultContent":'', "width":100, "name": "人脸图片" ,"title": "图片" , "render":renderImage},
-            { "data":"userName","defaultContent":'',"width":100, "name": "姓名" ,"title": "姓名" , "render":renderUserName},
+            { "data":"userName","defaultContent":'',"class":"username", "width":100, "name": "姓名" ,"title": "姓名" , "render":renderUserName},
             { "data":"userGroupName","defaultContent":'',"width":100, "name": "人员类型" ,"title": "人员类型"},
             { "data":"deptName","defaultContent":'',"width":100, "name": "部门" ,"title": "部门"},
             { "data":"deviceAreaName","defaultContent":'',"width":100, "name": "通行区域" ,"title": "区域"},
@@ -123,12 +116,13 @@ function loadPassTable(params) {
                     var log = logs[i];
                     content += log.optContent+"<br>";
                 }
-                $(row).on('mouseover', function(){
-                    tip(content,$(row), 1);
+                $('td.username>a', row).on('mouseover', function(){
+                    tip(content,$('td.username>a', row));
                 });
-                $(row).on('mouseout', function(){
+                $('td.username>a', row).on('mouseout', function(){
                     closeTip();
                 });
+                $('td.username>a', row).prepend('<span class="glyphicon glyphicon-info-sign m-xs-r" aria-hidden="true"></span>')
             }
 
         }
@@ -154,7 +148,11 @@ function loadPassTable(params) {
 
     function renderOpt(data, type, row, meta){
 
-        return "<a href='javascript:void(0)' onclick='editPassRecord("+meta.row+")'>修改</a>&nbsp;&nbsp;&nbsp;<a href='javascript:void(0)' onclick='delPassRecord("+meta.row+")'>删除</a>";
+        var content =  "<a href='javascript:void(0)' onclick='editPassRecord("+meta.row+")'>修改</a>";
+        if(row.logs && row.logs.length>0){
+            content += "&nbsp;&nbsp;&nbsp;<a href='javascript:void(0)' onclick='delPassRecord("+meta.row+")'>删除</a>";
+        }
+        return content;
     }
 }
 
@@ -214,6 +212,17 @@ function editPassRecord(index){
 
 function delPassRecord(index){
     var row = table.row(index).data();
+    var user = getCacheObj(SESSION_USER);
+    if(user){
+        var role = user.dataRole;
+        if(role.indexOf(ROLE.general)>-1){// 部门以下的权限 不可修改其他部门的通行数据，这里判断senoir权限，可以修改 大队领导和军事办的权限 TODO
+            layer.msg("请联系本室办领导删除!");
+            return;
+        }
+    }else {
+        layer.msg("请联系本室办领导删除!");
+        return;
+    }
     $.post(SERVER_URL.pass_del,{recordId:row.passRecordId}, function(ret){
         layer.msg("删除成功！");
         //这里删除一行

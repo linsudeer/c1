@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.ThirdDutyMapper">
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.ThirdDuty">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="dutyLeader" jdbcType="VARCHAR" property="dutyleader" />
+    <result column="createdTime" jdbcType="TIMESTAMP" property="createdtime" />
+    <result column="dutyAmy" jdbcType="VARCHAR" property="dutyamy" />
+    <result column="modifiedTime" jdbcType="TIMESTAMP" property="modifiedtime" />
+    <result column="dutyOffice" jdbcType="VARCHAR" property="dutyoffice" />
+    <result column="typeName" jdbcType="VARCHAR" property="typename" />
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="zoneId" jdbcType="VARCHAR" property="zoneid" />
+  </resultMap>
+</mapper>

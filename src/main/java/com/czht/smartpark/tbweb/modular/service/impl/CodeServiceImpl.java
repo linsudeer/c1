@@ -31,8 +31,20 @@ public class CodeServiceImpl implements CodeService {
     private DictMapper dictMapper;
 
     @Override
-    public List<CodeDTO> getUsers(String username, Integer deptId, Integer limit) {
-        return userMapper.getUsersForCode(username, deptId, limit);
+    public List<CodeDTO> getUsers(String username, String deptId, Integer limit) {
+        if(deptId != null){
+            String[] deptIds = deptId.split(",");
+            if(deptIds.length==1){
+                return userMapper.getUsersForCode(username, Integer.parseInt(deptIds[0]), limit);
+            }else if(deptIds.length>1){
+                List<CodeDTO> list = userMapper.getUsersForCodeBydeptIds(username, deptIds, limit);
+                return list;
+            }else {
+                return userMapper.getUsersForCode(username, 0, limit);
+            }
+        }else {
+            return userMapper.getUsersForCode(username, 0, limit);
+        }
     }
 
     @Override

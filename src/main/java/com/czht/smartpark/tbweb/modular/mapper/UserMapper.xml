@@ -77,6 +77,7 @@
     <result column="user_group" jdbcType="INTEGER" property="userGroup" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
     <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="onwork_status" jdbcType="INTEGER" property="onworkStatus" />
     <result column="data_role" jdbcType="VARCHAR" property="dataRole"></result>
     <result column="identification_pic_id" jdbcType="LONGVARBINARY" property="idPic" />
   </resultMap>
@@ -87,7 +88,24 @@
   </resultMap>
 
   <select id="loginVail" resultMap="SimpleUserResultMap">
-    select u.user_id, u.user_name, u.user_sex, u.user_mobile, u.dept_id, dept.dept_name, u.dept_parent_id,u.data_role, u.identification_pic_id from tb_user u left join tb_pf_department dept on u.dept_id=dept.dept_id
+    SELECT
+    u.user_id,
+    u.user_name,
+    u.user_sex,
+    u.user_mobile,
+    u.dept_id,
+    dept.dept_name,
+    u.user_type,
+    u.user_group,
+    u.dept_parent_id,
+    u.data_role,
+    u.identification_pic_id,
+    (case when pass.device_direction=1 then 1 else 0 end) as onwork_status
+
+    FROM
+    tb_user u
+    LEFT JOIN tb_pf_department dept ON u.dept_id = dept.dept_id
+    left join view_today_pass_last_in pass on u.user_id=pass.user_id
     <where>
       <if test="username != null">
          and u.user_name=#{username}
@@ -107,7 +125,25 @@
       <if test="deptId != null and deptId>0">
         and dept_id=#{deptId}
       </if>
-      <if test="username != null">
+      <if test="username != null and username != ''">
+        and user_name REGEXP #{username}
+      </if>
+    </where>
+    <if test="limit != null">
+      limit #{limit}
+    </if>
+  </select>
+
+  <select id="getUsersForCodeBydeptIds" resultMap="CodeResultMap">
+    select user_id, user_name from tb_user
+    <where>
+      <if test="deptIds != null and deptIds != ''">
+        and dept_id in
+        <foreach collection="deptIds" item="id" index="index" open="(" close=")" separator=",">
+          #{id}
+        </foreach>
+      </if>
+      <if test="username != null and username != ''">
         and user_name REGEXP #{username}
       </if>
     </where>
@@ -117,7 +153,25 @@
   </select>
 
   <select id="getSimpleUserInfo" parameterType="java.lang.Integer" resultMap="SimpleUserResultMap">
-    select user_id, user_name, user_sex, user_mobile, u.dept_id,dept.dept_name,user_type,user_group, dept_parent_id, data_role, identification_pic_id from tb_user u left join tb_pf_department dept on u.dept_id=dept.dept_id where user_id=#{userId}
+SELECT
+	u.user_id,
+	u.user_name,
+	u.user_sex,
+	u.user_mobile,
+	u.dept_id,
+	dept.dept_name,
+	u.user_type,
+	u.user_group,
+	u.dept_parent_id,
+	u.data_role,
+	u.identification_pic_id,
+	(case when pass.device_direction=1 then 1 else 0 end) as onwork_status
+
+FROM
+	tb_user u
+LEFT JOIN tb_pf_department dept ON u.dept_id = dept.dept_id
+left join view_today_pass_last_in pass on u.user_id=pass.user_id
+where u.user_id=#{userId}
   </select>
 
 </mapper>

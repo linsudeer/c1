@@ -7,7 +7,7 @@ var CAROUSEWRAP = "#carousel";
 
 function initOnwork(params){
     setTitleData(params.deptPid, params.deptId, params.type);
-    loadData(params.deptPid, params.deptId, params.type, params.areaId);
+    loadData(params.deptPid, params.deptId, params.type, params.areaId, decodeURI(params.endDatetime));
 
 }
 
@@ -15,7 +15,7 @@ function initOnwork(params){
  * 设置标题
  */
 function setTitleData(deptPid, deptId, type){
-    if(type){// 类型1-在岗 2-临时离岗 3-不在岗
+    if(type){// 类型1-在岗 2-临时离岗 3-不在岗 4-24小时在岗
 
     }else {// 没有类型，显示所有，根据部门显示
         $.get(SERVER_URL.current_typegroup,{deptId:deptId, deptPid:deptPid}, function(res){
@@ -37,19 +37,29 @@ function setTitleData(deptPid, deptId, type){
 
             }
             $(HEADER).text(deptName+"在岗人员");
+            if(!deptId){
+                deptName = "";
+            }
             var html='<span>'+deptName+'人员统计：</span>\n' +
                 '\t\t\t\t\t<span> 共 '+total+'人，  </span>\n' +
                 '\t\t\t\t\t<span> 在岗'+onCnt+'人， </span>\n' +
                 '\t\t\t\t\t<span> 不在岗'+offCnt+'人。</span>';
-            $(CAROUSE_TITLE).html(html+'<a data-toggle="tab" href="#tab1">列表显示</a>');
-            $(TABLE_TITLE).html(html + '<a data-toggle="tab" href="#tab2">图例显示</a>')
+            if(!deptId){
+                $('#tab2').removeClass('active')
+                $('#tab1').addClass('active')
+                $(TABLE_TITLE).html(html + '<a data-toggle="tab" href="#tab2"></a>')
+            }else {
+                $(CAROUSE_TITLE).html(html+'<a data-toggle="tab" href="#tab1">列表显示</a>');
+                $(TABLE_TITLE).html(html + '<a data-toggle="tab" href="#tab2">图例显示</a>')
+            }
+
         });
     }
 
 }
 
-function loadData(pid, id, type, areaId){
-    $.get(SERVER_URL.current_pass,{deptId:id, deptPid:pid, type:type, areaId:areaId}, function(ret){
+function loadData(pid, id, type, areaId, endDatetime){
+    $.get(SERVER_URL.current_pass,{deptId:id, deptPid:pid, type:type, areaId:areaId, endDatetime:endDatetime}, function(ret){
 
         var list = ret.data;
         // 这里重复赋值主要是填充数量
@@ -69,11 +79,11 @@ function loadData(pid, id, type, areaId){
             $(TABLE_TITLE).html(html + '<a data-toggle="tab" href="#tab2">图例显示</a>')
         }
 
-        if(list && list.length<100){// 数量太多则不显示图例
+        if(id){// 数量太多则不显示图例
             drawCarousel(list);
         }else {
-            $('#tab1').removeClass('active')
-            $('#tab2').addClass('active')
+            $('#tab2').removeClass('active')
+            $('#tab1').addClass('active')
         }
         drawTable(list);
 

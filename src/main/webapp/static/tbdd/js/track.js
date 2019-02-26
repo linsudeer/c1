@@ -39,10 +39,16 @@ function initTrack(params){
         table.destroy();
 
         //跳转页面
-        var curdate = new Date().format("yyyy-MM-dd");
-        p.starttime = p.starttime?p.starttime:curdate;
-        p.endtime = p.endtime?p.endtime:curdate;
-        go("track/"+p.userId+"/"+p.starttime+"/"+p.endtime);
+        if(p.userId){
+            var curdate = new Date().format("yyyy-MM-dd");
+            p.starttime = p.starttime?p.starttime:curdate;
+            p.endtime = p.endtime?p.endtime:curdate;
+            go("track/"+p.userId+"/"+p.starttime+"/"+p.endtime);
+        }else {
+            layer.msg("请选择姓名！");
+            return;
+        }
+
 
         // 这里是页面内加载
         /*setUserInfo(p.userId);
@@ -52,7 +58,17 @@ function initTrack(params){
 
     // 监听新增按钮
     $('form#query').on('click', '#addBtn', function (e){
-
+        var user = getCacheObj(SESSION_USER);
+        if(user){
+            var role = user.dataRole;
+            if(role.indexOf(ROLE.general)>-1){// 部门以下的权限 不可修改其他部门的通行数据，这里判断senoir权限，可以修改 大队领导和军事办的权限 TODO
+                layer.msg("请联系本室办领导新增!");
+                return;
+            }
+        }else {
+            layer.msg("请联系本室办领导新增!");
+            return;
+        }
         layer.open({
             type:1,
             content:$(PASS_ADD_WRAP),
@@ -71,7 +87,7 @@ function initTrack(params){
                 $(PASS_DIRECT).val('').trigger('change');
                 $(PASS_AREA).val('').trigger('change');
                 $(PASS_DATETIME).val('');
-                $(PASS_UNAME).val('').trigger('change');
+                // $(PASS_UNAME).val('').trigger('change');
                 $(PASS_OLD_UNAME).val('');
                 $(PASS_REMARK).val('');
             }
@@ -88,6 +104,7 @@ function setUserInfo(userId){
         $(USER_NAME).text(user.userName || '');
         $(DEPT_NAME).text(user.deptName || '');
         setSelect2Val($(QUERY_UNAME), userId, user.userName)
+        setSelect2Val($(PASS_UNAME), userId, user.userName)
 
     });
 }
@@ -221,6 +238,7 @@ function drawHistoryAttend(userId,startDate,endDate) {
             { "data":"computeDetail", "defaultContent":'',"name": "计算详情" ,"title": "计算详情" ,"orderable": false,"render":renderCompuleDetail}
         ],
         rowCallback:function( row, data ){
+            var remarkNum = 0;
             if(data.causaRecords && data.causaRecords.length>0){// 考勤异常整行变红
                 var flag = 1;
                 var content = '';
@@ -229,22 +247,31 @@ function drawHistoryAttend(userId,startDate,endDate) {
                     if(r.reviewFlag == 0){// 这里如果有一个0 则说明还有异常情况未处理
                         flag = 0;
                     }else {// 这里如果是1的话则说明有已经处理过的情况，要显示出来备注
-                        content += r.reviewUserName+"于"+ r.reviewTime+'修改了'+r.causalname+'状态，原因：'+r.reviewRemark+";<br />";
-                        $('td>a', row).on('mouseover', function(){
-                            tip(content,$(row));
-                        });
-                        $('td>a', row).on('mouseout', function(){
-                            closeTip();
-                        });
+                        content += (remarkNum+=1)+". "+r.reviewUserName+"于"+ r.reviewTime+'修改了'+r.causalname+'状态，原因：'+r.reviewRemark+";<br />";
                     }
                 }
                 if(flag == 0){
                     $(row).css('color', 'red');
                     $('td>a', row).css('color', 'red');
                 }else {// 这里说明全部是1 则应该显示黄色
+                    $('td>a', row).on('mouseover', function(){
+                        tip(content,$('td>a', row));
+                    });
+                    $('td>a', row).on('mouseout', function(){
+                        closeTip();
+                    });
                     $(row).css('color', 'yellow');
                     $('td>a', row).css('color', 'yellow');
+                    $('td>a', row).prepend('<span class="glyphicon glyphicon-info-sign m-xs-r" aria-hidden="true"></span>')
                 }
+
+            }
+            if(data.reviewFlag==1){
+                content+= (remarkNum+=1)+". "+data.reviewRemark;
+            }
+            if(!data.reviewFlag && data.actualTime<data.absenceTime){
+                $(row).css('color', 'red');
+                $('td>a', row).css('color', 'red');
             }
 
         }
@@ -267,7 +294,22 @@ function drawHistoryAttend(userId,startDate,endDate) {
         }
     }
 
+    /**
+     * 考勤状态 请假，大队执勤，上午迟到，上午早退，下午迟到，下午早退，上午旷工，下午旷工，时长不足，记录不全，
+     * @param data
+     * @param type
+     * @param row
+     * @returns {string}
+     */
     function renderLeaveRemark(data, type, row) {
+        var content = "<span style='color:"+getLeaveColor(data)+"'>"+data+"</span>";
+        if(row.pairFlag==1){
+            data = '记录不全';
+        }
+        if(!row.reviewFlag && row.actualTime<row.absenceTime){
+            data = "时长不足"
+            content = "<span style='color:"+getLeaveColor(data)+";cursor: pointer' onclick='openModifyStatus("+row.meta+")'><span class='glyphicon glyphicon-pencil m-xs-r' aria-hidden='true'></span><span>"+data+"</span></span>";
+        }
         if(row.causaRecords && row.causaRecords.length>0 ){
             for(var i=0; i<row.causaRecords.length; i++){
                 if(row.causaRecords[i].reviewFlag == 0){// 这里如果有一个0 则说明还有异常情况未处理
@@ -275,9 +317,8 @@ function drawHistoryAttend(userId,startDate,endDate) {
                     break;
                 }
             }
-
         }
-        return "<span style='color:"+getLeaveColor(data)+"'>"+data+"</span>";
+        return content;
     }
 
     function renderCompuleDetail(data, type, row, meta) {
@@ -309,4 +350,67 @@ function drawHistoryAttend(userId,startDate,endDate) {
         }
         return week;
     }
+}
+
+function openModifyStatus(index){
+    var data = table.row(index).data();
+    //加载权限判断
+    var user = getCacheObj(SESSION_USER);
+    if(user){
+        var role = user.dataRole;
+        if(role.indexOf(ROLE.general)>-1){// 部门以下的权限 不可以修改其他部门的通行数据，大队领导权限可以修改本部门权限
+            layer.msg("请联系本室办领导修改");
+            return;
+        }
+        if(role.indexOf(ROLE.senior)>-1){// 大队领导可以查看所有数据，可以修改本部门和军事办的数据
+            if(user.deptId != data.deptId  && data.deptId!=5){
+                layer.msg("请联系本室办领导修改");
+                return;
+            }
+        }
+        if(role.indexOf(ROLE.middle)>-1){
+            if(user.deptId != data.deptId){
+                layer.msg("请联系本室办领导修改");
+                return;
+            }
+        }
+    }else {
+        layer.msg("请联系本室办领导修改");
+        return;
+    }
+    var html = '<form style="padding: 10px;">' +
+        '<div class="form-group"><label>姓名：</label><span style="display: inline-block;">'+data.userName+'</span></div>' +
+        '<div class="form-group"><label>状态：</label><select id="attendSelect" type="text" style="width:85%" class="form-control" name="status" placeholder="考勤状态"></select></div>' +
+        '</form>'
+
+    layer.open({
+        type:1,
+        shadeClose: true, //开启遮罩关闭
+        content:html,
+        area: ['600px', '350px'],
+        btn: ['保存', '关闭'],
+        yes: function(layindex){
+            var status = $("#attendSelect").val();
+            saveAttendStatus(layindex, index, data.id, status);
+        },
+        success:function(){
+            $("#attendSelect").select2({
+                data:[{id:'正常', text:"正常"},{id:'大队执勤', text:'大队执勤'},{id:'休假', text:'休假'},{id:'临时外出', text:"临时外出"}]
+            });
+        }
+    });
+}
+
+function saveAttendStatus(layindex, rowIndex, attendId, status){
+
+    $.post(SERVER_URL.attend_modifyStatus,{attendId:attendId, status:status}, function(ret){
+        var record = ret.data;
+        if(record){
+            table.row(rowIndex).data(record);
+            layer.msg('修改成功!');
+        }
+
+
+    })
+    layer.close(layindex);
 }

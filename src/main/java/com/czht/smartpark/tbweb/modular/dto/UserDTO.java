@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class UserDTO implements Serializable {
 
+
+
     private Integer userId;
     private String userName;
     private Integer userSex;
@@ -20,6 +22,11 @@ public class UserDTO implements Serializable {
     private String dataRole;
 
     private byte[] idPic;
+
+    /**
+     * 在岗状态
+     */
+    private Integer onworkStatus;
 
     public Integer getUserId() {
         return userId;
@@ -115,5 +122,13 @@ public class UserDTO implements Serializable {
 
     public void setDataRole(String dataRole) {
         this.dataRole = dataRole;
+    }
+
+    public Integer getOnworkStatus() {
+        return onworkStatus;
+    }
+
+    public void setOnworkStatus(Integer onworkStatus) {
+        this.onworkStatus = onworkStatus;
     }
 }

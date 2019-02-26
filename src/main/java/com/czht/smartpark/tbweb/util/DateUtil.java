@@ -43,7 +43,7 @@ public class DateUtil extends DateUtils{
      * 获得上周周一的时间
      * @return
      */
-    public static String getLastMonday(){
+    public static String getPreMonday(){
 
         LocalDate d = LocalDate.now();
         return d.minusWeeks(1).dayOfWeek().withMinimumValue().toString("yyyy-MM-dd");
@@ -53,7 +53,7 @@ public class DateUtil extends DateUtils{
      * 获得上周周日的时间
      * @return
      */
-    public static String getLastSunday(){
+    public static String getPreSunday(){
 
         LocalDate d = LocalDate.now();
         return d.minusWeeks(1).dayOfWeek().withMaximumValue().toString("yyyy-MM-dd");

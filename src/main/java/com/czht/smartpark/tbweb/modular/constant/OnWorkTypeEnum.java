@@ -2,7 +2,7 @@ package com.czht.smartpark.tbweb.modular.constant;
 
 public enum  OnWorkTypeEnum {
 
-    ONWORK(1, "在岗"), TEMPWORK(2, "临时离岗"), OFFWORK(3, "不在岗");
+    ONWORK(1, "在岗"), TEMPWORK(2, "临时离岗"), OFFWORK(3, "不在岗"), ONWORK24H(4, "24小时在岗");
 
     private Integer type;
 

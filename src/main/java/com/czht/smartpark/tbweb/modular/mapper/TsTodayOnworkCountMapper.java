@@ -48,6 +48,15 @@ public interface TsTodayOnworkCountMapper extends Mapper<TsTodayOnworkCount> {
     List<OnWorkPassDTO> getOnWorkPassRecords(countOnWorkBean bean);
 
     /**
+     * 查看在岗记录
+     * @param bean
+     * @return
+     */
+    List<OnWorkPassDTO> getOnWorkPassRecordsBy24h(countOnWorkBean bean);
+
+
+
+    /**
      * 查看临时离岗记录
      * @param bean
      * @return

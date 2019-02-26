@@ -27,6 +27,13 @@ public interface UserMapper extends Mapper<User> {
     List<CodeDTO> getUsersForCode(@Param("username") String username, @Param("deptId") Integer deptId, @Param("limit") Integer limit);
 
     /**
+     * 查找用户的字典集合
+     * @param username
+     * @return
+     */
+    List<CodeDTO> getUsersForCodeBydeptIds(@Param("username") String username, @Param("deptIds") String[] deptIds, @Param("limit") Integer limit);
+
+    /**
      * 根据用户Id查找基本信息
      * @param userId
      * @return

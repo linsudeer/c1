@@ -35,4 +35,11 @@ public interface AttendService {
      * @param remark
      */
     void updateAttendCausa(Integer id, String remark);
+
+    /**
+     * 修改考勤状态
+     * @param attendId
+     * @param status
+     */
+    AttendanceRecord updateAttendStatus(Integer attendId, String status);
 }

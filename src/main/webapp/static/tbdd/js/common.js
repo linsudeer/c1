@@ -50,6 +50,17 @@ $(function(){
         zIndex:100
     })
 
+    $.ajaxSetup( {
+        url: "/index.html" , // 默认URL
+        aysnc: false , // 默认同步加载
+        beforeSend: function(xhr){
+            console.log(xhr);
+        },
+        error: function(jqXHR, textStatus, errorMsg){ // 出错时默认的处理函数
+            alert( '发送AJAX请求到"' + this.url + '"时出错[' + jqXHR.status + ']：' + errorMsg );
+        }
+    });
+
 });
 
 /**
@@ -139,7 +150,7 @@ function renderSelect(elem, placeholder, data, params,change, load) {
             quietMillis: 250,
             data: function (term) {
                 var p = params?params:{};
-                p.limit = 10;
+                p.limit = 50;
                 p.key = term.term;
                 return p;
             },
@@ -312,6 +323,7 @@ function go(path) {
     if(hash == path) {
         location.reload(true);
     }else {
+
         Q.go(path);
     }
 
@@ -323,7 +335,7 @@ function go(path) {
  */
 function getLeaveColor(type){
     var color = "";
-    switch (type){
+    /*switch (type){
         case '病假':
             color = 'orange';
             break;
@@ -359,7 +371,7 @@ function getLeaveColor(type){
             break;
         default:
             color = "";
-    }
+    }*/
     return color;
 }
 

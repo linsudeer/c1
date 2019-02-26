@@ -14,7 +14,7 @@ public interface CodeService {
      * @param username
      * @return
      */
-    List<CodeDTO> getUsers(String username, Integer deptId, Integer limit);
+    List<CodeDTO> getUsers(String username, String deptId, Integer limit);
 
     /**
      * 查找所有区域

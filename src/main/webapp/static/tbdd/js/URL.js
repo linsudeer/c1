@@ -32,6 +32,7 @@ var SERVER_URL = {
 
     attend_statistics:DOMAIN+"/attend/statistics",//综合考勤
     attend_history: DOMAIN+"/attend/history",//个人历史考勤
+    attend_modifyStatus: DOMAIN+"/attend/modifyStatus",//修改考勤状态
 
     attend_causal_review: DOMAIN+"/attend/updateAttendCausa",//修正考勤异常情况
 

@@ -48,7 +48,7 @@ function loadAttendTable(params){
         serverSide: false,
         columns: [
             { "data":null, "width":50, "name": "序号" ,"title": "序号", "render":xh},
-            { "data":"userName", "defaultContent":'',"name": "姓名" ,"title": "姓名" ,"orderable": false, "render":renderUserName},
+            { "data":"userName", "defaultContent":'',"name": "姓名" ,"title": "姓名" ,"orderable": true, "render":renderUserName},
             { "data":"deptName", "defaultContent":'',"name": "部门" ,"title": "部门" ,"orderable": true},
             { "data":"startDate", "defaultContent":'',"name": "开始日期" ,"title": "开始日期" ,"orderable": true, "render":renderAttendDate},
             { "data":"endDate", "defaultContent":'',"name": "结束日期" ,"title": "结束日期" ,"orderable": true, "render":renderAttendDate},
@@ -60,6 +60,7 @@ function loadAttendTable(params){
             { "data":"null", "name": "状态" ,"title": "状态" ,"orderable": false, "render":renderStatus}
         ],
         rowCallback:function( row, data ){
+            var remarNum = 0;
             if(data.causaRecords && data.causaRecords.length>0){// 考勤异常整行变红
                 var flag = 1;
                 var content = '';
@@ -68,7 +69,7 @@ function loadAttendTable(params){
                     if(r.reviewFlag == 0){// 这里如果有一个0 则说明还有异常情况未处理
                         flag = 0;
                     }else {// 这里如果是1的话则说明有已经处理过的情况，要显示出来备注
-                        content += r.reviewUserName+"于"+ r.reviewTime+'修改了'+r.causalname+'状态，原因：'+r.reviewRemark+";<br />";
+                        content += (remarNum+=1)+". "+r.reviewUserName+"修改了"+r.attendDate.substr(0,10)+r.causalname+'状态，原因：'+r.reviewRemark+";<br />";
                     }
                 }
                 if(flag == 0){
@@ -78,12 +79,13 @@ function loadAttendTable(params){
                     $(row).css('color', 'yellow');
                     $('td>a', row).css('color', 'yellow');
 
-                    $(row).on('mouseover', function(){
-                        tip(content,$(row), 1);
+                    $('td>a', row).on('mouseover', function(){
+                        tip(content,$('td>a', row));
                     });
-                    $(row).on('mouseout', function(){
+                    $('td>a', row).on('mouseout', function(){
                         closeTip();
                     });
+                    $('td>a', row).prepend('<span class="glyphicon glyphicon-info-sign m-xs-r" aria-hidden="true"></span>')
                 }
             }
 
@@ -119,7 +121,7 @@ function loadAttendTable(params){
                 }
             }
             if(flag == 0){
-                return '<a href="javascript:void(0)" onclick="casuaDetail('+meta.row+')" onmouseover="showCasua(this, '+meta.row+')" onmouseout="closeTip()">异常</a>';
+                return '<a href="javascript:void(0)" onclick="casuaDetail('+meta.row+')" onmouseover="showCasua(this, '+meta.row+')" onmouseout="closeTip()"><span class="glyphicon glyphicon-pencil m-xs-r" aria-hidden="true"></span><span>异常</span></a>';
             }else {
                 return '正常';
             }
@@ -133,8 +135,9 @@ function loadAttendTable(params){
 }
 
 function showCasua(e, index){
-    event.stopPropagation();
     var data = attendTable.row(index).data();
+
+    event.stopPropagation();
     var causas = data.causaRecords;// 对应的异常记录
     var content = "";
     for(var i=0;i<causas.length;i++){
@@ -157,6 +160,30 @@ function showCasua(e, index){
 var causalLayerIndex;
 function casuaDetail(index){
     var data = attendTable.row(index).data();
+    //加载权限判断
+    var user = getCacheObj(SESSION_USER);
+    if(user){
+        var role = user.dataRole;
+        if(role.indexOf(ROLE.general)>-1){// 部门以下的权限 不可以修改其他部门的通行数据，大队领导权限可以修改本部门权限
+            layer.msg("请联系本室办领导修改");
+            return;
+        }
+        if(role.indexOf(ROLE.senior)>-1){// 大队领导可以查看所有数据，可以修改本部门和军事办的数据
+            if(user.deptId != data.deptId  && data.deptId!=5){
+                layer.msg("请联系本室办领导修改");
+                return;
+            }
+        }
+        if(role.indexOf(ROLE.middle)>-1){
+            if(user.deptId != data.deptId){
+                layer.msg("请联系本室办领导修改");
+                return;
+            }
+        }
+    }else {
+        layer.msg("请联系本室办领导修改");
+        return;
+    }
     var causas = data.causaRecords;// 对应的异常记录
     var html = '<ul class="list-group casua"><li class="list-group-item text-center"><span>序号</span><span>离岗状态</span><span>时间</span><span>操作</span></li>';
     for(var i=0;i<causas.length;i++){

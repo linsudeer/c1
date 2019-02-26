@@ -197,6 +197,44 @@
     ) t left join tb_user u on t.user_id=u.user_id
   </select>
 
+  <select id="getOnWorkPassRecordsBy24h" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
+    select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onwork_status, u.identification_pic_id  from (
+    SELECT
+    pass_datetime AS last_passtime,
+    user_id,
+    pass.dept_id,
+    dept.dept_name,
+    user_name,
+    (case when pass.device_direction=1 then '进' else '出' end) as lastDirect,
+    device_area_id AS area_id,
+    area.area_name AS area_name,
+    '在岗' AS onwork_status
+    FROM
+    view_today_pass_record pass
+    LEFT JOIN tb_pf_area area ON pass.device_area_id = area.area_id
+    LEFT OUTER JOIN tb_pf_department dept ON pass.dept_id = dept.dept_id
+    WHERE
+    pass.user_id > 0
+    AND dept.parent_id=1
+    AND pass.pass_datetime &lt;= '2019-02-25 16:49:00'
+    <if test="deptId != null and deptId>0">
+      and pass.dept_id=#{deptId}
+    </if>
+    <if test="areaId != null and areaId>0">
+      and pass.device_area_id=#{areaId}
+    </if>
+    <if test="deptPid != null and deptPid >0">
+      and dept.parent_id=#{deptPid}
+    </if>
+    <if test="endDatetime!=null">
+      and pass.pass_datetime &lt;= #{endDatetime}
+    </if>
+    GROUP BY pass.user_id
+    HAVING lastDirect='进'
+
+    ) t left join tb_user u on t.user_id=u.user_id
+  </select>
+
   <select id="getTempWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
     select t.last_passtime,t.lastDirect , t.user_id, t.user_name, t.dept_id,t.dept_name,t.area_id,t.area_name, t.onwork_status, u.identification_pic_id  from (
     SELECT

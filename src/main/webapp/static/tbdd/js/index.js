@@ -42,7 +42,10 @@ function init(){
             }
         }
         if(hash == "" || hash.indexOf('home') > -1) {
-            if(!data.pId) {data.pId = data.id;data.id = 0;}// 这种情况说明点击的是单位，id对应的是父部门
+            if(data.type==1) {
+                data.pId = data.id;
+                data.id = 0;
+            }// 这种情况说明点击的是单位，id对应的是父部门
             drawAllChart(data.text, data.id, data.pId);
 
         }
@@ -57,6 +60,11 @@ function init(){
         $(this).children('div').css('display','none');
     });
 
+    $("#userImg").on('click', function(){
+        var user = getCacheObj(SESSION_USER);
+        go('track/'+user.userId);
+    });
+
 
     $('#logout').on('click', function(e){
         $.post(SERVER_URL.logout, function(res){
@@ -69,8 +77,20 @@ function init(){
 
     // 初始化公用部分
     // 对姓名进行权限判断，如果senior权限，则可以修改本部门和大队领导的权限
+    var user = getCacheObj(SESSION_USER);
+    if(user){
+        var role = user.dataRole;
+        if(role.indexOf(ROLE.general)>-1 || role.indexOf(ROLE.middle)>-1){// 部门以下的权限可以查看本部门的数据
+            renderSelect($(PASS_UNAME),'姓名', SERVER_URL.code_user, {deptId: user.deptId});
+        }else if(role.indexOf(ROLE.senior)>-1){
+            renderSelect($(PASS_UNAME),'姓名', SERVER_URL.code_user, {deptId: user.deptId+', 5'});
+        }else {// 其他权限可以查看
+            renderSelect($(PASS_UNAME),'姓名', SERVER_URL.code_user);
+        }
 
-    renderSelect($(PASS_UNAME),'姓名', SERVER_URL.code_user);
+    }
+
+
     renderSelect($(PASS_AREA),'区域', SERVER_URL.code_area);
     renderSelect($(PASS_DIRECT),'进出方向', SERVER_URL.code_direct);
     laydate.render({ elem: PASS_DATETIME, type: 'datetime'});
@@ -82,7 +102,13 @@ function init(){
 // 加载区域数据
 function setAreaData() {
     var user = getCacheObj(SESSION_USER);
-    $("#userImg").attr('src','data:image/jpeg;base64,'+(user.idPic || ''));
+    $.get(SERVER_URL.user_simple+"/"+user.userId, function(ret){
+        var u = ret.data;
+        $("#userImg").attr('src','data:image/jpeg;base64,'+(u.idPic || ''));
+        $("#onworkStatusImg").attr('src', u.onworkStatus?'../img/onwork.png':'../img/offwork.png');
+        $("#onworkStatusText").append(u.onworkStatus?"<span style='color:#14dd4d'>在岗</span>":"<span style='color:#707073'>不在岗</span>");
+    })
+
 
     //**************** 监听事件***************
 
@@ -96,13 +122,16 @@ function setAreaData() {
         params.areaId = 1;// 区域ID根据具体IP 判断
         params.direct = (type==1?1:2);
         params.passtime = new Date().format("yyyy-MM-dd hh:mm:ss");
-        params.remark = (type==1?"上班打":"下班打卡");
+        params.remark = (type==1?"上班打卡":"下班打卡");
         $.post(SERVER_URL.pass_add,params, function(ret){
             var record = ret.data;
 
             // 这里首页新增一行记录
             if(record){
-                if(table) {
+                var hash = location.hash.replace('#!', '');
+                if(hash.indexOf("track") > -1) {
+                    location.reload(true);
+                }else if(hash.indexOf("pass") > -1){
                     table.row.add(record);
                     table.draw(false);
                 }
@@ -205,7 +234,8 @@ function savePass(index){
 }
 
 function drawAllChart(text, deptId, deptPid){
-    draw24hData(true,'deptId', deptId);
+    draw24hData(true,{deptId:deptId, deptPid:deptPid});
+
     drawOnWorkByState(text+'人员在岗统计', {deptId:deptId,deptPid:deptPid});
     drawOnWorkByArea(text+'在岗人员位置分布', {deptId:deptId,deptPid:deptPid});
     drawOnWorkByInTime(text+'考勤情况统计', {deptId:deptId,deptPid:deptPid})

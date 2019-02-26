@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.ThirdTstUserMapper">
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.ThirdTstUser">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="unitencodeid" jdbcType="VARCHAR" property="unitencodeid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="showname" jdbcType="VARCHAR" property="showname" />
+    <result column="role" jdbcType="VARCHAR" property="role" />
+    <result column="tel1" jdbcType="VARCHAR" property="tel1" />
+    <result column="tel2" jdbcType="VARCHAR" property="tel2" />
+    <result column="tel3" jdbcType="VARCHAR" property="tel3" />
+    <result column="roomid" jdbcType="VARCHAR" property="roomid" />
+    <result column="curstate" jdbcType="TINYINT" property="curstate" />
+    <result column="curtitle" jdbcType="VARCHAR" property="curtitle" />
+    <result column="dm" jdbcType="VARCHAR" property="dm" />
+    <result column="yl" jdbcType="VARCHAR" property="yl" />
+    <result column="px" jdbcType="INTEGER" property="px" />
+    <result column="typename" jdbcType="VARCHAR" property="typename" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+</mapper>

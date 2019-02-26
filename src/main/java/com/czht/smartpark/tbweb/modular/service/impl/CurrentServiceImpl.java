@@ -49,6 +49,8 @@ public class CurrentServiceImpl implements CurrentService {
         List<OnWorkPassDTO> list = new ArrayList<OnWorkPassDTO>();
         if(bean.getType() == OnWorkTypeEnum.ONWORK.getType()) {// 在岗
             list = onworkCountMapper.getOnWorkPassRecords(bean);
+        }else if(bean.getType() == OnWorkTypeEnum.ONWORK24H.getType()){
+            list = onworkCountMapper.getOnWorkPassRecordsBy24h(bean);
         }else if(bean.getType() == OnWorkTypeEnum.TEMPWORK.getType()){// 临时离岗
             list = onworkCountMapper.getTempWorkPassRecords(bean);
         }else if(bean.getType() == OnWorkTypeEnum.OFFWORK.getType()){// 不在岗
@@ -59,6 +61,7 @@ public class CurrentServiceImpl implements CurrentService {
         }
         return list;
     }
+
 
     @Override
     public List<OnWrokCntDTO> countOnWorkByAttend(countOnWorkBean bean) {

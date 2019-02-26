@@ -54,7 +54,11 @@
       <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
     </table> -->
 
-    <table tableName="tb_pass_record_today" domainObjectName="PassRecordToday"><generatedKey column="new_pass_record_id" sqlStatement="Mysql" identity="true"/></table>
+    <table tableName="tb_third_oa_duty" domainObjectName="ThirdDuty"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
+    <table tableName="tb_third_oa_dutyuser" domainObjectName="ThirdDutyuser"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
+    <table tableName="tb_third_oa_leavetype" domainObjectName="ThirdLeavetype"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
+    <table tableName="tb_third_oa_leaveuser" domainObjectName="ThirdLeaveuser"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
+    <table tableName="tb_third_tst_user" domainObjectName="ThirdTstUser"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
 
   </context>
 </generatorConfiguration>

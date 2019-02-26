@@ -25,11 +25,11 @@ public class AttendController {
     public Tip getStatisticsRecords(AttendBean bean){
         //这里控制时间
         if(DateUtil.getWeek()==1){
-            bean.setStartDate(DateUtil.getLastMonday());
-            bean.setEndDate(DateUtil.getLastSunday());
+            bean.setStartDate(bean.getStartDate()==null?DateUtil.getPreMonday():bean.getStartDate());
+            bean.setEndDate(bean.getEndDate()==null?DateUtil.getPreSunday():bean.getEndDate());
         }else {
-            bean.setStartDate(DateUtil.getMonday());
-            bean.setEndDate(DateUtil.getSunday());
+            bean.setStartDate(bean.getStartDate()==null?DateUtil.getMonday():bean.getStartDate());
+            bean.setEndDate(bean.getEndDate()==null?DateUtil.getSunday():bean.getEndDate());
         }
         List<AttendStatisticsDTO> list = attendService.getAttendStatisticsRecords(bean);
         return ResultTip.success(list);
@@ -64,5 +64,10 @@ public class AttendController {
         return ResultTip.success();
     }
 
+    @RequestMapping(value = "modifyStatus", method = RequestMethod.POST)
+    public Tip updateAttendStatus(Integer attendId, String status) {
+        AttendanceRecord record = attendService.updateAttendStatus(attendId, status);
+        return ResultTip.success(record);
+    }
 
 }

@@ -36,6 +36,9 @@ body .purple-class .layui-layer-content {
 .m-l {margin-left: 10px;}
 .m-r {margin-right: 10px;}
 
+.m-xs-l {margin-left: 5px;}
+.m-xs-r {margin-right: 5px;}
+
 #query{padding-left: 20px;}
 
 #addPassWrap form{padding: 20px 10px;}

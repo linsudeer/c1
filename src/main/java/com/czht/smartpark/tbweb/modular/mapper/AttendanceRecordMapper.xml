@@ -186,4 +186,9 @@
   <select id="generalAttend">
     call p_attendance_calculate_tb(#{attendDate}, #{userId})
   </select>
+
+
+  <update id="updateAttendStatus">
+    update tb_attendance_record_tb set review_flag=1, leave_remark=#{status},review_remark=#{remark} where id=#{attendId}
+  </update>
 </mapper>

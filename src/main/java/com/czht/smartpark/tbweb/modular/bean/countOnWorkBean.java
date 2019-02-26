@@ -1,5 +1,7 @@
 package com.czht.smartpark.tbweb.modular.bean;
 
+import java.util.Date;
+
 public class countOnWorkBean extends PermissonBean{
 
     private Integer areaId;
@@ -11,6 +13,11 @@ public class countOnWorkBean extends PermissonBean{
      * 类型1-在岗 2-临时离岗 3-不在岗
      */
     private Integer type;
+
+    /**
+     * 统计的结束时间，主要是折线图
+     */
+    private String endDatetime;
 
     public Integer getAreaId() {
         return areaId;
@@ -47,4 +54,11 @@ public class countOnWorkBean extends PermissonBean{
         this.type = type;
     }
 
+    public String getEndDatetime() {
+        return endDatetime;
+    }
+
+    public void setEndDatetime(String endDatetime) {
+        this.endDatetime = endDatetime;
+    }
 }

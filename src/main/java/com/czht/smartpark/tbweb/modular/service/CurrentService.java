@@ -69,4 +69,5 @@ public interface CurrentService {
      * @return
      */
     List<OnWorkPassDTO> getOnWorkAttendPassRecords(countOnWorkBean bean);
+
 }

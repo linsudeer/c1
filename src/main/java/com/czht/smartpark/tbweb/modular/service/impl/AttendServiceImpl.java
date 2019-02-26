@@ -10,6 +10,7 @@ import com.czht.smartpark.tbweb.modular.dto.UserDTO;
 import com.czht.smartpark.tbweb.modular.mapper.AttendanceCausaMapper;
 import com.czht.smartpark.tbweb.modular.mapper.AttendanceRecordMapper;
 import com.czht.smartpark.tbweb.modular.service.AttendService;
+import com.czht.smartpark.tbweb.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +58,19 @@ public class AttendServiceImpl implements AttendService {
 
             // 这里增加修改记录到系统日志 TODO
         }
+    }
+
+    @Override
+    public AttendanceRecord updateAttendStatus(Integer attendId, String status) {
+        if(attendId == null) return null;
+
+        String remark = "";
+        UserDTO user = HttpServletRequestHolder.getSessionInfo();
+        remark = DateUtil.getDate("yyyy-MM-dd HH:mm:ss") + "修改考勤状态为"+status+";";
+        attendMapper.updateAttendStatus(attendId, status, remark);
+
+        // 增加操作记录
+
+        return attendMapper.selectByPrimaryKey(attendId);
     }
 }
