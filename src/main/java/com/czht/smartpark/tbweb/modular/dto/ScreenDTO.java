@@ -66,6 +66,8 @@ public class ScreenDTO {
 	 */
 	private String picUrl;
 
+	private byte[] idPic;
+
 	/**
 	 * 方法，进入还是离开
 	 */
@@ -182,5 +184,13 @@ public class ScreenDTO {
 
 	public void setDirect(String direct) {
 		this.direct = direct;
+	}
+
+	public byte[] getIdPic() {
+		return idPic;
+	}
+
+	public void setIdPic(byte[] idPic) {
+		this.idPic = idPic;
 	}
 }

@@ -35,6 +35,7 @@ function show(recordId){
 			var username = '',picUrl = '',direct = '';
 			username= data.userName;
 			picUrl = data.picUrl;
+			var idPic = data.idPic;
 			direct = data.direct=='进'?'进入':'离开';
 			passtime = data.passDateTime;
 			passtime = passtime.substr(11,5);
@@ -42,17 +43,32 @@ function show(recordId){
 				username = '<font color="red">访客</font>';
 			}
 			$("#screen #screenTitle").html(data.title);
-			$("#screen #header").attr("src",picUrl);
+			if(picUrl){
+				$("#screen #header").attr("src",picUrl);
+			}else if(idPic){
+				$("#screen #header").attr("src",'data:image/jpeg;base64,'+idPic);
+			}
+
 			$("#screen #topOneInfo").html(username+'已于'+passtime+'<br>'+direct+data.areaName);
 			$("#screen #allTotal").html('截至目前，'+data.areaName+'域已进入 <span style="color: #FFFF00">'+data.allTotalCnt+'</span>人次，'+data.cmpName+'<span style="color: #FFFF00">'+data.allSelfCnt+'</span>人次，访客<span style="color: #FFFF00">'+data.allOtherCnt+'</span>人次。');
 			$("#screen #todayTotal").html('今日进入'+data.areaName+'<span style="color: #FFFF00">'+data.todayTotalCnt+'</span>人次，'+data.cmpName+'<span style="color: #FFFF00">'+data.todaySelfCnt+'</span>人次，访客<span style="color: #FFFF00">'+data.todayOtherCnt+'</span>人次。');
 
 			var lis = $('.btn-ul>li');
 			if(lis.length<5){
-				$('#screen .btn-ul').prepend('<li><img src="'+picUrl+'"></li>');
+				if(picUrl){
+					$('#screen .btn-ul').prepend('<li><img src="'+picUrl+'"></li>');
+				}else if(idPic){
+					$('#screen .btn-ul').prepend('<li><img src="data:image/jpeg;base64,'+idPic+'"></li>');
+				}
+
 			}else{
 				$('#screen .btn-ul li:last-child').remove();
-				$('#screen .btn-ul').prepend('<li><img src="'+picUrl+'"></li>');
+				if(picUrl){
+
+				}else if(idPic){
+					$('#screen .btn-ul').prepend('<li><img src="data:image/jpeg;base64,'+idPic+'"></li>');
+				}
+
 			}
 	});
 }

@@ -299,7 +299,13 @@ public class PassServiceImpl implements PassService {
         //这里需要查询具体数据
         PassDTO passDTO = passRecordMapper.getPassRecordById(passRecordId);
         dto.setUserName(passDTO.getUserName());
-        dto.setPicUrl(passDTO.getFaceFdfsId());
+        if(passDTO == null || passDTO.getUserId()==0){// 访客是通行的照片
+            dto.setPicUrl(passDTO.getFaceFdfsId());
+        }else {//是证件照片
+            UserDTO user = userService.getSimpleUserInfo(passDTO.getUserId().intValue());
+            dto.setIdPic(user.getIdPic());
+        }
+
         dto.setPassDateTime(passDTO.getPassDatetime());
         dto.setDirect(passDTO.getDirect());
         return dto;
