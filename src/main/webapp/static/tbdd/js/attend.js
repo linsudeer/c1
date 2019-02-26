@@ -36,6 +36,7 @@ function initAttend(){
     //监听查询按钮
     $('form#query').on('click', 'button', function(e){
         var params = $(this).parents('form').serializeJSON();
+        params.deptId = $(QUERY_DEPT).val();
         console.log(params);
         attendTable.clear();
         attendTable.destroy();

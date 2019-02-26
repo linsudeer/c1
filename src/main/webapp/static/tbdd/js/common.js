@@ -179,8 +179,8 @@ function renderSelect(elem, placeholder, data, params,change, load) {
  * @param value
  */
 function setSelect2Val(elem, key, value){
-    elem.append('<option value="'+key+'" selected>'+value+'</option>');
-    elem.val(key).change();
+    elem.append('<option value="'+key+'">'+value+'</option>');
+    elem.val(key).trigger("change")
 }
 
 function renderTable(elem, url, data, options){

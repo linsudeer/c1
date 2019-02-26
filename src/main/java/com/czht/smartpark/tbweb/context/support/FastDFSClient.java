@@ -1,12 +1,19 @@
 package com.czht.smartpark.tbweb.context.support;
 
+import com.czht.smartpark.tbweb.modular.dmo.SysConfig;
+import com.czht.smartpark.tbweb.modular.dto.CodeDTO;
+import com.czht.smartpark.tbweb.modular.mapper.SysConfigMapper;
 import org.csource.common.MyException;
 import org.csource.common.NameValuePair;
 import org.csource.fastdfs.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.swing.*;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class FastDFSClient {
@@ -14,12 +21,18 @@ public class FastDFSClient {
 
     private StorageClient1 storageClient1 = null;
 
+    @Autowired
+    private SysConfigMapper configMapper = SpringContextHolder.getBean(SysConfigMapper.class);
 
+
+    /**
+     * 注释掉的部分为 直接读取配置文件，现在直接从数据库读取
+     */
     public FastDFSClient(){
-        String CONFIG_FILENAME = FastDFSClient.class.getResource("/conf/fdfs.conf").getPath();
-        try {
 
-            ClientGlobal.init(CONFIG_FILENAME);
+        try {
+//            ClientGlobal.init(FastDFSClient.class.getResource("/conf/fdfs.conf").getPath());
+            initConfig();
             TrackerClient trackerClient = new TrackerClient(ClientGlobal.g_tracker_group);
             TrackerServer trackerServer = trackerClient.getConnection();
             if (trackerServer == null) {
@@ -35,6 +48,51 @@ public class FastDFSClient {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void initConfig(){
+        if(configMapper == null) return;
+        List<SysConfig> configs = configMapper.getConfigs("fdfs_client");
+        if(configs != null && configs.size()>0){
+            for(SysConfig config : configs){
+                String name = config.getConfigName();
+                String value = config.getValue();
+                if("connect_timeout".equals(name)){
+                    ClientGlobal.setG_connect_timeout(Integer.parseInt(value));
+                }
+                if("network_timeout".equals(name)){
+                    ClientGlobal.setG_network_timeout(Integer.parseInt(value));
+                }
+                if("charset".equals(name)){
+                    ClientGlobal.setG_charset(value);
+                }
+                if("http.tracker_http_port".equals(name)){
+                    ClientGlobal.setG_tracker_http_port(Integer.parseInt(value));
+                }
+                if("http.anti_steal_token".equals(name)){
+                    ClientGlobal.setG_anti_steal_token(value=="no"?false:true);
+                }
+                if("http.secret_key".equals(name)){
+                    ClientGlobal.setG_secret_key(value);
+                }
+                if("tracker_server".equals(name)){
+                    String[] szTrackerServers = value.split(",");
+                    InetSocketAddress[] tracker_servers = new InetSocketAddress[szTrackerServers.length];
+
+                    for(int i = 0; i < szTrackerServers.length; ++i) {
+                        String[] parts = szTrackerServers[i].split("\\:", 2);
+                        if (parts.length != 2) {
+                            throw new RuntimeException("the value of item \"tracker_server\" is invalid, the correct format is host:port");
+                        }
+
+                        tracker_servers[i] = new InetSocketAddress(parts[0].trim(), Integer.parseInt(parts[1].trim()));
+                    }
+
+                    ClientGlobal.setG_tracker_group(new TrackerGroup(tracker_servers));
+                }
+
+            }
         }
     }
 

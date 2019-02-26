@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.czht.smartpark.tbweb.modular.mapper.SysConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.czht.smartpark.tbweb.modular.dmo.SysConfig" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="config_id" property="configId" jdbcType="INTEGER" />
+    <result column="config_type" property="configType" jdbcType="VARCHAR" />
+    <result column="typename" property="typename" jdbcType="VARCHAR" />
+    <result column="config_name" property="configName" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="VARCHAR" />
+    <result column="editable" property="editable" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select id="getConfigs" resultMap="BaseResultMap">
+    SELECT * FROM tb_sys_config where typename=#{typename} and editable=1;
+  </select>
+</mapper>

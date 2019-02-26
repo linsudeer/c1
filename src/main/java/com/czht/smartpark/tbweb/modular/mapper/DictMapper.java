@@ -23,4 +23,5 @@ public interface DictMapper extends Mapper<Dict> {
      * @return
      */
     CodeDTO getConfig (@Param("configName") String configName);
+
 }

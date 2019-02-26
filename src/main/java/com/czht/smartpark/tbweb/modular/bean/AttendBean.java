@@ -13,7 +13,12 @@ public class AttendBean extends Page {
     private String endDate;
 
     public Integer getDeptId() {
-        return deptId;
+
+        if(super.getDeptId() != null && super.getDeptId() > 0){
+            return super.getDeptId();
+        }else {
+            return deptId;
+        }
     }
 
     public void setDeptId(Integer deptId) {

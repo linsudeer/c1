@@ -100,5 +100,4 @@ public class CodeServiceImpl implements CodeService {
         return dictMapper.getConfig(configName);
     }
 
-
 }

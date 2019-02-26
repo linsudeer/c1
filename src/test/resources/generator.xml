@@ -54,11 +54,7 @@
       <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
     </table> -->
 
-    <table tableName="tb_third_oa_duty" domainObjectName="ThirdDuty"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
-    <table tableName="tb_third_oa_dutyuser" domainObjectName="ThirdDutyuser"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
-    <table tableName="tb_third_oa_leavetype" domainObjectName="ThirdLeavetype"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
-    <table tableName="tb_third_oa_leaveuser" domainObjectName="ThirdLeaveuser"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
-    <table tableName="tb_third_tst_user" domainObjectName="ThirdTstUser"><generatedKey column="id" sqlStatement="Mysql" identity="true"/></table>
+    <table tableName="tb_sys_config" domainObjectName="SysConfig"><generatedKey column="config_id" sqlStatement="Mysql" identity="true"/></table>
 
   </context>
 </generatorConfiguration>

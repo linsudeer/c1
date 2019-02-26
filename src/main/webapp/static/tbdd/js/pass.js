@@ -46,6 +46,7 @@ function initPass() {
     //监听查询按钮
     $('form#query').on('click', '#queryBtn', function(e){
         var params = $(this).parents('form').serializeJSON();
+        params.deptId = $(QUERY_DEPT).val();
         console.log(params);
         table.clear();
         table.destroy();
