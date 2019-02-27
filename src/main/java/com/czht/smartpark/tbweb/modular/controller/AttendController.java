@@ -7,6 +7,7 @@ import com.czht.smartpark.tbweb.modular.dmo.AttendanceRecord;
 import com.czht.smartpark.tbweb.modular.dto.AttendStatisticsDTO;
 import com.czht.smartpark.tbweb.modular.service.AttendService;
 import com.czht.smartpark.tbweb.util.DateUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,11 +26,11 @@ public class AttendController {
     public Tip getStatisticsRecords(AttendBean bean){
         //这里控制时间
         if(DateUtil.getWeek()==1){
-            bean.setStartDate(bean.getStartDate()==null?DateUtil.getPreMonday():bean.getStartDate());
-            bean.setEndDate(bean.getEndDate()==null?DateUtil.getPreSunday():bean.getEndDate());
+            bean.setStartDate(StringUtils.isBlank(bean.getStartDate())?DateUtil.getPreMonday():bean.getStartDate());
+            bean.setEndDate(StringUtils.isBlank(bean.getEndDate())?DateUtil.getPreSunday():bean.getEndDate());
         }else {
-            bean.setStartDate(bean.getStartDate()==null?DateUtil.getMonday():bean.getStartDate());
-            bean.setEndDate(bean.getEndDate()==null?DateUtil.getSunday():bean.getEndDate());
+            bean.setStartDate(StringUtils.isBlank(bean.getStartDate())?DateUtil.getMonday():bean.getStartDate());
+            bean.setEndDate(StringUtils.isBlank(bean.getEndDate())?DateUtil.getSunday():bean.getEndDate());
         }
         List<AttendStatisticsDTO> list = attendService.getAttendStatisticsRecords(bean);
         return ResultTip.success(list);

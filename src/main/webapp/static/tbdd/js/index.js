@@ -224,7 +224,12 @@ function savePass(index){
 
                 var hash = location.hash.replace('#!', '');
                 if(hash.indexOf("track") > -1) {
-                    location.reload(true);
+
+                    setUserInfo(record.userId);
+                    drawTrack(record.userId);
+                    table.clear();
+                    table.destroy();
+                    drawHistoryAttend(record.userId);
                 }else if(hash.indexOf("pass") > -1){
                     table.row.add(record);
                     table.draw(false);

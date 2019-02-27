@@ -70,9 +70,26 @@ function loadAttendTable(params){
             { "data":"overTime", "defaultContent":0,"name": "加班时长（小时）" ,"title": "加班时长（小时）" ,"orderable": true},
             { "data":"null", "name": "状态" ,"title": "状态" ,"orderable": false, "render":renderStatus}
         ],
-        /*buttons: [
-            'copy', 'excel', 'pdf'
-        ],*/
+        buttons: [
+            {
+                'extend':'excelHtml5',
+                'text':'导出',
+                'title':'人脸识别考勤系统-考勤报表',
+                'className':'btn btn-success btn-sm',
+                "exportOptions":{
+                    columns:[1,2,3,4,5,6,8,9]
+                },
+            },
+            /*{
+                'extend':'print',
+                'text':'打印',
+                'title':'人脸识别考勤系统-考勤报表',
+                'className':'btn btn-success btn-sm',
+                "exportOptions":{
+                    columns:[1,2,3,4,5,6,8,9]
+                },
+            }*/
+        ],
         rowCallback:function( row, data ){
             var remarNum = 0;
             if(data.causaRecords && data.causaRecords.length>0){// 考勤异常整行变红

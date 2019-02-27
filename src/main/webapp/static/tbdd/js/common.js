@@ -190,7 +190,7 @@ function renderTable(elem, url, data, options){
     options = options?options:{};
     options.bJQueryUI = true;
     options.pagingType = 'full_numbers';
-    options.sDom = 't<"row-fluid"lipB>';
+    options.sDom = 't<"row-fluid"lipB>';//'t<"row-fluid"lipB>';
     options.bFilter = false;
     options.processing = true;
     options.bPaginate=true;
@@ -208,6 +208,9 @@ function renderTable(elem, url, data, options){
         oPaginate: {
             "sPrevious": "上页","sNext": "下页","sLast": "末页","sFirst": "首页"
         }
+    }
+    if(!options.buttons){
+        options.buttons = [];
     }
     if(Array.isArray(url)){
         options.serverSide = false;

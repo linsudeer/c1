@@ -29,6 +29,9 @@ function initTrack(params){
     setUserInfo(params.userId);
     //当天通行记录（轨迹图片）
     drawTrack(params.userId, params.starttime, params.endtime);
+    // $(QUERY_STARTTIME).val(params.starttime);
+    // $(QUERY_ENDTIME).val(params.endtime);
+
     //加载此人历史考勤（历史考勤）
     drawHistoryAttend(params.userId);
 
@@ -40,20 +43,21 @@ function initTrack(params){
 
         //跳转页面
         if(p.userId){
-            var curdate = new Date().format("yyyy-MM-dd");
+            /*var curdate = new Date().format("yyyy-MM-dd");
             p.starttime = p.starttime?p.starttime:curdate;
             p.endtime = p.endtime?p.endtime:curdate;
-            go("track/"+p.userId+"/"+p.starttime+"/"+p.endtime);
+            go("track/"+p.userId+"/"+p.starttime+"/"+p.endtime);*/
+
+            // 这里是页面内加载
+            setUserInfo(p.userId);
+            drawHistoryAttend(p.userId, p.starttime, p.endtime);
+            drawTrack(p.userId, p.starttime, p.endtime);
+
         }else {
             layer.msg("请选择姓名！");
             return;
         }
 
-
-        // 这里是页面内加载
-        /*setUserInfo(p.userId);
-        drawHistoryAttend(p.userId, p.starttime, p.endtime);
-        drawTrack(p.userId, p.starttime, p.endtime);*/
     });
 
     // 监听新增按钮
@@ -127,7 +131,7 @@ function drawTrack(userId, startdate, enddate){
         // if(!list) return;
 
         // 获取所有区域
-        var areas = getAreas();
+        var areas = getAreas().reverse();
         if(areas.length==0) return;
 
         var seriesData = [];
@@ -186,7 +190,7 @@ function drawTrack(userId, startdate, enddate){
                     textStyle:{color:"#fff"}
                 }]	,
             color:colors,
-            legend: {left:"right",show:true,textStyle:{color:"#fff"},itemWidth:45,itemHeight:35,data:areaNames},
+            legend: {left:"right",show:true,textStyle:{color:"#fff"},itemWidth:45,itemHeight:35,data:areaNames.reverse()},
             calculable : true,
             xAxis : [{type : 'category',show:false,axisLabel : {formatter: '',textStyle:{color:"#fff"}},
                 axisLine:{lineStyle:{color: '#ffffff',width: 5,type: 'solid'}} ,splitLine:{show:true  },boundaryGap : true,data : xAxisData}],
@@ -199,7 +203,19 @@ function drawTrack(userId, startdate, enddate){
         trackChart.setOption(option);
 
         trackChart.on('click',function(params){
+            var fullFdfsId = params.data.fullFdfsId || '';
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                area: ['788px','443px'],
+                skin: 'layui-layer-nobg', //没有背景色
+                shadeClose: true,
+                content: '<img style="width: 100%;" src='+fullFdfsId+'>',
+                success: function(layero, index){
 
+                }
+            });
         });
     })
 
