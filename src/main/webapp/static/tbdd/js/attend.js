@@ -34,10 +34,20 @@ function initAttend(){
     }
 
     //监听查询按钮
-    $('form#query').on('click', 'button', function(e){
+    $('form#query').on('click', '#queryBtn', function(e){
         var params = $(this).parents('form').serializeJSON();
         params.deptId = $(QUERY_DEPT).val();
-        console.log(params);
+        attendTable.clear();
+        attendTable.destroy();
+        loadAttendTable(params);
+    });
+
+    //监听查询按钮
+    $('form#query').on('click', '#preAttendBtn', function(e){
+        var params = $(this).parents('form').serializeJSON();
+        params.deptId = $(QUERY_DEPT).val();
+        params.startDate = new Date().getPreMonday().format("yyyy-MM-dd");
+        params.endDate = new Date().getPreSunday().format("yyyy-MM-dd");
         attendTable.clear();
         attendTable.destroy();
         loadAttendTable(params);
@@ -53,13 +63,16 @@ function loadAttendTable(params){
             { "data":"deptName", "defaultContent":'',"name": "部门" ,"title": "部门" ,"orderable": true},
             { "data":"startDate", "defaultContent":'',"name": "开始日期" ,"title": "开始日期" ,"orderable": true, "render":renderAttendDate},
             { "data":"endDate", "defaultContent":'',"name": "结束日期" ,"title": "结束日期" ,"orderable": true, "render":renderAttendDate},
-            { "data":"absenceDays","defaultContent":'', "name": "应出勤（天）" ,"title": "应出勤（天）" ,"orderable": true},
-            { "data":"leaveDays", "defaultContent":'',"name": "请假（天）" ,"title": "请假（天）" ,"orderable": true},
-            { "data":"absenceTime", "defaultContent":'',"name": "应出勤（小时）" ,"title": "应出勤（小时" ,"orderable": true},
-            { "data":"attendTime", "defaultContent":'',"name": "考勤时长（小时）" ,"title": "考勤时长（小时）" ,"orderable": true},
-            { "data":"overTime", "defaultContent":'',"name": "加班时长（小时）" ,"title": "加班时长（小时）" ,"orderable": true},
+            { "data":"absenceDays","defaultContent":0, "name": "应出勤（天）" ,"title": "应出勤（天）" ,"orderable": true},
+            { "data":"leaveDays", "defaultContent":0,"name": "请假（天）" ,"title": "请假（天）" ,"orderable": true},
+            { "data":"absenceTime", "defaultContent":0,"name": "应出勤（小时）" ,"title": "应出勤（小时" ,"orderable": true},
+            { "data":"attendTime", "defaultContent":0,"name": "考勤时长（小时）" ,"title": "考勤时长（小时）" ,"orderable": true, "render":renderAttendTime},
+            { "data":"overTime", "defaultContent":0,"name": "加班时长（小时）" ,"title": "加班时长（小时）" ,"orderable": true},
             { "data":"null", "name": "状态" ,"title": "状态" ,"orderable": false, "render":renderStatus}
         ],
+        /*buttons: [
+            'copy', 'excel', 'pdf'
+        ],*/
         rowCallback:function( row, data ){
             var remarNum = 0;
             if(data.causaRecords && data.causaRecords.length>0){// 考勤异常整行变红
@@ -104,6 +117,10 @@ function loadAttendTable(params){
         }else {
             return "<a href='#!track/"+row.userId+"'>"+data+"</a>";
         }
+    }
+
+    function renderAttendTime(data, type,row){
+        return data?data.toFixed(1):0;
     }
 
     /**
@@ -170,7 +187,7 @@ function casuaDetail(index){
             return;
         }
         if(role.indexOf(ROLE.senior)>-1){// 大队领导可以查看所有数据，可以修改本部门和军事办的数据
-            if(user.deptId != data.deptId  && data.deptId!=5){
+            if(user.deptId != data.deptId  && data.deptId!=SENIOR_DEPT_ID){
                 layer.msg("请联系本室办领导修改");
                 return;
             }

@@ -1,5 +1,6 @@
 
 var QUERY_DEPT = "#query select[name='deptId']";//部门
+var QUERY_P_DEPT = "#query input[name='deptPid']";//部门
 var QUERY_UNAME = "#query select[name='userId']"; // 用户名
 var QUERY_AREA = "#query select[name='areaId']";//区域
 var QUERY_USERGROUP = "#query select[name='userGroup']";//人员分组
@@ -47,7 +48,9 @@ function initPass() {
     $('form#query').on('click', '#queryBtn', function(e){
         var params = $(this).parents('form').serializeJSON();
         params.deptId = $(QUERY_DEPT).val();
-        console.log(params);
+        if(params.deptId){
+            params.deptPid=0;
+        }
         table.clear();
         table.destroy();
         loadPassTable(params);
@@ -168,7 +171,7 @@ function editPassRecord(index){
             return;
         }
         if(role.indexOf(ROLE.senior)>-1){// 大队领导可以查看所有数据，可以修改本部门和军事办的数据
-            if(user.deptId != row.deptId  && row.deptId!=5){
+            if(user.deptId != row.deptId  && row.deptId!=SENIOR_DEPT_ID){
                 layer.msg("请联系本室办领导修改");
                 return;
             }

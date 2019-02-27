@@ -49,6 +49,8 @@ public class PassServiceImpl implements PassService {
     @Autowired
     private AttendanceRecordMapper attendMapper;
 
+    private FastDFSClient fastDFSClient = new FastDFSClient();
+
     @Override
     public List<PassDTO> getPassRecords(PassBean query) {
 
@@ -90,10 +92,9 @@ public class PassServiceImpl implements PassService {
 
 
         //照片，因为证件照是 byte[] 所以这里需要存储并返回地址
-        FastDFSClient fastdfs = new FastDFSClient();
         byte[] img = user.getIdPic();
         if(img != null && img.length>0){
-            String url = fastdfs.uploadFile(img, "jpg");
+            String url = fastDFSClient.uploadFile(img, "jpg");
             record.setFaceFdfsId(url);
             record.setFullFdfsId(url);
         }
@@ -188,11 +189,9 @@ public class PassServiceImpl implements PassService {
         PassRecord record = passRecordMapper.selectByPrimaryKey(recordId);
 
         // 删除图片
-        FastDFSClient fast = new FastDFSClient();
-
         if(record != null){
-            fast.deleteFile(record.getFaceFdfsId());
-            fast.deleteFile(record.getFullFdfsId());
+            fastDFSClient.deleteFile(record.getFaceFdfsId());
+            fastDFSClient.deleteFile(record.getFullFdfsId());
         }
         passRecordMapper.deleteByPrimaryKey(recordId);
         //删除today表

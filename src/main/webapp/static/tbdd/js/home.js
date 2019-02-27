@@ -60,7 +60,8 @@ function setAttendRankData(){
         for(var i=0;i<length;i++){
             var width = data[i].attendTime/35*100;
             width = (width>100)?100:width;
-            html.push('<div class="text-left msg-block"><div class="span5"><div class=""><i class="icon icon-user paihangIcon"></i><a href="#!attend"><strong>'+data[i].userName+'</strong></a></div></div>');
+            width = width?width:0;
+            html.push('<div class="text-left msg-block"><div class="span5"><div class=""><i class="icon icon-user paihangIcon"></i><a href="#!track/'+data[i].userId+'"><strong>'+data[i].userName+'</strong></a></div></div>');
             html.push('<div class="span6"><div class="progress progress-striped '+(i<3?"progress-success":(i<7?"":"progress-warning"))+'" title="'+data[i].attendTime+'小时"><div style="background-color:#058FFE;width: '+width+'%;">'+data[i].attendTime+'小时</div></div></div> </div>')
         }
         $('#paihang .msg-block').remove();
@@ -266,7 +267,7 @@ function drawOnWorkByInTime(title, params){
 
     $(elem+' h5').text(title);
 
-    $.get(SERVER_URL.current_count_attend, function(ret){
+    $.get(SERVER_URL.current_count_attend,params, function(ret){
         var data = ret.data;
         var legendData = [], xdata = [];
         if(data){
@@ -277,7 +278,9 @@ function drawOnWorkByInTime(title, params){
         }
         drawPie($(elem+" .chart")[0], legendData, xdata, function(p){
             if(p.data.value<=0) return;
-            var path = 'attendpass/'+p.data.attendType;
+            var deptId = params.deptId?params.deptId:0;
+            var deptPid = params.deptPid?params.deptPid:0;
+            var path = 'attendpass/'+p.data.attendType+"/"+deptId+"/"+deptPid;
             go(path);
         });
     });

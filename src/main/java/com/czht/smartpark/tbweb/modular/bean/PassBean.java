@@ -13,6 +13,8 @@ public class PassBean extends Page {
 
     private Integer deptId;
 
+    private Integer deptPid;
+
     private Long userId;
 
     private Long oldUserId;
@@ -45,6 +47,19 @@ public class PassBean extends Page {
 
     public void setDeptId(Integer deptId) {
         this.deptId = deptId;
+    }
+
+    @Override
+    public Integer getDeptPid() {
+        if(super.getDeptPid() != null && super.getDeptPid() > 0){
+            return super.getDeptPid();
+        }else {
+            return deptPid;
+        }
+    }
+
+    public void setDeptPid(Integer deptPid) {
+        this.deptPid = deptPid;
     }
 
     @Override

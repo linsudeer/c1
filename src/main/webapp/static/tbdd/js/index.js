@@ -35,7 +35,10 @@ function init(){
 
                 }else {// 其他权限可以查看
                     // 这里填充右边部门并查询
-                    var deptId = data.pId?data.id:0;
+
+                    var deptPid = data.type==1?data.id:data.pId;
+                    var deptId = data.type==2?data.id:0;
+                    $(QUERY_P_DEPT).val(deptPid);
                     setSelect2Val($(QUERY_DEPT), deptId, data.text);
                     $("#queryBtn").click();
                 }
@@ -83,7 +86,7 @@ function init(){
         if(role.indexOf(ROLE.general)>-1 || role.indexOf(ROLE.middle)>-1){// 部门以下的权限可以查看本部门的数据
             renderSelect($(PASS_UNAME),'姓名', SERVER_URL.code_user, {deptId: user.deptId});
         }else if(role.indexOf(ROLE.senior)>-1){
-            renderSelect($(PASS_UNAME),'姓名', SERVER_URL.code_user, {deptId: user.deptId+', 5'});
+            renderSelect($(PASS_UNAME),'姓名', SERVER_URL.code_user, {deptId: user.deptId+', '+SENIOR_DEPT_ID});
         }else {// 其他权限可以查看
             renderSelect($(PASS_UNAME),'姓名', SERVER_URL.code_user);
         }
@@ -203,6 +206,7 @@ function savePass(index){
             // 这里首页更新一行记录
             if(record){
                 table.row(index).data(record);
+                table.draw(false);
                 layer.msg('修改成功!');
             }
 

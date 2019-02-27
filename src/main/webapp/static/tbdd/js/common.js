@@ -4,6 +4,8 @@ var SESSION_USER = "session_user";
 var INDEX_MAIN_ID = "#main";
 var HOME_TREE_ID = "#deptTree";
 
+var SENIOR_DEPT_ID = 5;// senior对应的部门权限，多了一个军事办，这里是军事办的部门id
+
 var ROLE = {
     /**
      * 拥有最大权限，可以查看系统所有数据，以及所有修改权限；可以查看后台管理系统
@@ -54,10 +56,10 @@ $(function(){
         url: "/index.html" , // 默认URL
         aysnc: false , // 默认同步加载
         beforeSend: function(xhr){
-            console.log(xhr);
+
         },
         error: function(jqXHR, textStatus, errorMsg){ // 出错时默认的处理函数
-            alert( '发送AJAX请求到"' + this.url + '"时出错[' + jqXHR.status + ']：' + errorMsg );
+            // alert( '发送AJAX请求到"' + this.url + '"时出错[' + jqXHR.status + ']：' + errorMsg );
         }
     });
 
@@ -298,7 +300,30 @@ Date.prototype.minOfCurdate = function(){
 Date.prototype.maxOfCurdate = function(){
     return this.format('yyyy-MM-dd 23:59:59');
 }
+//上周周一
+Date.prototype.getPreMonday = function(){
+    return this.getMonday(-1);
+}
+//上周周日
+Date.prototype.getPreSunday = function(){
+    return this.getSunday(-1);
+}
 
+/**
+ * 获得当前周 前n周周一（+n）或后n周周一（-n）
+ */
+Date.prototype.getMonday = function(n){
+    var c = n<0?-6:6;
+    this.setDate(this.getDate()+(n*this.getDay()+c));
+    return this;
+}
+/**
+ * 获得当前周 前n周周日（+n）或后n周周日（-n）
+ */
+Date.prototype.getSunday = function(n){
+    this.setDate(this.getDate()+(n*this.getDay()));
+    return this;
+}
 function parseDate(str){
     return new Date(Date.parse(str.replace(/\-/g,"/")));
 }

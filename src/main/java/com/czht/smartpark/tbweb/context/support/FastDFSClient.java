@@ -31,8 +31,8 @@ public class FastDFSClient {
     public FastDFSClient(){
 
         try {
-//            ClientGlobal.init(FastDFSClient.class.getResource("/conf/fdfs.conf").getPath());
-            initConfig();
+            ClientGlobal.init(FastDFSClient.class.getResource("/conf/fdfs.conf").getPath());
+//            initConfig();
             TrackerClient trackerClient = new TrackerClient(ClientGlobal.g_tracker_group);
             TrackerServer trackerServer = trackerClient.getConnection();
             if (trackerServer == null) {

@@ -239,9 +239,10 @@ function drawHistoryAttend(userId,startDate,endDate) {
         ],
         rowCallback:function( row, data ){
             var remarkNum = 0;
+            var content = '';
             if(data.causaRecords && data.causaRecords.length>0){// 考勤异常整行变红
                 var flag = 1;
-                var content = '';
+
                 for(var i=0; i<data.causaRecords.length; i++){
                     var r = data.causaRecords[i];
                     if(r.reviewFlag == 0){// 这里如果有一个0 则说明还有异常情况未处理
@@ -250,28 +251,34 @@ function drawHistoryAttend(userId,startDate,endDate) {
                         content += (remarkNum+=1)+". "+r.reviewUserName+"于"+ r.reviewTime+'修改了'+r.causalname+'状态，原因：'+r.reviewRemark+";<br />";
                     }
                 }
-                if(flag == 0){
+                if(!data.reviewFlag && flag == 0){
                     $(row).css('color', 'red');
                     $('td>a', row).css('color', 'red');
                 }else {// 这里说明全部是1 则应该显示黄色
-                    $('td>a', row).on('mouseover', function(){
-                        tip(content,$('td>a', row));
-                    });
-                    $('td>a', row).on('mouseout', function(){
-                        closeTip();
-                    });
+
                     $(row).css('color', 'yellow');
                     $('td>a', row).css('color', 'yellow');
-                    $('td>a', row).prepend('<span class="glyphicon glyphicon-info-sign m-xs-r" aria-hidden="true"></span>')
                 }
 
             }
             if(data.reviewFlag==1){
+                $(row).css('color', 'yellow');
+                $('td>a', row).css('color', 'yellow');
+
                 content+= (remarkNum+=1)+". "+data.reviewRemark;
             }
             if(!data.reviewFlag && data.actualTime<data.absenceTime){
                 $(row).css('color', 'red');
                 $('td>a', row).css('color', 'red');
+            }
+            if(content){
+                $('td>a', row).prepend('<span class="glyphicon glyphicon-info-sign m-xs-r" aria-hidden="true"></span>')
+                $('td>a', row).on('mouseover', function(){
+                    tip(content,$('td>a', row));
+                });
+                $('td>a', row).on('mouseout', function(){
+                    closeTip();
+                });
             }
 
         }
@@ -301,14 +308,14 @@ function drawHistoryAttend(userId,startDate,endDate) {
      * @param row
      * @returns {string}
      */
-    function renderLeaveRemark(data, type, row) {
+    function renderLeaveRemark(data, type, row, meta) {
         var content = "<span style='color:"+getLeaveColor(data)+"'>"+data+"</span>";
         if(row.pairFlag==1){
             data = '记录不全';
         }
         if(!row.reviewFlag && row.actualTime<row.absenceTime){
             data = "时长不足"
-            content = "<span style='color:"+getLeaveColor(data)+";cursor: pointer' onclick='openModifyStatus("+row.meta+")'><span class='glyphicon glyphicon-pencil m-xs-r' aria-hidden='true'></span><span>"+data+"</span></span>";
+            content = "<span style='color:"+getLeaveColor(data)+";cursor: pointer' onclick='openModifyStatus("+meta.row+")'><span class='glyphicon glyphicon-pencil m-xs-r' aria-hidden='true'></span><span>"+data+"</span></span>";
         }
         if(row.causaRecords && row.causaRecords.length>0 ){
             for(var i=0; i<row.causaRecords.length; i++){
@@ -407,6 +414,7 @@ function saveAttendStatus(layindex, rowIndex, attendId, status){
         var record = ret.data;
         if(record){
             table.row(rowIndex).data(record);
+            table.draw(false);
             layer.msg('修改成功!');
         }
 
