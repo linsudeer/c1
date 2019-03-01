@@ -201,17 +201,18 @@ function drawTrack(userId, startdate, enddate){
         };
         var trackChart = echarts.init(document.getElementById(TRACK_WRAP));
         trackChart.setOption(option);
-
+        trackChart.off('click');
         trackChart.on('click',function(params){
             var fullFdfsId = params.data.fullFdfsId || '';
             layer.open({
                 type: 1,
                 title: false,
                 closeBtn: 0,
-                area: ['788px','443px'],
+                area: ['800px', '500px'],
+                offset:'auto',
                 skin: 'layui-layer-nobg', //没有背景色
                 shadeClose: true,
-                content: '<img style="width: 100%;" src='+fullFdfsId+'>',
+                content: '<img style="width: 100%;height: 100%;" src='+fullFdfsId+'>',
                 success: function(layero, index){
 
                 }
@@ -328,6 +329,7 @@ function drawHistoryAttend(userId,startDate,endDate) {
         var content = "<span style='color:"+getLeaveColor(data)+"'>"+data+"</span>";
         if(row.pairFlag==1){
             data = '记录不全';
+            content = "<span style='color:"+getLeaveColor(data)+";'><span>"+data+"</span></span>";
         }
         if(!row.reviewFlag && row.actualTime<row.absenceTime){
             data = "时长不足"
@@ -337,9 +339,13 @@ function drawHistoryAttend(userId,startDate,endDate) {
             for(var i=0; i<row.causaRecords.length; i++){
                 if(row.causaRecords[i].reviewFlag == 0){// 这里如果有一个0 则说明还有异常情况未处理
                     data = row.causaRecords[i].causalname;
+                    content = "<span style='color:"+getLeaveColor(data)+";'><span>"+data+"</span></span>";
                     break;
                 }
             }
+        }
+        if(row.leaveStatus>0){
+            content = "<span style='color:"+getLeaveColor(data)+";'><span>"+row.leaveRemark+"</span></span>";
         }
         return content;
     }
@@ -370,7 +376,10 @@ function drawHistoryAttend(userId,startDate,endDate) {
         }
         else if(data==7){
             week = '星期日';
+        }else {
+            week = "";
         }
+
         return week;
     }
 }

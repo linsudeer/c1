@@ -58,6 +58,9 @@ $(function(){
         beforeSend: function(xhr){
 
         },
+        complete:function(xhr,status){
+            console.log(status);
+        },
         error: function(jqXHR, textStatus, errorMsg){ // 出错时默认的处理函数
             // alert( '发送AJAX请求到"' + this.url + '"时出错[' + jqXHR.status + ']：' + errorMsg );
         }
@@ -73,9 +76,12 @@ $(function(){
  */
 function load(path, callback, params){
     var url = DOMAIN+HTML_PATH+path+'.html';
+    $(document.body).append('<script src="../js/'+path+'.js"></script>');
     $(INDEX_MAIN_ID).load(url,'',function(response,status,xhr){
-        if(typeof callback == 'function'){
-            callback(params);
+
+        if(callback){
+            // callback(params);
+            eval(callback+"("+JSON.stringify(params)+")");
         }
     });
 }
@@ -446,4 +452,18 @@ function auth(){
 
 }
 
+
+function getUrlParams(name){
+    if(!name) return '';
+    var param = window.location.search.substr(1).split('&');
+    var paramObj = {};
+    if(param && param.length>0){
+        for(var i=0;i<param.length;i++){
+            var obj = param[i].split('=');
+            paramObj[obj[0]] = obj[1];
+        }
+        return paramObj[name] || '';
+    }
+    return "";
+}
 

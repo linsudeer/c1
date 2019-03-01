@@ -97,6 +97,8 @@ function initPass() {
 
 function loadPassTable(params) {
 
+    var user = getCacheObj(SESSION_USER);
+
     var options = {
         ordering:false,
         columns: [
@@ -153,7 +155,7 @@ function loadPassTable(params) {
     function renderOpt(data, type, row, meta){
 
         var content =  "<a href='javascript:void(0)' onclick='editPassRecord("+meta.row+")'>修改</a>";
-        if(row.logs && row.logs.length>0){
+        if(row.logs && row.logs.length>0 || ROLE.admin.indexOf(user.dataRole)>-1){
             content += "&nbsp;&nbsp;&nbsp;<a href='javascript:void(0)' onclick='delPassRecord("+meta.row+")'>删除</a>";
         }
         return content;
@@ -194,7 +196,7 @@ function editPassRecord(index){
         area: ['600px', '380px'],
         btn: ['保存', '关闭'],
         yes: function(idx){
-            savePass(index);
+            savePass(idx);
         },
         success: function(layero, index){
 

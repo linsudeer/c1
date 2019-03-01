@@ -17,6 +17,13 @@
   </resultMap>
 
   <select id="getConfigs" resultMap="BaseResultMap">
-    SELECT * FROM tb_sys_config where typename=#{typename} and editable=1;
+    SELECT * FROM tb_sys_config where typename=#{configName} and editable=1;
+  </select>
+  
+  <select id="getConfigsByNames" resultMap="BaseResultMap">
+        SELECT * FROM tb_sys_config where editable=1 and typename in 
+        <foreach collection="configNames" item="name" open="(" close=")" separator=",">
+          #{name}
+        </foreach>
   </select>
 </mapper>

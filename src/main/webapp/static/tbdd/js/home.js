@@ -240,6 +240,7 @@ function drawOnWorkByArea(title,params){
     var elem = '#chart2';
     $(elem+' h5').text(title);
     $.get(SERVER_URL.current_areagroup,params, function(res){
+        if(!res.data) return;
         var list = res.data;
         var legendData = [];
         var data = [];

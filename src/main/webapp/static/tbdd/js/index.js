@@ -6,6 +6,7 @@ var PASS_AREA = "#addPassWrap select[name='areaId']";//区域
 var PASS_DIRECT = "#addPassWrap select[name='direct']";//进出方向
 var PASS_RECORD_ID ="#addPassWrap input[name='recordId']";
 var PASS_REMARK = "#addPassWrap input[name='remark']";
+var MODIFY_PWD_WRAP = "#modifyPwdWrap";
 
 
 
@@ -78,6 +79,44 @@ function init(){
         });
     });
 
+    // 监听新增按钮
+    $('#editPwd').on('click', function (e){
+        layer.open({
+            type:1,
+            content:$(MODIFY_PWD_WRAP),
+            area: ['600px', '350px'],
+            btn: ['保存', '关闭'],
+            yes: function(index){
+                var params = $(MODIFY_PWD_WRAP).children("form").serializeJSON();
+                if(!params.oldPwd) {
+                    layer.msg("请输入原密码！");
+                    return;
+                }
+                if(!params.newPwd) {
+                    layer.msg("请输入新密码！");
+                    return;
+                }
+                if(params.newPwd != params.newPwd2){
+                    layer.msg("两次输入的密码不一致！");
+                    return;
+                }
+                $.post(SERVER_URL.user_modifyPwd,params, function(ret){
+                    if(ret.code == SUCCESS){
+                        layer.msg("密码修改成功，再次登录将使用新密码");
+                        layer.close(index);
+                    }else {
+                        layer.msg(ret.msg);
+
+                    }
+
+                })
+            },
+            success:function(){
+                $(MODIFY_PWD_WRAP).children("input").val("");
+            }
+        });
+    });
+
     // 初始化公用部分
     // 对姓名进行权限判断，如果senior权限，则可以修改本部门和大队领导的权限
     var user = getCacheObj(SESSION_USER);
@@ -96,7 +135,7 @@ function init(){
 
     renderSelect($(PASS_AREA),'区域', SERVER_URL.code_area);
     renderSelect($(PASS_DIRECT),'进出方向', SERVER_URL.code_direct);
-    laydate.render({ elem: PASS_DATETIME, type: 'datetime'});
+    laydate.render({ elem: PASS_DATETIME, type: 'datetime', max:0});
 
     setData();
 
@@ -105,6 +144,7 @@ function init(){
 // 加载区域数据
 function setAreaData() {
     var user = getCacheObj(SESSION_USER);
+    if(!user) return;
     $.get(SERVER_URL.user_simple+"/"+user.userId, function(ret){
         var u = ret.data;
         $("#userImg").attr('src','data:image/jpeg;base64,'+(u.idPic || ''));
@@ -249,3 +289,5 @@ function drawAllChart(text, deptId, deptPid){
     drawOnWorkByArea(text+'在岗人员位置分布', {deptId:deptId,deptPid:deptPid});
     drawOnWorkByInTime(text+'考勤情况统计', {deptId:deptId,deptPid:deptPid})
 }
+
+

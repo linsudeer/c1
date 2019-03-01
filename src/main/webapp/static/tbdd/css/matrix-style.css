@@ -421,7 +421,7 @@ input[type="text"]:focus, input[type="textarea"]:focus {
 	top: -7px;
 }
 .container-fluid .row-fluid:first-child {
-	margin-top: 12px;
+	/*margin-top: 12px;*/
 }
 .navbar-inverse .brand, .navbar-inverse .nav>li>a {
     color: #fff;

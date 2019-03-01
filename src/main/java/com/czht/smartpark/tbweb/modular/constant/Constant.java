@@ -7,6 +7,11 @@ public interface Constant {
 
     String SESSION_USER = "TB_USER";
 
+    /**
+     * 第三方登陆token
+     */
+    String SESSION_THIRD_OA_TOKEN = "THIRD_OA_TOKEN";
+
     int DEFAULT_LIMIT = 1000;
 
     /**
@@ -53,6 +58,9 @@ public interface Constant {
      * 统计访客总数（今天之前的所有数据）
      */
     String SCREEN_ALL_OTHER_CNT = "SCREEN_ALL_OTHER_CNT";
+
+
+    String MSG_SYSNAME = "人脸识别系统1";
 
 
 }

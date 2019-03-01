@@ -1,4 +1,5 @@
 var DOMAIN = 'http://localhost:8089';
+// var DOMAIN = 'http://192.168.10.201:8080/tbweb';
 var HTML_PATH = '/static/tbdd/html/';
 
 // 通行记录类
@@ -38,5 +39,7 @@ var SERVER_URL = {
 
     screen_heartbeat:DOMAIN+"/pass/screenHearBeat",//心跳
     screen_data:DOMAIN+"/pass/getScreenData",//心跳
+
+    user_modifyPwd:DOMAIN+"/user/modifyPwd",//修改密码
 
 }

@@ -1,6 +1,7 @@
 package com.czht.smartpark.tbweb.modular.dto;
 
 import com.czht.smartpark.tbweb.modular.dmo.SysOplog;
+import com.czht.smartpark.tbweb.util.DateUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Date;
@@ -61,6 +62,11 @@ public class PassDTO {
     private Integer reviewFlag;
 
     private List<SysOplog> logs;
+
+    /**
+     * 过滤标识，1-被过滤 0-正常
+     */
+    private Integer filterFlag;
 
     public Long getPassRecordId() {
         return passRecordId;
@@ -244,5 +250,42 @@ public class PassDTO {
 
     public void setLogs(List<SysOplog> logs) {
         this.logs = logs;
+    }
+
+    public Integer getFilterFlag() {
+        return filterFlag;
+    }
+
+    public void setFilterFlag(Integer filterFlag) {
+        this.filterFlag = filterFlag;
+    }
+
+    @Override
+    public String toString() {
+        return "PassDTO{" +
+                "passRecordId=" + passRecordId +
+                ", passDatetime=" + DateUtil.format(passDatetime, "yyyy-MM-dd HH:mm:ss") +
+                ", userId=" + userId +
+                ", deviceId=" + deviceId +
+                ", deviceType=" + deviceType +
+                ", deviceDirection=" + deviceDirection +
+                ", direct='" + direct + '\'' +
+                ", deviceName='" + deviceName + '\'' +
+                ", deviceAreaId=" + deviceAreaId +
+                ", deviceAreaName='" + deviceAreaName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userSex=" + userSex +
+                ", userType=" + userType +
+                ", userGroup=" + userGroup +
+                ", userGroupName='" + userGroupName + '\'' +
+                ", groupId=" + groupId +
+                ", deptId=" + deptId +
+                ", deptName='" + deptName + '\'' +
+                ", deptParentId=" + deptParentId +
+                ", fullFdfsId='" + fullFdfsId + '\'' +
+                ", faceFdfsId='" + faceFdfsId + '\'' +
+                ", reviewFlag=" + reviewFlag +
+                ", logs=" + logs +
+                '}';
     }
 }

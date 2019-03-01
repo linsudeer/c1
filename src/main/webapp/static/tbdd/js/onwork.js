@@ -5,9 +5,14 @@ var TABLE_TITLE = "#tableTitle";
 var PASS_TABLE = "#passTable";
 var CAROUSEWRAP = "#carousel";
 
+var QUERY_DEPT = "#query select[name='deptId']";//部门
+var QUERY_P_DEPT = "#query input[name='deptPid']";//部门
+
+
 function initOnwork(params){
     setTitleData(params.deptPid, params.deptId, params.type);
     loadData(params.deptPid, params.deptId, params.type, params.areaId, decodeURI(params.endDatetime));
+
 
 }
 
@@ -15,8 +20,7 @@ function initOnwork(params){
  * 设置标题
  */
 function setTitleData(deptPid, deptId, type){
-    if(type){// 类型1-在岗 2-临时离岗 3-不在岗 4-24小时在岗
-
+    if(+type){// 类型1-在岗 2-临时离岗 3-不在岗 4-24小时在岗
     }else {// 没有类型，显示所有，根据部门显示
         $.get(SERVER_URL.current_typegroup,{deptId:deptId, deptPid:deptPid}, function(res){
             var data = res.data;
@@ -37,14 +41,18 @@ function setTitleData(deptPid, deptId, type){
 
             }
             $(HEADER).text(deptName+"在岗人员");
-            if(!deptId){
+            if(!+deptId){
                 deptName = "";
+            }else {
+                setSelect2Val($(QUERY_DEPT), deptId, deptName)
             }
+
             var html='<span>'+deptName+'人员统计：</span>\n' +
                 '\t\t\t\t\t<span> 共 '+total+'人，  </span>\n' +
                 '\t\t\t\t\t<span> 在岗'+onCnt+'人， </span>\n' +
                 '\t\t\t\t\t<span> 不在岗'+offCnt+'人。</span>';
-            if(!deptId){
+
+            if(!+deptId || data.length>50){
                 $('#tab2').removeClass('active')
                 $('#tab1').addClass('active')
                 $(TABLE_TITLE).html(html + '<a data-toggle="tab" href="#tab2"></a>')
@@ -146,7 +154,7 @@ function drawTable(list) {
     var options = {
         serverSide:false,
         columns: [
-            { "data":null, "width":50, "name": "序号" ,"title": "序号", "render":xh},
+            { "data":null, "width":50, "name": "序号" ,"title": "序号", "orderable": false, "render":xh},
             { "data":"userName", "defaultContent":'',"name": "姓名" ,"title": "姓名" ,"orderable": false, "render":renderUserName},
             { "data":"deptName", "defaultContent":'',"name": "部门" ,"title": "部门" ,"orderable": false},
             { "data":"areaName", "defaultContent":'',"name": "最后出现区域" ,"title": "最后出现区域" ,"orderable": false},

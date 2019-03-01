@@ -5,6 +5,7 @@ import com.czht.smartpark.tbweb.context.tip.ResultTip;
 import com.czht.smartpark.tbweb.context.tip.bean.Tip;
 import com.czht.smartpark.tbweb.modular.bean.LoginBean;
 import com.czht.smartpark.tbweb.modular.constant.Constant;
+import com.czht.smartpark.tbweb.modular.dto.ThirdOaUserDTO;
 import com.czht.smartpark.tbweb.modular.dto.UserDTO;
 import com.czht.smartpark.tbweb.modular.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -47,8 +48,22 @@ public class LoginController {
     }
 
     @RequestMapping(value = "checklogin", method = RequestMethod.GET)
-    public Tip checklogin(HttpServletRequest request){
+    public Tip checklogin(HttpServletRequest request, String token){
         HttpSession session = request.getSession();
+        //先判断oa是不是已经登陆（没有token和查找到用户为空都是没有登陆），在判断本系统是否登陆
+        String sessionToken = (String)session.getAttribute(Constant.SESSION_THIRD_OA_TOKEN);
+        if(StringUtils.isBlank(sessionToken)){//没有登陆
+            if(StringUtils.isNotBlank(token)) {
+                ThirdOaUserDTO oauser = userService.getThirdOaUser(token);
+                if (oauser != null) {
+                    UserDTO user = userService.getByName(oauser.getAccountName());
+                    if (user != null) {
+                        session.setAttribute(Constant.SESSION_USER, user);
+                        session.setAttribute(Constant.SESSION_THIRD_OA_TOKEN, token);
+                    }
+                }
+            }
+        }
         UserDTO user = (UserDTO) session.getAttribute(Constant.SESSION_USER);
         if(user != null) {
             return ResultTip.success(user);

@@ -39,4 +39,15 @@ public interface UserMapper extends Mapper<User> {
      * @return
      */
     UserDTO getSimpleUserInfo(@Param("userId") Integer userId);
+
+    /**
+     * 查找用户,名字确保唯一
+     * @param username
+     * @return
+     */
+    UserDTO getSimpleUserByName(@Param("username") String username);
+
+    User checkOldPwd(@Param("userId") Long userId, @Param("oldPwd") String oldPwd);
+
+    void modifyPwd(@Param("userId") Long userId, @Param("pwd") String pwd);
 }

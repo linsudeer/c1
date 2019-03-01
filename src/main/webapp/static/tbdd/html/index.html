@@ -63,7 +63,8 @@
                 <li>
                     <a><i class="icon icon-user"></i><span class="navSapn" id="headerUserName">--</span></a>
                     <div class="header-menu-sub">
-                        <p id="logout"><a href="javascript:void(0)">注销</a></p>
+                        <p id="editPwd"><a href="javascript:void(0)">修改密码</a></p>
+                        <p id="logout"><a href="javascript:void(0)">退出系统</a></p>
                     </div>
                 </li>
             </ul>
@@ -104,7 +105,13 @@
 <main id="main"></main>
 
 <!-- 页脚 -->
-<footer class="footer"></footer>
+<footer class="footer">
+    <!--<div id="navShouToggle" class="navShouToggle" style="display: none;">
+        <img src="../img/mini.png" alt="" id="navTop">
+    </div>
+    <span id="copyright" class="copyright">版权所有：@北京***科技有限公司</span>
+    <span id="version" class="version">V2.1.0</span>-->
+</footer>
 
 <!-- 公用的部分 -->
 
@@ -135,13 +142,30 @@
     </form>
 </div>
 
+<div id="modifyPwdWrap" style="display: none;">
+    <form>
+        <div class="form-group">
+            <label>原&nbsp;&nbsp;密&nbsp;&nbsp;码：</label>
+            <input type="password" class="form-control" name="oldPwd" style="display: inline-block;" placeholder="原密码">
+        </div>
+        <div class="form-group">
+            <label>新&nbsp;&nbsp;密&nbsp;&nbsp;码：</label>
+            <input type="password" class="form-control" name="newPwd" style="display: inline-block;" placeholder="新密码">
+        </div>
+        <div class="form-group">
+            <label>确认密码：</label>
+            <input type="password" class="form-control" name="newPwd2" style="display: inline-block;" placeholder="再次输入新密码">
+        </div>
+    </form>
+</div>
+
 <script src="../js/index.js"></script>
-<script src="../js/home.js"></script>
-<script src="../js/pass.js"></script>
-<script src="../js/attendpass.js"></script>
-<script src="../js/track.js"></script>
-<script src="../js/onwork.js"></script>
-<script src="../js/attend.js"></script>
+<!--<script src="../js/home.js"></script>-->
+<!--<script src="../js/pass.js"></script>-->
+<!--<script src="../js/attendpass.js"></script>-->
+<!--<script src="../js/track.js"></script>-->
+<!--<script src="../js/onwork.js"></script>-->
+<!--<script src="../js/attend.js"></script>-->
 
 <script src="../js/router.js"></script>
 

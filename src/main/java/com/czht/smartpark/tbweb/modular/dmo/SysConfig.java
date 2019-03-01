@@ -209,4 +209,19 @@ public class SysConfig {
     public void setUpdated(Date updated) {
         this.updated = updated;
     }
+
+    @Override
+    public String toString() {
+        return "SysConfig{" +
+                "configId=" + configId +
+                ", configType='" + configType + '\'' +
+                ", typename='" + typename + '\'' +
+                ", configName='" + configName + '\'' +
+                ", value='" + value + '\'' +
+                ", editable=" + editable +
+                ", remark='" + remark + '\'' +
+                ", created=" + created +
+                ", updated=" + updated +
+                '}';
+    }
 }

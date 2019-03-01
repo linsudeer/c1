@@ -3,17 +3,18 @@
 
 
 Q.reg('index',function(){
-    load('home', initHome);
+    checkLogin();
+    load('home', "initHome");
 }).reg('pass', function(){//记录查询
-    load('pass',  initPass);
+    load('pass',  "initPass");
 }).reg('attendpass', function(type, deptId, deptPid){//记录查询
-    load('attendpass',  initAttendPass, {type:type, deptId:deptId, deptPid:deptPid});
+    load('attendpass',  "initAttendpass", {type:type, deptId:deptId, deptPid:deptPid});
 }).reg('attend', function() {//综合考勤
-    load('attend', initAttend);
+    load('attend', "initAttend");
 }).reg('track', function(userId, start, end) {//个人轨迹
-    load('track', initTrack, {userId: userId, starttime:start, endtime:end});
+    load('track', "initTrack", {userId: userId, starttime:start, endtime:end});
 }).reg('onwork', function(pid, id, type,areaId, endDatetime){// 部门在岗情况
-    load('onwork', initOnwork, {deptPid:pid, deptId:id, type:type, areaId:areaId, endDatetime:endDatetime});
+    load('onwork', "initOnwork", {deptPid:pid, deptId:id, type:type, areaId:areaId, endDatetime:endDatetime});
 });
 
 
@@ -23,8 +24,18 @@ Q.init({
     pop:function(L,arg){/* 每次有url变更时都会触发pop回调 */
         // console.log(L);
         layer.closeAll()
-        // 校验登陆
-        $.get(SERVER_URL.checklogin, function(res){
+        checkLogin();
+
+    }
+});
+
+function checkLogin(){
+    var token = getUrlParams('access_token');
+    // 校验登陆
+    $.ajax({
+        url:SERVER_URL.checklogin,
+        data:{token:token},
+        success:function(res){
             var user = res.data;
             if(user){
                 setCahceObj(SESSION_USER, user);
@@ -34,7 +45,7 @@ Q.init({
                     window.location.href=DOMAIN+HTML_PATH+"login.html";
                 },1000);
             }
-        })
-    }
-});
-
+        },
+        async:false
+    })
+}

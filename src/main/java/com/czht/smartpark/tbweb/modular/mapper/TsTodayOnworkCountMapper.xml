@@ -166,7 +166,7 @@
         and pass.device_area_id=#{areaId}
       </if>
     </where>
-    order by lastDirect desc
+    order by onwork_status desc, u.reserve_int asc
   </select>
 
   <select id="getOnWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
@@ -195,6 +195,7 @@
       and dept.parent_id=#{deptPid}
     </if>
     ) t left join tb_user u on t.user_id=u.user_id
+    ORDER BY u.reserve_int asc
   </select>
 
   <select id="getOnWorkPassRecordsBy24h" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
@@ -232,6 +233,7 @@
     HAVING lastDirect='进'
 
     ) t left join tb_user u on t.user_id=u.user_id
+    ORDER BY u.reserve_int asc
   </select>
 
   <select id="getTempWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
@@ -260,6 +262,7 @@
       and pass.device_area_id=#{areaId}
     </if>
     ) t left join tb_user u on t.user_id=u.user_id
+    ORDER BY u.reserve_int asc
   </select>
 
   <select id="getOffWorkPassRecords" parameterType="com.czht.smartpark.tbweb.modular.bean.countOnWorkBean" resultMap="OnWorkPassResultMap">
@@ -309,6 +312,7 @@
     leaveuser.endTime
     )
     ) oa ON u.user_name = oa.userName
+    ORDER BY u.reserve_int asc
     ) t left join tb_pf_area area on t.device_area_id=area.area_id
     left outer join tb_pf_department dept on t.dept_id=dept.dept_id
     where t.onwork_status='不在岗'
@@ -321,6 +325,7 @@
     <if test="areaId != null and areaId>0">
       and pass.device_area_id=#{areaId}
     </if>
+
   </select>
 
 

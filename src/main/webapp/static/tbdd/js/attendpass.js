@@ -6,7 +6,7 @@ var ATTEND_PASS_TABLE = "#attendPassTable";// 表格
 
 var attendPassTable;
 
-function initAttendPass(params) {
+function initAttendpass(params) {
 
     var user = getCacheObj(SESSION_USER);
     var type = params.type;
